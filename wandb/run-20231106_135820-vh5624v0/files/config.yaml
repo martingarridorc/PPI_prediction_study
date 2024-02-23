@@ -1,0 +1,58 @@
+wandb_version: 1
+
+learning_rate:
+  desc: null
+  value: 0.001
+epochs:
+  desc: null
+  value: 50
+max_size:
+  desc: null
+  value: 1166
+subset:
+  desc: null
+  value: false
+subset_size:
+  desc: null
+  value: 0.5
+batchsize:
+  desc: null
+  value: 2048
+use_embeddings:
+  desc: null
+  value: true
+embedding_name:
+  desc: null
+  value: esm2_t36_3B
+mean_embedding:
+  desc: null
+  value: true
+dataset:
+  desc: null
+  value: huang
+_wandb:
+  desc: null
+  value:
+    python_version: 3.8.18
+    cli_version: 0.15.12
+    framework: huggingface
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1699275500.328129
+    t:
+      1:
+      - 1
+      - 55
+      2:
+      - 1
+      - 11
+      - 49
+      - 55
+      3:
+      - 16
+      - 23
+      4: 3.8.18
+      5: 0.15.12
+      8:
+      - 5
+      13: linux-x86_64

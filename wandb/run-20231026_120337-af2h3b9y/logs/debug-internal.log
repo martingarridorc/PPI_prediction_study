@@ -1,0 +1,230 @@
+2023-10-26 12:03:37,247 INFO    StreamThr :3708445 [internal.py:wandb_internal():86] W&B internal server running at pid: 3708445, started at: 2023-10-26 12:03:37.245515
+2023-10-26 12:03:37,249 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: status
+2023-10-26 12:03:37,249 INFO    WriterThread:3708445 [datastore.py:open_for_write():85] open: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/run-af2h3b9y.wandb
+2023-10-26 12:03:37,252 DEBUG   SenderThread:3708445 [sender.py:send():380] send: header
+2023-10-26 12:03:37,264 DEBUG   SenderThread:3708445 [sender.py:send():380] send: run
+2023-10-26 12:03:37,689 INFO    SenderThread:3708445 [dir_watcher.py:__init__():211] watching files in: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files
+2023-10-26 12:03:37,689 INFO    SenderThread:3708445 [sender.py:_start_run_threads():1122] run started: af2h3b9y with start time 1698314617.244885
+2023-10-26 12:03:37,697 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: check_version
+2023-10-26 12:03:37,697 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: check_version
+2023-10-26 12:03:37,770 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: run_start
+2023-10-26 12:03:37,775 DEBUG   HandlerThread:3708445 [system_info.py:__init__():32] System info init
+2023-10-26 12:03:37,775 DEBUG   HandlerThread:3708445 [system_info.py:__init__():47] System info init done
+2023-10-26 12:03:37,775 INFO    HandlerThread:3708445 [system_monitor.py:start():194] Starting system monitor
+2023-10-26 12:03:37,776 INFO    SystemMonitor:3708445 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2023-10-26 12:03:37,776 INFO    HandlerThread:3708445 [system_monitor.py:probe():214] Collecting system info
+2023-10-26 12:03:37,777 INFO    SystemMonitor:3708445 [interfaces.py:start():190] Started cpu monitoring
+2023-10-26 12:03:37,777 INFO    SystemMonitor:3708445 [interfaces.py:start():190] Started disk monitoring
+2023-10-26 12:03:37,778 INFO    SystemMonitor:3708445 [interfaces.py:start():190] Started gpu monitoring
+2023-10-26 12:03:37,779 INFO    SystemMonitor:3708445 [interfaces.py:start():190] Started memory monitoring
+2023-10-26 12:03:37,780 INFO    SystemMonitor:3708445 [interfaces.py:start():190] Started network monitoring
+2023-10-26 12:03:37,804 DEBUG   HandlerThread:3708445 [system_info.py:probe():196] Probing system
+2023-10-26 12:03:37,813 DEBUG   HandlerThread:3708445 [system_info.py:_probe_git():181] Probing git
+2023-10-26 12:03:37,829 DEBUG   HandlerThread:3708445 [system_info.py:_probe_git():189] Probing git done
+2023-10-26 12:03:37,829 DEBUG   HandlerThread:3708445 [system_info.py:probe():244] Probing system done
+2023-10-26 12:03:37,829 DEBUG   HandlerThread:3708445 [system_monitor.py:probe():223] {'os': 'Linux-6.2.0-32-generic-x86_64-with-glibc2.10', 'python': '3.8.18', 'heartbeatAt': '2023-10-26T10:03:37.804849', 'startedAt': '2023-10-26T10:03:37.215231', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': 'main.py', 'codePathLocal': 'main.py', 'codePath': 'main.py', 'git': {'remote': 'git@github.com:BlackCetus/bachelor.git', 'commit': '21029660b669e63d0fe7a4d50cfab820dd0aeeae'}, 'email': None, 'root': '/nfs/home/students/t.reim/bachelor/pytorchtest', 'host': 'gpu02.exbio.wzw.tum.de', 'username': 't.reim', 'executable': '/nfs/home/students/t.reim/.conda/envs/mamba2/bin/python', 'cpu_count': 64, 'cpu_count_logical': 64, 'cpu_freq': {'current': 2476.77890625, 'min': 0.0, 'max': 0.0}, 'cpu_freq_per_core': [{'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2896.722, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2631.345, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2976.974, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 3271.906, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 3091.58, 'min': 0.0, 'max': 0.0}, {'current': 3334.614, 'min': 0.0, 'max': 0.0}, {'current': 2805.368, 'min': 0.0, 'max': 0.0}, {'current': 3343.819, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2412.757, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 1668.77, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}, {'current': 2345.703, 'min': 0.0, 'max': 0.0}], 'disk': {'/': {'total': 548.0470123291016, 'used': 35.014373779296875}}, 'gpu': 'NVIDIA A40', 'gpu_count': 3, 'gpu_devices': [{'name': 'NVIDIA A40', 'memory_total': 48305799168}, {'name': 'NVIDIA A40', 'memory_total': 48305799168}, {'name': 'NVIDIA A40', 'memory_total': 48305799168}], 'memory': {'total': 503.4728889465332}}
+2023-10-26 12:03:37,829 INFO    HandlerThread:3708445 [system_monitor.py:probe():224] Finished collecting system info
+2023-10-26 12:03:37,829 INFO    HandlerThread:3708445 [system_monitor.py:probe():227] Publishing system info
+2023-10-26 12:03:37,829 DEBUG   HandlerThread:3708445 [system_info.py:_save_pip():52] Saving list of pip packages installed into the current environment
+2023-10-26 12:03:37,833 DEBUG   HandlerThread:3708445 [system_info.py:_save_pip():68] Saving pip packages done
+2023-10-26 12:03:37,833 DEBUG   HandlerThread:3708445 [system_info.py:_save_conda():75] Saving list of conda packages installed into the current environment
+2023-10-26 12:03:38,691 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_created():271] file/dir created: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/requirements.txt
+2023-10-26 12:03:38,692 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_created():271] file/dir created: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/conda-environment.yaml
+2023-10-26 12:03:40,061 DEBUG   HandlerThread:3708445 [system_info.py:_save_conda():87] Saving conda packages done
+2023-10-26 12:03:40,089 INFO    HandlerThread:3708445 [system_monitor.py:probe():229] Finished publishing system info
+2023-10-26 12:03:40,091 DEBUG   SenderThread:3708445 [sender.py:send():380] send: files
+2023-10-26 12:03:40,091 INFO    SenderThread:3708445 [sender.py:_save_file():1378] saving file wandb-metadata.json with policy now
+2023-10-26 12:03:40,096 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: stop_status
+2023-10-26 12:03:40,096 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: stop_status
+2023-10-26 12:03:40,097 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: internal_messages
+2023-10-26 12:03:40,377 DEBUG   SenderThread:3708445 [sender.py:send():380] send: telemetry
+2023-10-26 12:03:40,644 INFO    wandb-upload_0:3708445 [upload_job.py:push():131] Uploaded file /tmp/tmp50rv9cwswandb/qwfssli4-wandb-metadata.json
+2023-10-26 12:03:40,710 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/conda-environment.yaml
+2023-10-26 12:03:40,710 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_created():271] file/dir created: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/wandb-metadata.json
+2023-10-26 12:03:42,711 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_created():271] file/dir created: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/output.log
+2023-10-26 12:03:42,802 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: status_report
+2023-10-26 12:03:43,047 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: partial_history
+2023-10-26 12:03:43,048 DEBUG   SenderThread:3708445 [sender.py:send():380] send: history
+2023-10-26 12:03:43,048 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: summary_record
+2023-10-26 12:03:43,054 INFO    SenderThread:3708445 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2023-10-26 12:03:43,666 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: partial_history
+2023-10-26 12:03:43,666 DEBUG   SenderThread:3708445 [sender.py:send():380] send: history
+2023-10-26 12:03:43,667 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: summary_record
+2023-10-26 12:03:43,671 INFO    SenderThread:3708445 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2023-10-26 12:03:43,711 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_created():271] file/dir created: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/wandb-summary.json
+2023-10-26 12:03:44,203 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: partial_history
+2023-10-26 12:03:44,204 DEBUG   SenderThread:3708445 [sender.py:send():380] send: history
+2023-10-26 12:03:44,204 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: summary_record
+2023-10-26 12:03:44,213 INFO    SenderThread:3708445 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2023-10-26 12:03:44,695 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: partial_history
+2023-10-26 12:03:44,695 DEBUG   SenderThread:3708445 [sender.py:send():380] send: history
+2023-10-26 12:03:44,695 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: summary_record
+2023-10-26 12:03:44,785 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/wandb-summary.json
+2023-10-26 12:03:44,785 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/output.log
+2023-10-26 12:03:44,904 INFO    SenderThread:3708445 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2023-10-26 12:03:45,182 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: partial_history
+2023-10-26 12:03:45,182 DEBUG   SenderThread:3708445 [sender.py:send():380] send: history
+2023-10-26 12:03:45,182 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: summary_record
+2023-10-26 12:03:45,226 INFO    SenderThread:3708445 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2023-10-26 12:03:45,787 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/wandb-summary.json
+2023-10-26 12:03:45,787 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/output.log
+2023-10-26 12:03:45,886 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: partial_history
+2023-10-26 12:03:45,886 DEBUG   SenderThread:3708445 [sender.py:send():380] send: history
+2023-10-26 12:03:45,887 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: summary_record
+2023-10-26 12:03:45,893 INFO    SenderThread:3708445 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2023-10-26 12:03:46,413 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: partial_history
+2023-10-26 12:03:46,413 DEBUG   SenderThread:3708445 [sender.py:send():380] send: history
+2023-10-26 12:03:46,414 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: summary_record
+2023-10-26 12:03:46,417 INFO    SenderThread:3708445 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2023-10-26 12:03:46,788 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/wandb-summary.json
+2023-10-26 12:03:46,909 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: partial_history
+2023-10-26 12:03:46,909 DEBUG   SenderThread:3708445 [sender.py:send():380] send: history
+2023-10-26 12:03:46,909 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: summary_record
+2023-10-26 12:03:46,913 INFO    SenderThread:3708445 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2023-10-26 12:03:47,399 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: partial_history
+2023-10-26 12:03:47,400 DEBUG   SenderThread:3708445 [sender.py:send():380] send: history
+2023-10-26 12:03:47,400 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: summary_record
+2023-10-26 12:03:47,405 INFO    SenderThread:3708445 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2023-10-26 12:03:47,561 DEBUG   SenderThread:3708445 [sender.py:send():380] send: exit
+2023-10-26 12:03:47,561 INFO    SenderThread:3708445 [sender.py:send_exit():585] handling exit code: 255
+2023-10-26 12:03:47,561 INFO    SenderThread:3708445 [sender.py:send_exit():587] handling runtime: 9
+2023-10-26 12:03:47,565 INFO    SenderThread:3708445 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2023-10-26 12:03:47,565 INFO    SenderThread:3708445 [sender.py:send_exit():593] send defer
+2023-10-26 12:03:47,566 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:47,566 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 0
+2023-10-26 12:03:47,566 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:47,566 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 0
+2023-10-26 12:03:47,566 INFO    SenderThread:3708445 [sender.py:transition_state():613] send defer: 1
+2023-10-26 12:03:47,566 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:47,566 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 1
+2023-10-26 12:03:47,566 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:47,566 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 1
+2023-10-26 12:03:47,566 INFO    SenderThread:3708445 [sender.py:transition_state():613] send defer: 2
+2023-10-26 12:03:47,567 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:47,567 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 2
+2023-10-26 12:03:47,567 INFO    HandlerThread:3708445 [system_monitor.py:finish():203] Stopping system monitor
+2023-10-26 12:03:47,567 INFO    HandlerThread:3708445 [interfaces.py:finish():202] Joined cpu monitor
+2023-10-26 12:03:47,567 INFO    HandlerThread:3708445 [interfaces.py:finish():202] Joined disk monitor
+2023-10-26 12:03:47,567 DEBUG   SystemMonitor:3708445 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2023-10-26 12:03:47,568 DEBUG   SystemMonitor:3708445 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2023-10-26 12:03:47,568 DEBUG   SystemMonitor:3708445 [system_monitor.py:_start():183] Publishing last batch of metrics
+2023-10-26 12:03:47,776 INFO    HandlerThread:3708445 [interfaces.py:finish():202] Joined gpu monitor
+2023-10-26 12:03:47,776 INFO    HandlerThread:3708445 [interfaces.py:finish():202] Joined memory monitor
+2023-10-26 12:03:47,776 INFO    HandlerThread:3708445 [interfaces.py:finish():202] Joined network monitor
+2023-10-26 12:03:47,777 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:47,777 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 2
+2023-10-26 12:03:47,777 INFO    SenderThread:3708445 [sender.py:transition_state():613] send defer: 3
+2023-10-26 12:03:47,777 DEBUG   SenderThread:3708445 [sender.py:send():380] send: stats
+2023-10-26 12:03:47,778 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:47,778 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 3
+2023-10-26 12:03:47,778 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:47,778 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 3
+2023-10-26 12:03:47,778 INFO    SenderThread:3708445 [sender.py:transition_state():613] send defer: 4
+2023-10-26 12:03:47,778 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:47,778 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 4
+2023-10-26 12:03:47,778 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:47,778 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 4
+2023-10-26 12:03:47,779 INFO    SenderThread:3708445 [sender.py:transition_state():613] send defer: 5
+2023-10-26 12:03:47,779 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:47,779 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 5
+2023-10-26 12:03:47,779 DEBUG   SenderThread:3708445 [sender.py:send():380] send: summary
+2023-10-26 12:03:47,783 INFO    SenderThread:3708445 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2023-10-26 12:03:47,783 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:47,783 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 5
+2023-10-26 12:03:47,783 INFO    SenderThread:3708445 [sender.py:transition_state():613] send defer: 6
+2023-10-26 12:03:47,783 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:47,783 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 6
+2023-10-26 12:03:47,784 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:47,784 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 6
+2023-10-26 12:03:47,787 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: status_report
+2023-10-26 12:03:47,790 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/wandb-summary.json
+2023-10-26 12:03:47,790 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/output.log
+2023-10-26 12:03:47,989 INFO    SenderThread:3708445 [sender.py:transition_state():613] send defer: 7
+2023-10-26 12:03:47,990 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:47,990 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 7
+2023-10-26 12:03:47,990 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:47,990 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 7
+2023-10-26 12:03:48,561 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: poll_exit
+2023-10-26 12:03:48,791 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/config.yaml
+2023-10-26 12:03:49,793 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/output.log
+2023-10-26 12:03:51,570 INFO    SenderThread:3708445 [sender.py:transition_state():613] send defer: 8
+2023-10-26 12:03:51,570 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: poll_exit
+2023-10-26 12:03:51,570 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:51,571 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 8
+2023-10-26 12:03:51,571 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:51,571 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 8
+2023-10-26 12:03:51,571 INFO    SenderThread:3708445 [job_builder.py:build():281] Attempting to build job artifact
+2023-10-26 12:03:51,571 INFO    SenderThread:3708445 [job_builder.py:_get_source_type():393] is repo sourced job
+2023-10-26 12:03:51,573 INFO    SenderThread:3708445 [job_builder.py:build():369] adding wandb-job metadata file
+2023-10-26 12:03:51,590 INFO    SenderThread:3708445 [sender.py:transition_state():613] send defer: 9
+2023-10-26 12:03:51,590 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:51,590 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 9
+2023-10-26 12:03:51,590 DEBUG   SenderThread:3708445 [sender.py:send():380] send: artifact
+2023-10-26 12:03:51,794 INFO    Thread-12 :3708445 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/output.log
+2023-10-26 12:03:52,688 INFO    SenderThread:3708445 [sender.py:send_artifact():1456] sent artifact job-git_github.com_BlackCetus_bachelor.git_main.py - {'id': 'QXJ0aWZhY3Q6NjE2MDQ2NjM0', 'state': 'COMMITTED', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjEwOTgzNjg1OQ==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6NjE2NzQ0NzI5', 'versionIndex': 5}}}
+2023-10-26 12:03:52,688 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:52,688 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 9
+2023-10-26 12:03:52,688 INFO    SenderThread:3708445 [dir_watcher.py:finish():358] shutting down directory watcher
+2023-10-26 12:03:52,794 INFO    SenderThread:3708445 [dir_watcher.py:finish():388] scan: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files
+2023-10-26 12:03:52,795 INFO    SenderThread:3708445 [dir_watcher.py:finish():402] scan save: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/config.yaml config.yaml
+2023-10-26 12:03:52,795 INFO    SenderThread:3708445 [dir_watcher.py:finish():402] scan save: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/wandb-metadata.json wandb-metadata.json
+2023-10-26 12:03:52,795 INFO    SenderThread:3708445 [dir_watcher.py:finish():402] scan save: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/requirements.txt requirements.txt
+2023-10-26 12:03:52,795 INFO    SenderThread:3708445 [dir_watcher.py:finish():402] scan save: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/output.log output.log
+2023-10-26 12:03:52,795 INFO    SenderThread:3708445 [dir_watcher.py:finish():402] scan save: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/conda-environment.yaml conda-environment.yaml
+2023-10-26 12:03:52,795 INFO    SenderThread:3708445 [dir_watcher.py:finish():402] scan save: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/wandb-summary.json wandb-summary.json
+2023-10-26 12:03:52,799 INFO    SenderThread:3708445 [sender.py:transition_state():613] send defer: 10
+2023-10-26 12:03:52,800 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:52,802 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 10
+2023-10-26 12:03:52,804 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:52,804 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 10
+2023-10-26 12:03:52,804 INFO    SenderThread:3708445 [file_pusher.py:finish():175] shutting down file pusher
+2023-10-26 12:03:53,177 INFO    wandb-upload_3:3708445 [upload_job.py:push():131] Uploaded file /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/conda-environment.yaml
+2023-10-26 12:03:53,217 INFO    wandb-upload_0:3708445 [upload_job.py:push():131] Uploaded file /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/requirements.txt
+2023-10-26 12:03:53,250 INFO    wandb-upload_1:3708445 [upload_job.py:push():131] Uploaded file /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/config.yaml
+2023-10-26 12:03:53,258 INFO    wandb-upload_2:3708445 [upload_job.py:push():131] Uploaded file /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/output.log
+2023-10-26 12:03:53,311 INFO    wandb-upload_4:3708445 [upload_job.py:push():131] Uploaded file /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/files/wandb-summary.json
+2023-10-26 12:03:53,511 INFO    Thread-11 :3708445 [sender.py:transition_state():613] send defer: 11
+2023-10-26 12:03:53,511 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:53,511 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 11
+2023-10-26 12:03:53,512 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:53,512 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 11
+2023-10-26 12:03:53,512 INFO    SenderThread:3708445 [file_pusher.py:join():181] waiting for file pusher
+2023-10-26 12:03:53,512 INFO    SenderThread:3708445 [sender.py:transition_state():613] send defer: 12
+2023-10-26 12:03:53,512 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:53,512 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 12
+2023-10-26 12:03:53,512 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: status_report
+2023-10-26 12:03:53,513 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:53,513 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 12
+2023-10-26 12:03:53,513 INFO    SenderThread:3708445 [file_stream.py:finish():595] file stream finish called
+2023-10-26 12:03:53,563 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: keepalive
+2023-10-26 12:03:53,684 INFO    SenderThread:3708445 [file_stream.py:finish():599] file stream finish is done
+2023-10-26 12:03:53,684 INFO    SenderThread:3708445 [sender.py:transition_state():613] send defer: 13
+2023-10-26 12:03:53,685 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:53,685 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 13
+2023-10-26 12:03:53,685 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:53,685 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 13
+2023-10-26 12:03:53,685 INFO    SenderThread:3708445 [sender.py:transition_state():613] send defer: 14
+2023-10-26 12:03:53,685 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: defer
+2023-10-26 12:03:53,685 INFO    HandlerThread:3708445 [handler.py:handle_request_defer():172] handle defer: 14
+2023-10-26 12:03:53,685 DEBUG   SenderThread:3708445 [sender.py:send():380] send: final
+2023-10-26 12:03:53,686 DEBUG   SenderThread:3708445 [sender.py:send():380] send: footer
+2023-10-26 12:03:53,686 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: defer
+2023-10-26 12:03:53,686 INFO    SenderThread:3708445 [sender.py:send_request_defer():609] handle sender defer: 14
+2023-10-26 12:03:53,686 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: poll_exit
+2023-10-26 12:03:53,686 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: poll_exit
+2023-10-26 12:03:53,687 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: server_info
+2023-10-26 12:03:53,687 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: server_info
+2023-10-26 12:03:53,689 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: get_summary
+2023-10-26 12:03:53,689 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: sampled_history
+2023-10-26 12:03:53,690 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: internal_messages
+2023-10-26 12:03:53,690 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: job_info
+2023-10-26 12:03:53,819 DEBUG   SenderThread:3708445 [sender.py:send_request():407] send_request: job_info
+2023-10-26 12:03:53,819 INFO    MainThread:3708445 [wandb_run.py:_footer_history_summary_info():3599] rendering history
+2023-10-26 12:03:53,819 INFO    MainThread:3708445 [wandb_run.py:_footer_history_summary_info():3631] rendering summary
+2023-10-26 12:03:53,820 INFO    MainThread:3708445 [wandb_run.py:_footer_sync_info():3558] logging synced files
+2023-10-26 12:03:53,820 DEBUG   HandlerThread:3708445 [handler.py:handle_request():146] handle_request: shutdown
+2023-10-26 12:03:53,820 INFO    HandlerThread:3708445 [handler.py:finish():866] shutting down handler
+2023-10-26 12:03:54,690 INFO    WriterThread:3708445 [datastore.py:close():294] close: /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231026_120337-af2h3b9y/run-af2h3b9y.wandb
+2023-10-26 12:03:54,819 INFO    SenderThread:3708445 [sender.py:finish():1534] shutting down sender
+2023-10-26 12:03:54,819 INFO    SenderThread:3708445 [file_pusher.py:finish():175] shutting down file pusher
+2023-10-26 12:03:54,819 INFO    SenderThread:3708445 [file_pusher.py:join():181] waiting for file pusher

@@ -1,0 +1,16 @@
+
+Using Cuda
+Traceback (most recent call last):
+  File "main.py", line 51, in <module>
+    optimizer.step()
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/optim/optimizer.py", line 373, in wrapper
+    out = func(*args, **kwargs)
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/optim/optimizer.py", line 76, in _use_grad
+    ret = func(self, *args, **kwargs)
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/optim/adam.py", line 163, in step
+    adam(
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/optim/adam.py", line 311, in adam
+    func(params,
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/optim/adam.py", line 565, in _multi_tensor_adam
+    exp_avg_sq_sqrt = torch._foreach_sqrt(device_exp_avg_sqs)
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.56 GiB. GPU 0 has a total capacty of 11.78 GiB of which 518.06 MiB is free. Including non-PyTorch memory, this process has 11.27 GiB memory in use. Of the allocated memory 10.26 GiB is allocated by PyTorch, and 10.28 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

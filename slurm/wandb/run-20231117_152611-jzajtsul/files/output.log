@@ -1,0 +1,17 @@
+Using Data:  gold_stand
+Using Model:  dscript_like
+Using Wandb:  True
+Learning Rate:  0.001
+Max Sequence Length:  2000
+Epochs:  25
+Batchsize:  10
+Using Subset
+Subset Size:  29299
+Val Subset Size:  9949
+Using Embeddings:  esm2_t33_650  Mean:  False
+Using CUDA
+Epoch 1/25, Average Loss: 1.0211003472475468, Accuracy: 0.5255214258627212, Precision: 0.4252998537298882, Recall: 0.32807857955468883, F1 Score: 0.3401237509729774
+Traceback (most recent call last):
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/main.py", line 243, in <module>
+    val_inputs = val_batch['tensor']
+KeyError: 'tensor'

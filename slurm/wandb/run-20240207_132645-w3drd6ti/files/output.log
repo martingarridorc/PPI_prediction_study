@@ -1,0 +1,15 @@
+Using Data:  gold_stand
+Using Model:  baseline2d
+Using Wandb:  True
+Learning Rate:  0.001
+Max Sequence Length:  10000
+Epochs:  25
+early stopping:  True
+Batchsize:  10
+Using Subset
+Subset Size:  81592
+Val Subset Size:  26024
+Using Embeddings:  esm2_t36_3B  Mean:  False
+Using CUDA
+Epoch 1/25, Average Loss: 0.6931471824645996, Accuracy: 0.49894607843137095, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 1/25, Average Val Loss: 0.6931412816047668, Val Accuracy: 0.4971763349980789, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0

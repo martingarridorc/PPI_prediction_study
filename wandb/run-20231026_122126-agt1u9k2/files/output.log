@@ -1,0 +1,9 @@
+
+Using Cuda
+Epoch 1/25, Average Loss: 0.3334885787437944, Accuracy: 0.8454346780735221, Precision: 0.8756547641770213, Recall: 0.8579540777763596, F1 Score: 0.4263822115384615
+Traceback (most recent call last):
+  File "main.py", line 116, in <module>
+    met = metrics(val_labels.to(1), predicted_labels)
+  File "main.py", line 15, in metrics
+    true_positive = torch.sum((y_true == 1) & (y_pred == 1)).item()
+RuntimeError: The size of tensor a (128) must match the size of tensor b (52) at non-singleton dimension 0

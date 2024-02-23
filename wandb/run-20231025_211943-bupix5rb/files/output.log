@@ -1,0 +1,55 @@
+
+Using Cuda
+Epoch 1/25, Average Loss: 0.3425128512522754, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 1/25, Average Val Loss: 0.5286287069320679, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 2/25, Average Loss: 0.061289211735129356, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 2/25, Average Val Loss: 0.6978871822357178, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 3/25, Average Loss: 0.027909960159484076, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 3/25, Average Val Loss: 0.8012344241142273, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 4/25, Average Loss: 0.01514707789893317, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 4/25, Average Val Loss: 0.8834336400032043, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 5/25, Average Loss: 0.01299035206081017, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 5/25, Average Val Loss: 0.9815274477005005, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 6/25, Average Loss: 0.010666929851354593, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 6/25, Average Val Loss: 1.0100395679473877, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 7/25, Average Loss: 0.00862010261249345, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 7/25, Average Val Loss: 1.0477358102798462, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 8/25, Average Loss: 0.00517291268453632, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 8/25, Average Val Loss: 1.0819011926651, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 9/25, Average Loss: 0.005484359268687994, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 9/25, Average Val Loss: 1.1312932968139648, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 10/25, Average Loss: 0.006049368688870934, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 10/25, Average Val Loss: 1.1917002201080322, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 11/25, Average Loss: 0.006312083720010431, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 11/25, Average Val Loss: 1.110394835472107, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 12/25, Average Loss: 0.013539110500406584, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 12/25, Average Val Loss: 1.2205990552902222, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 13/25, Average Loss: 0.035343144578612685, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 13/25, Average Val Loss: 0.9592964053153992, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 14/25, Average Loss: 0.03422006374389371, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 14/25, Average Val Loss: 0.9720478057861328, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 15/25, Average Loss: 0.020276078283238935, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 15/25, Average Val Loss: 0.9185141921043396, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 16/25, Average Loss: 0.016197460344033864, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 16/25, Average Val Loss: 0.9156535863876343, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 17/25, Average Loss: 0.008151800605393125, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 17/25, Average Val Loss: 1.105119228363037, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 18/25, Average Loss: 0.008122253825764774, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Epoch 18/25, Average Val Loss: 1.1295582056045532, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 19/25, Average Loss: 0.005041189658667837, Accuracy: 0.0, Precision: 0.0, Recall: 0.0, F1 Score: 0.0
+Traceback (most recent call last):
+  File "main.py", line 110, in <module>
+    for val_batch in vdataloader:
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 630, in __next__
+    data = self._next_data()
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 674, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 276, in __getitem__
+    padd_sequence(seq2, self.max)
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 225, in padd_sequence
+    sequence.extend(np.zeros((1,24)))
+KeyboardInterrupt

@@ -1,0 +1,8 @@
+
+Using Cuda
+Traceback (most recent call last):
+  File "main.py", line 87, in <module>
+    met = metrics(labels.to(1), predicted_labels)
+  File "main.py", line 31, in metrics
+    f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+RuntimeError: Boolean value of Tensor with more than one value is ambiguous

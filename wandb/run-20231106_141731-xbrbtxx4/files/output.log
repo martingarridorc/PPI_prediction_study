@@ -1,0 +1,44 @@
+
+Using CUDA
+/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/cuda/__init__.py:611: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+Epoch 1/50, Average Loss: 0.5896352529525757, Accuracy: 0.6962196180555555, Precision: 0.7204883007437796, Recall: 0.6064298992121417, F1 Score: 0.6575237803847707
+Epoch 1/50, Average Val Loss: 0.6968965530395508, Val Accuracy: 0.4723519587862319, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 2/50, Average Loss: 0.4350434899330139, Accuracy: 0.8517013888888888, Precision: 0.8678704272784611, Recall: 0.819530706495198, F1 Score: 0.8429512924419823
+Epoch 2/50, Average Val Loss: 0.6779535412788391, Val Accuracy: 0.5539373867753623, Val Precision: 0.5, Val Recall: 0.001002004008016032, Val F1 Score: 0.002
+Epoch 3/50, Average Loss: 0.3586788475513458, Accuracy: 0.8946614583333334, Precision: 0.9120055179735237, Recall: 0.8691814534612761, F1 Score: 0.8900716115804037
+Epoch 3/50, Average Val Loss: 0.6589552164077759, Val Accuracy: 0.8184725996376812, Val Precision: 0.7980769230769231, Val Recall: 0.809456740442656, Val F1 Score: 0.8032521934164523
+Epoch 4/50, Average Loss: 0.29549198150634765, Accuracy: 0.9294053819444444, Precision: 0.9465529054955747, Recall: 0.9059823889718558, F1 Score: 0.9257985491438008
+Epoch 4/50, Average Val Loss: 0.6213762760162354, Val Accuracy: 0.871383888134058, Val Precision: 0.8342276968107811, Val Recall: 0.8888658080598255, Val F1 Score: 0.8606783511846803
+Epoch 5/50, Average Loss: 0.2511180490255356, Accuracy: 0.9477647569444445, Precision: 0.9635429132768778, Recall: 0.9289939744350603, F1 Score: 0.945892042211594
+Epoch 5/50, Average Val Loss: 0.5537141561508179, Val Accuracy: 0.9135529891304348, Val Precision: 0.9593173963133641, Val Recall: 0.8614982578397212, Val F1 Score: 0.9077369439071565
+Epoch 6/50, Average Loss: 0.21188893020153046, Accuracy: 0.9610937500000001, Precision: 0.9771566979203467, Recall: 0.944163948050648, F1 Score: 0.9602632133378337
+Epoch 6/50, Average Val Loss: 0.4696198105812073, Val Accuracy: 0.928611865942029, Val Precision: 0.9362316979193424, Val Recall: 0.9150410992516256, Val F1 Score: 0.924871441113759
+Epoch 7/50, Average Loss: 0.179386106133461, Accuracy: 0.9704817708333333, Precision: 0.973590340243077, Recall: 0.9641945469989807, F1 Score: 0.9687657340319987
+Epoch 7/50, Average Val Loss: 0.397800087928772, Val Accuracy: 0.9111894248188406, Val Precision: 0.9657511444028297, Val Recall: 0.8416035353535354, Val F1 Score: 0.8991886043995672
+Epoch 8/50, Average Loss: 0.1560370832681656, Accuracy: 0.9765972222222222, Precision: 0.9832630179196649, Recall: 0.9694750992474794, F1 Score: 0.9762109015518089
+Epoch 8/50, Average Val Loss: 0.30542969703674316, Val Accuracy: 0.9445694633152174, Val Precision: 0.9823788546255506, Val Recall: 0.9043618465716226, Val F1 Score: 0.9417529330572809
+Epoch 9/50, Average Loss: 0.12829772979021073, Accuracy: 0.9837760416666667, Precision: 0.9835411916893056, Recall: 0.9833576550413984, F1 Score: 0.9834283547044924
+Epoch 9/50, Average Val Loss: 0.2358909398317337, Val Accuracy: 0.9649994338768115, Val Precision: 0.9678801546391753, Val Recall: 0.9581123737373738, Val F1 Score: 0.9629464285714285
+Epoch 10/50, Average Loss: 0.11542882919311523, Accuracy: 0.9846788194444445, Precision: 0.9876383696698143, Recall: 0.9809836153846108, F1 Score: 0.9842462034207005
+Epoch 10/50, Average Val Loss: 0.2100953906774521, Val Accuracy: 0.9311311141304348, Val Precision: 0.9730392156862745, Val Recall: 0.8964322381930185, Val F1 Score: 0.9330421720262602
+Epoch 11/50, Average Loss: 0.09800634235143661, Accuracy: 0.9904904513888889, Precision: 0.9927818159042532, Recall: 0.9876943106467007, F1 Score: 0.9902212944170431
+Epoch 11/50, Average Val Loss: 0.18740525841712952, Val Accuracy: 0.9543350883152174, Val Precision: 0.9879649890590809, Val Recall: 0.92586008072266, Val F1 Score: 0.9558915790686657
+Epoch 12/50, Average Loss: 0.08563031554222107, Accuracy: 0.9920529513888889, Precision: 0.9918560933535641, Recall: 0.9920235178158416, F1 Score: 0.9919224852235896
+Epoch 12/50, Average Val Loss: 0.15165331959724426, Val Accuracy: 0.949119678442029, Val Precision: 0.9655375710151142, Val Recall: 0.8873087308730874, Val F1 Score: 0.923964149280047
+Epoch 13/50, Average Loss: 0.08034489303827286, Accuracy: 0.9928949652777778, Precision: 0.9913153594230172, Recall: 0.9948142599144836, F1 Score: 0.9930435358231009
+Epoch 13/50, Average Val Loss: 0.11091596633195877, Val Accuracy: 0.986328125, Val Precision: 0.9848484848484849, Val Recall: 0.986815415821501, Val F1 Score: 0.9858299595141701
+Epoch 14/50, Average Loss: 0.06564721390604973, Accuracy: 0.9958984375, Precision: 0.9951033175255761, Recall: 0.9964506805056637, F1 Score: 0.9957636962605875
+Epoch 14/50, Average Val Loss: 0.12340828776359558, Val Accuracy: 0.9674408401268115, Val Precision: 0.9759493670886076, Val Recall: 0.9531522468142186, Val F1 Score: 0.9642808101613457
+Traceback (most recent call last):
+  File "main.py", line 106, in <module>
+    for batch in dataloader:
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 630, in __next__
+    data = self._next_data()
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 674, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+KeyboardInterrupt

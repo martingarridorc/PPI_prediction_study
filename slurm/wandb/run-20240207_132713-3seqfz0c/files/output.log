@@ -1,0 +1,21 @@
+Using Data:  gold_stand
+Using Model:  baseline2d
+Using Wandb:  True
+Learning Rate:  0.001
+Max Sequence Length:  10000
+Epochs:  25
+early stopping:  True
+Batchsize:  10
+Using Subset
+Subset Size:  81592
+Val Subset Size:  26024
+Using Embeddings:  esm2_t33_650  Mean:  False
+Using CUDA
+Epoch 1/25, Average Loss: 0.6931619899310902, Accuracy: 0.4971200980392162, Precision: 0.08825391962340491, Recall: 0.07268362900715845, F1 Score: 0.06306739830062037
+Epoch 1/25, Average Val Loss: 0.6931412816047668, Val Accuracy: 0.4954091432961986, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+TP: 0, FP: 0, TN: 12921, FN: 13103
+Epoch 2/25, Average Loss: 0.6931473649234748, Accuracy: 0.496458333333335, Precision: 0.001303104575163399, Recall: 0.0005729166666666668, F1 Score: 0.0006944709702062644
+Epoch 2/25, Average Val Loss: 0.6931412816047668, Val Accuracy: 0.49556281213983805, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+TP: 0, FP: 0, TN: 12908, FN: 13116
+Epoch 3/25, Average Loss: 0.6931473436381888, Accuracy: 0.49894607843137195, Precision: 0.000857843137254902, Recall: 0.00018907563025210084, F1 Score: 0.0003066643323996265
+Epoch 3/25, Average Val Loss: 0.6931412816047668, Val Accuracy: 0.4971955436035349, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0

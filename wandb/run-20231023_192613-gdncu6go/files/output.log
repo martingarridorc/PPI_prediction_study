@@ -1,0 +1,41 @@
+
+Epoch 1/50, Sample 0/5316 Loss: 0.7476943731307983
+Epoch 1/50, Sample 16/5316 Loss: 0.6755573749542236
+Epoch 1/50, Sample 32/5316 Loss: 0.7120058536529541
+Epoch 1/50, Sample 48/5316 Loss: 0.6349180340766907
+Epoch 1/50, Sample 64/5316 Loss: 0.7404078245162964
+Epoch 1/50, Sample 80/5316 Loss: 0.8639767169952393
+Epoch 1/50, Sample 96/5316 Loss: 0.9684237241744995
+Epoch 1/50, Sample 112/5316 Loss: 0.6751216650009155
+Epoch 1/50, Sample 128/5316 Loss: 0.5884078145027161
+Epoch 1/50, Sample 144/5316 Loss: 0.8049424886703491
+Epoch 1/50, Sample 160/5316 Loss: 0.9106813073158264
+Epoch 1/50, Sample 176/5316 Loss: 0.859004020690918
+Epoch 1/50, Sample 192/5316 Loss: 0.5851497650146484
+Epoch 1/50, Sample 208/5316 Loss: 0.6427939534187317
+Epoch 1/50, Sample 224/5316 Loss: 0.7933439612388611
+Epoch 1/50, Sample 240/5316 Loss: 0.6478646993637085
+Epoch 1/50, Sample 256/5316 Loss: 0.5827068090438843
+Epoch 1/50, Sample 272/5316 Loss: 0.6128912568092346
+Epoch 1/50, Sample 288/5316 Loss: 0.6839577555656433
+Epoch 1/50, Sample 304/5316 Loss: 0.668694019317627
+Epoch 1/50, Sample 320/5316 Loss: 0.8025006651878357
+Epoch 1/50, Sample 336/5316 Loss: 0.7049930095672607
+Epoch 1/50, Sample 352/5316 Loss: 0.7059926986694336
+Epoch 1/50, Sample 368/5316 Loss: 0.6693041920661926
+Epoch 1/50, Sample 384/5316 Loss: 0.6398049592971802
+Epoch 1/50, Sample 400/5316 Loss: 0.8117192387580872
+Epoch 1/50, Sample 416/5316 Loss: 0.6691169738769531
+Epoch 1/50, Sample 432/5316 Loss: 0.819312334060669
+Epoch 1/50, Sample 448/5316 Loss: 0.4903697669506073
+Epoch 1/50, Sample 464/5316 Loss: 0.6569509506225586
+Epoch 1/50, Sample 480/5316 Loss: 0.5827745795249939
+Epoch 1/50, Sample 496/5316 Loss: 0.7104965448379517
+Traceback (most recent call last):
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/main.py", line 47, in <module>
+    loss.backward()
+  File "/nfs/home/students/t.reim/.conda/envs/vscodeconnection/lib/python3.11/site-packages/torch/_tensor.py", line 487, in backward
+    torch.autograd.backward(
+  File "/nfs/home/students/t.reim/.conda/envs/vscodeconnection/lib/python3.11/site-packages/torch/autograd/__init__.py", line 200, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt

@@ -1,0 +1,250 @@
+{
+    "os": "Linux-5.15.0-73-generic-x86_64-with-glibc2.10",
+    "python": "3.8.18",
+    "heartbeatAt": "2023-10-24T11:41:06.885096",
+    "startedAt": "2023-10-24T11:40:59.467371",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "main.py",
+    "codePathLocal": "main.py",
+    "codePath": "main.py",
+    "host": "gpu01",
+    "username": "t.reim",
+    "executable": "/nfs/home/students/t.reim/.conda/envs/mamba2/bin/python",
+    "cpu_count": 20,
+    "cpu_count_logical": 40,
+    "cpu_freq": {
+        "current": 928.9809250000001,
+        "min": 800.0,
+        "max": 3000.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 3000.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.002,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3000.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 49.12775802612305,
+            "used": 45.96392059326172
+        }
+    },
+    "gpu": "NVIDIA TITAN Xp",
+    "gpu_count": 3,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA TITAN Xp",
+            "memory_total": 12884901888
+        },
+        {
+            "name": "NVIDIA TITAN V",
+            "memory_total": 12884901888
+        },
+        {
+            "name": "NVIDIA TITAN V",
+            "memory_total": 12884901888
+        }
+    ],
+    "memory": {
+        "total": 93.07874298095703
+    }
+}

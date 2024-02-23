@@ -1,0 +1,6 @@
+
+Using Cuda
+Traceback (most recent call last):
+  File "main.py", line 59, in <module>
+    for epoch in tqdm(range(num_epochs), desc="epochs", unit="set"):
+TypeError: 'module' object is not callable

@@ -1,0 +1,5 @@
+
+Using Cuda
+Epoch 1/25, Average Loss: 0.3911307989841416, Accuracy: 63.582392776523704
+Epoch 1/25, Validation Loss: 2.1569244861602783, Accuracy: 63.0844250363901
+Epoch 2/25, Average Loss: 0.08958903877508073, Accuracy: 63.582392776523704

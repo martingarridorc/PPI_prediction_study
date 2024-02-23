@@ -1,0 +1,20 @@
+
+Using CUDA
+/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/cuda/__init__.py:611: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+Traceback (most recent call last):
+  File "main.py", line 99, in <module>
+    for batch in dataloader:
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 630, in __next__
+    data = self._next_data()
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 674, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 294, in __getitem__
+    seq1 = get_embedding_mean(embedding_directory, data[1])
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 272, in get_embedding_mean
+    embedding = torch.load(os.path.join(dirpath, protein_id + ".pt"))
+numpy.core._exceptions._UFuncNoLoopError: ufunc 'add' did not contain a loop with signature matching types (dtype('int64'), dtype('<U3')) -> None

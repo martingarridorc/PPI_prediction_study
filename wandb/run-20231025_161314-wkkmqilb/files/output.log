@@ -1,0 +1,8 @@
+
+Using Cuda
+Traceback (most recent call last):
+  File "main.py", line 87, in <module>
+    met = metrics(labels, predicted_labels)
+  File "main.py", line 15, in metrics
+    diff = y_true + y_pred - 1
+RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:1 and cpu!

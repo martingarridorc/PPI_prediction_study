@@ -1,0 +1,15 @@
+Using Data:  gold_stand
+Using Model:  richoux
+Using Wandb:  True
+Learning Rate:  0.001
+Max Sequence Length:  None
+Epochs:  25
+Batchsize:  1024
+Using Subset
+Subset Size:  81596
+Val Subset Size:  26024
+Using Embeddings:  esm2_t48_65B  Mean:  False
+Traceback (most recent call last):
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/main.py", line 176, in <module>
+    model = m2.FC2_20_2Dense(insize=insize, mean=mean_embedding, max_len=max)
+TypeError: __init__() got an unexpected keyword argument 'max_len'

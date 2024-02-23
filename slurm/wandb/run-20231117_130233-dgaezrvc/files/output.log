@@ -1,0 +1,13 @@
+Using Subset
+Subset Size:  73247
+Val Subset Size:  24873
+Using Embeddings:  esm2_t33_650  Mean:  False
+Using CUDA
+Traceback (most recent call last):
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/main.py", line 193, in <module>
+    outputs = model(inputs[0], inputs[1])
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+TypeError: forward() takes 2 positional arguments but 3 were given

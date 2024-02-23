@@ -1,0 +1,225 @@
+2024-01-11 11:41:45,282 INFO    StreamThr :2876268 [internal.py:wandb_internal():86] W&B internal server running at pid: 2876268, started at: 2024-01-11 11:41:45.280818
+2024-01-11 11:41:45,284 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status
+2024-01-11 11:41:45,285 INFO    WriterThread:2876268 [datastore.py:open_for_write():85] open: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/run-u1hmkf0y.wandb
+2024-01-11 11:41:45,289 DEBUG   SenderThread:2876268 [sender.py:send():380] send: header
+2024-01-11 11:41:45,319 DEBUG   SenderThread:2876268 [sender.py:send():380] send: run
+2024-01-11 11:41:45,714 INFO    SenderThread:2876268 [dir_watcher.py:__init__():211] watching files in: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files
+2024-01-11 11:41:45,714 INFO    SenderThread:2876268 [sender.py:_start_run_threads():1122] run started: u1hmkf0y with start time 1704973305.281741
+2024-01-11 11:41:45,730 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: check_version
+2024-01-11 11:41:45,730 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: check_version
+2024-01-11 11:41:45,804 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: run_start
+2024-01-11 11:41:45,832 DEBUG   HandlerThread:2876268 [system_info.py:__init__():32] System info init
+2024-01-11 11:41:45,832 DEBUG   HandlerThread:2876268 [system_info.py:__init__():47] System info init done
+2024-01-11 11:41:45,832 INFO    HandlerThread:2876268 [system_monitor.py:start():194] Starting system monitor
+2024-01-11 11:41:45,832 INFO    SystemMonitor:2876268 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-01-11 11:41:45,832 INFO    HandlerThread:2876268 [system_monitor.py:probe():214] Collecting system info
+2024-01-11 11:41:45,833 INFO    SystemMonitor:2876268 [interfaces.py:start():190] Started cpu monitoring
+2024-01-11 11:41:45,833 INFO    SystemMonitor:2876268 [interfaces.py:start():190] Started disk monitoring
+2024-01-11 11:41:45,834 INFO    SystemMonitor:2876268 [interfaces.py:start():190] Started gpu monitoring
+2024-01-11 11:41:45,834 INFO    SystemMonitor:2876268 [interfaces.py:start():190] Started memory monitoring
+2024-01-11 11:41:45,835 INFO    SystemMonitor:2876268 [interfaces.py:start():190] Started network monitoring
+2024-01-11 11:41:45,914 DEBUG   HandlerThread:2876268 [system_info.py:probe():196] Probing system
+2024-01-11 11:41:45,921 DEBUG   HandlerThread:2876268 [system_info.py:_probe_git():181] Probing git
+2024-01-11 11:41:45,933 DEBUG   HandlerThread:2876268 [system_info.py:_probe_git():189] Probing git done
+2024-01-11 11:41:45,933 DEBUG   HandlerThread:2876268 [system_info.py:probe():244] Probing system done
+2024-01-11 11:41:45,933 DEBUG   HandlerThread:2876268 [system_monitor.py:probe():223] {'os': 'Linux-5.15.0-91-generic-x86_64-with-glibc2.10', 'python': '3.8.18', 'heartbeatAt': '2024-01-11T11:41:45.914835', 'startedAt': '2024-01-11T11:41:45.222822', 'docker': None, 'cuda': None, 'args': ('-data', 'gold_stand', '-model', 'dscript_like', '-lr', '0.001', '-max', '10000', '-epoch', '25', '-es', '-batch', '40', '-sub', '-subsize', '0.5', '-emb', '-emb_dim', '2560', '-wandb'), 'state': 'running', 'program': '/nfs/home/students/t.reim/bachelor/pytorchtest/main.py', 'codePathLocal': None, 'codePath': 'main.py', 'git': {'remote': 'git@github.com:BlackCetus/bachelor.git', 'commit': '871e7fd896a3e5753fa2948341bf458c81b19bef'}, 'email': None, 'root': '/nfs/home/students/t.reim/bachelor/pytorchtest', 'host': 'jlab-gpu01.exbio.wzw.tum.de', 'username': 't.reim', 'executable': '/nfs/home/students/t.reim/.conda/envs/mamba2/bin/python', 'cpu_count': 128, 'cpu_count_logical': 256, 'cpu_freq': {'current': 1542.86380859375, 'min': 1500.0, 'max': 2000.0}, 'cpu_freq_per_core': [{'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 3691.273, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 3693.218, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 3691.505, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 2000.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.0, 'min': 1500.0, 'max': 2000.0}], 'disk': {'/': {'total': 786.8798980712891, 'used': 269.1192626953125}}, 'gpu': 'NVIDIA A40', 'gpu_count': 2, 'gpu_devices': [{'name': 'NVIDIA A40', 'memory_total': 48305799168}, {'name': 'NVIDIA A40', 'memory_total': 48305799168}], 'memory': {'total': 1007.4337425231934}}
+2024-01-11 11:41:45,933 INFO    HandlerThread:2876268 [system_monitor.py:probe():224] Finished collecting system info
+2024-01-11 11:41:45,933 INFO    HandlerThread:2876268 [system_monitor.py:probe():227] Publishing system info
+2024-01-11 11:41:45,933 DEBUG   HandlerThread:2876268 [system_info.py:_save_pip():52] Saving list of pip packages installed into the current environment
+2024-01-11 11:41:45,937 DEBUG   HandlerThread:2876268 [system_info.py:_save_pip():68] Saving pip packages done
+2024-01-11 11:41:45,937 DEBUG   HandlerThread:2876268 [system_info.py:_save_conda():75] Saving list of conda packages installed into the current environment
+2024-01-11 11:41:45,946 ERROR   HandlerThread:2876268 [system_info.py:_save_conda():86] Error saving conda packages: [Errno 2] No such file or directory: 'conda'
+Traceback (most recent call last):
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/wandb/sdk/internal/system/system_info.py", line 82, in _save_conda
+    subprocess.call(
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/subprocess.py", line 340, in call
+    with Popen(*popenargs, **kwargs) as p:
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/subprocess.py", line 858, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/subprocess.py", line 1720, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'conda'
+2024-01-11 11:41:45,970 DEBUG   HandlerThread:2876268 [system_info.py:_save_conda():87] Saving conda packages done
+2024-01-11 11:41:45,975 INFO    HandlerThread:2876268 [system_monitor.py:probe():229] Finished publishing system info
+2024-01-11 11:41:45,990 DEBUG   SenderThread:2876268 [sender.py:send():380] send: files
+2024-01-11 11:41:45,990 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-metadata.json with policy now
+2024-01-11 11:41:45,995 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: internal_messages
+2024-01-11 11:41:45,996 DEBUG   SenderThread:2876268 [sender.py:send():380] send: telemetry
+2024-01-11 11:41:45,996 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: stop_status
+2024-01-11 11:41:45,999 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: stop_status
+2024-01-11 11:41:46,558 INFO    wandb-upload_0:2876268 [upload_job.py:push():131] Uploaded file /tmp/tmp1z71y2wowandb/e4ncyozj-wandb-metadata.json
+2024-01-11 11:41:46,716 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_created():271] file/dir created: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/output.log
+2024-01-11 11:41:46,716 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_created():271] file/dir created: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/conda-environment.yaml
+2024-01-11 11:41:46,716 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_created():271] file/dir created: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-metadata.json
+2024-01-11 11:41:46,717 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_created():271] file/dir created: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/requirements.txt
+2024-01-11 11:41:48,718 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/output.log
+2024-01-11 11:41:50,720 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/output.log
+2024-01-11 11:41:50,882 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:41:52,724 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/output.log
+2024-01-11 11:41:55,883 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:42:00,884 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:42:00,996 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: internal_messages
+2024-01-11 11:42:00,996 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: stop_status
+2024-01-11 11:42:00,997 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: stop_status
+2024-01-11 11:42:06,237 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:42:10,802 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:42:10,805 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:42:10,806 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:42:10,818 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:42:11,747 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_created():271] file/dir created: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:42:11,819 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:42:15,995 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: stop_status
+2024-01-11 11:42:15,996 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: internal_messages
+2024-01-11 11:42:15,997 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: stop_status
+2024-01-11 11:42:17,228 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:42:17,753 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/config.yaml
+2024-01-11 11:42:18,416 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:42:18,417 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:42:18,417 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:42:18,422 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:42:18,754 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:42:22,423 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:42:25,840 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:42:25,841 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:42:25,841 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:42:25,846 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:42:26,759 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:42:27,847 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:42:30,995 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: stop_status
+2024-01-11 11:42:30,996 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: stop_status
+2024-01-11 11:42:31,000 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: internal_messages
+2024-01-11 11:42:32,944 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:42:32,945 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:42:32,946 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:42:32,946 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:42:32,950 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:42:33,764 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:42:37,954 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:42:40,312 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:42:40,312 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:42:40,313 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:42:40,332 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:42:40,794 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:42:43,332 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:42:45,835 DEBUG   SystemMonitor:2876268 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-01-11 11:42:45,839 DEBUG   SenderThread:2876268 [sender.py:send():380] send: stats
+2024-01-11 11:42:45,995 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: stop_status
+2024-01-11 11:42:45,996 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: stop_status
+2024-01-11 11:42:45,999 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: internal_messages
+2024-01-11 11:42:46,630 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:42:46,631 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:42:46,631 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:42:46,635 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:42:46,799 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:42:48,636 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:42:53,307 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:42:53,309 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:42:53,309 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:42:53,314 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:42:53,805 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:42:54,315 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:42:59,316 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:43:00,287 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:43:00,288 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:43:00,289 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:43:00,293 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:43:00,811 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:43:00,995 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: stop_status
+2024-01-11 11:43:00,996 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: stop_status
+2024-01-11 11:43:00,998 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: internal_messages
+2024-01-11 11:43:05,245 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:43:06,557 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:43:06,558 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:43:06,558 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:43:06,563 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:43:06,818 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:43:10,564 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:43:12,292 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:43:12,293 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:43:12,293 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:43:12,298 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:43:12,822 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:43:15,843 DEBUG   SenderThread:2876268 [sender.py:send():380] send: stats
+2024-01-11 11:43:15,845 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:43:15,995 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: stop_status
+2024-01-11 11:43:15,996 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: stop_status
+2024-01-11 11:43:15,999 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: internal_messages
+2024-01-11 11:43:18,620 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:43:18,621 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:43:18,621 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:43:18,626 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:43:18,927 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:43:21,627 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:43:24,172 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:43:24,173 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:43:24,173 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:43:24,178 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:43:24,933 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:43:27,179 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:43:29,706 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:43:29,707 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:43:29,707 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:43:29,713 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:43:29,938 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:43:30,995 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: stop_status
+2024-01-11 11:43:30,996 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: stop_status
+2024-01-11 11:43:31,000 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: internal_messages
+2024-01-11 11:43:32,209 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:43:34,442 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:43:34,443 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:43:34,443 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:43:34,448 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:43:34,941 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:43:37,449 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:43:39,117 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:43:39,119 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:43:39,119 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:43:39,123 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:43:39,944 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:43:43,124 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:43:44,044 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:43:44,046 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:43:44,046 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:43:44,051 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:43:44,957 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:43:45,850 DEBUG   SenderThread:2876268 [sender.py:send():380] send: stats
+2024-01-11 11:43:45,995 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: stop_status
+2024-01-11 11:43:45,996 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: stop_status
+2024-01-11 11:43:45,999 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: internal_messages
+2024-01-11 11:43:48,224 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:43:48,434 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:43:48,435 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:43:48,435 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:43:48,439 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:43:48,960 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:43:52,735 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:43:52,736 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:43:52,736 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:43:52,741 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:43:52,964 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:43:53,742 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:43:57,126 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:43:57,127 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:43:57,127 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:43:57,132 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:43:57,967 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:43:59,132 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:44:00,812 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:44:00,813 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:44:00,813 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:44:00,818 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:44:00,968 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:44:00,996 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: stop_status
+2024-01-11 11:44:00,996 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: stop_status
+2024-01-11 11:44:01,000 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: internal_messages
+2024-01-11 11:44:04,207 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: status_report
+2024-01-11 11:44:05,813 DEBUG   HandlerThread:2876268 [handler.py:handle_request():146] handle_request: partial_history
+2024-01-11 11:44:05,814 DEBUG   SenderThread:2876268 [sender.py:send():380] send: history
+2024-01-11 11:44:05,815 DEBUG   SenderThread:2876268 [sender.py:send_request():407] send_request: summary_record
+2024-01-11 11:44:05,819 INFO    SenderThread:2876268 [sender.py:_save_file():1378] saving file wandb-summary.json with policy end
+2024-01-11 11:44:05,972 INFO    Thread-12 :2876268 [dir_watcher.py:_on_file_modified():288] file/dir modified: /nfs/home/students/t.reim/bachelor/pytorchtest/slurm/wandb/run-20240111_114145-u1hmkf0y/files/wandb-summary.json
+2024-01-11 11:44:07,839 INFO    MainThread:2876268 [internal.py:handle_exit():76] Internal process exited
+2024-01-11 11:44:07,886 INFO    memory    :2876268 [interfaces.py:monitor():140] Process proc.memory.rssMB has exited.
+2024-01-11 11:44:07,886 DEBUG   SystemMonitor:2876268 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-01-11 11:44:07,887 DEBUG   SystemMonitor:2876268 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-01-11 11:44:07,892 DEBUG   SenderThread:2876268 [sender.py:send():380] send: stats

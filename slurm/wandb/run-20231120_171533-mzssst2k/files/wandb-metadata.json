@@ -1,0 +1,394 @@
+{
+    "os": "Linux-6.2.0-36-generic-x86_64-with-glibc2.10",
+    "python": "3.8.18",
+    "heartbeatAt": "2023-11-20T16:15:34.663015",
+    "startedAt": "2023-11-20T16:15:33.766098",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "-data",
+        "gold_stand",
+        "-model",
+        "dscript_like",
+        "-lr",
+        "0.001",
+        "-epoch",
+        "25",
+        "-batch",
+        "40",
+        "-sub",
+        "-subsize",
+        "0.5",
+        "-emb",
+        "-emb_dim",
+        "1280",
+        "-wandb"
+    ],
+    "state": "running",
+    "program": "/nfs/home/students/t.reim/bachelor/pytorchtest/main.py",
+    "codePathLocal": null,
+    "codePath": "main.py",
+    "git": {
+        "remote": "git@github.com:BlackCetus/bachelor.git",
+        "commit": "0dcef473b6fd5323383abad573b444ea891b8273"
+    },
+    "email": "t.reim@tum.de",
+    "root": "/nfs/home/students/t.reim/bachelor/pytorchtest",
+    "host": "gpu02.exbio.wzw.tum.de",
+    "username": "t.reim",
+    "executable": "/nfs/home/students/t.reim/.conda/envs/mamba2/bin/python",
+    "cpu_count": 64,
+    "cpu_count_logical": 64,
+    "cpu_freq": {
+        "current": 2401.5382656250013,
+        "min": 0.0,
+        "max": 0.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3344.085,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3072.815,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2862.146,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3305.731,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3302.802,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3340.924,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 1837.36,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2345.71,
+            "min": 0.0,
+            "max": 0.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 548.0470123291016,
+            "used": 46.49600601196289
+        }
+    },
+    "gpu": "NVIDIA A40",
+    "gpu_count": 3,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA A40",
+            "memory_total": 48305799168
+        },
+        {
+            "name": "NVIDIA A40",
+            "memory_total": 48305799168
+        },
+        {
+            "name": "NVIDIA A40",
+            "memory_total": 48305799168
+        }
+    ],
+    "memory": {
+        "total": 503.47288513183594
+    }
+}

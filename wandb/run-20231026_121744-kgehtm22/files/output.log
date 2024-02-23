@@ -1,0 +1,24 @@
+
+Using Cuda
+Epoch 1/25, Average Loss: 0.3394107314593652, Accuracy: 0.8335779853511839, Precision: 0.8654064919989355, Recall: 0.8476634792971978, F1 Score: 0.42168057126696834
+Epoch 1/25, Average Val Loss: 0.5489116311073303, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 2/25, Average Loss: 0.06779024158330525, Accuracy: 0.9805297833568245, Precision: 0.9760190479213274, Recall: 0.9780899409439627, F1 Score: 0.4764564479638009
+Epoch 2/25, Average Val Loss: 0.6890829205513, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Epoch 3/25, Average Loss: 0.02892745175289319, Accuracy: 0.9909883887864465, Precision: 0.9903668959409879, Recall: 0.9905641072452992, F1 Score: 0.482112556561086
+Epoch 3/25, Average Val Loss: 0.8488940000534058, Val Accuracy: 0.0, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+Traceback (most recent call last):
+  File "main.py", line 66, in <module>
+    for batch in dataloader:
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 630, in __next__
+    data = self._next_data()
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 674, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 276, in __getitem__
+    padd_sequence(seq2, self.max)
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 225, in padd_sequence
+    sequence.extend(np.zeros((1,24)))
+KeyboardInterrupt

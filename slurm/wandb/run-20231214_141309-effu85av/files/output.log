@@ -1,0 +1,7 @@
+Using Data:  gold_stand
+Using Model:  baseline2d
+Using Wandb:  True
+Learning Rate:  0.001
+Max Sequence Length:  10000
+Epochs:  25
+Batchsize:  40

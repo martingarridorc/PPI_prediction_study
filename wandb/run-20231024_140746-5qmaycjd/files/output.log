@@ -1,0 +1,7 @@
+
+Using Cuda
+Epoch 1/50, Average Loss: 0.5404963833945138
+Traceback (most recent call last):
+  File "main.py", line 68, in <module>
+    val_loss += criterion(val_outputs, val_labels.item().to(1))
+RuntimeError: a Tensor with 128 elements cannot be converted to Scalar

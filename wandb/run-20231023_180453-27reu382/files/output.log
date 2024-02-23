@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/main.py", line 25, in <module>
+    max = max(d.max_sequence_size(train_data), d.max_sequence_size(test_data))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 25, in max_sequence_size
+    if (has_proper_structure(filename)):
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 51, in has_proper_structure
+    data_file = open(filename, 'r')
+                ^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'bachelor/pytorchtest/data/train_all_seq.csv'

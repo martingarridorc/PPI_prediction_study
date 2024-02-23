@@ -1,0 +1,20 @@
+Using Data:  gold_stand
+Using Model:  dscript_like
+Using Wandb:  True
+Learning Rate:  0.001
+Max Sequence Length:  None
+Epochs:  25
+Batchsize:  1024
+Using Subset
+Subset Size:  32638
+Val Subset Size:  10409
+Using Embeddings:  esm2_t33_650  Mean:  False
+Using CUDA
+Traceback (most recent call last):
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/main.py", line 196, in <module>
+    outputs = model.batch_iterate(batch, device, layer, embedding_dir)
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/models/dscript_like.py", line 85, in batch_iterate
+    p, cm = self.forward(seq1, seq2)
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/models/dscript_like.py", line 46, in forward
+    m = torch.cat([diff, mul], dim=-1)
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 430.00 MiB. GPU 0 has a total capacty of 44.38 GiB of which 262.56 MiB is free. Including non-PyTorch memory, this process has 44.12 GiB memory in use. Of the allocated memory 42.37 GiB is allocated by PyTorch, and 283.19 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

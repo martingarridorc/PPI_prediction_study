@@ -1,0 +1,26 @@
+Using Data:  gold_stand
+Using Model:  dscript_like
+Using Wandb:  True
+Learning Rate:  0.001
+Max Sequence Length:  10000
+Epochs:  25
+early stopping:  True
+Batchsize:  40
+Using Subset
+Subset Size:  81592
+Val Subset Size:  26024
+Using Embeddings:  esm2_t36_3B  Mean:  False
+Using CUDA
+Epoch 1/25, Average Loss: 0.6607086347160386, Accuracy: 0.6045036764705881, Precision: 0.6041038136583516, Recall: 0.6409468344031752, F1 Score: 0.6087532140924936
+Epoch 1/25, Average Val Loss: 0.7616472840309143, Val Accuracy: 0.5279441884280599, Val Precision: 0.5391892603556722, Val Recall: 0.3440060627294992, Val F1 Score: 0.41302850753513853
+TP: 4459, FP: 3824, TN: 9282, FN: 8459
+Epoch 2/25, Average Loss: 0.6013748147616199, Accuracy: 0.6737561274509799, Precision: 0.6707534236904253, Recall: 0.6892193353290714, F1 Score: 0.6712532093312474
+Epoch 2/25, Average Val Loss: 0.8280976414680481, Val Accuracy: 0.5126728110599078, Val Precision: 0.5267831374974237, Val Recall: 0.21493672544700523, Val F1 Score: 0.29803638019231987
+TP: 2801, FP: 2497, TN: 10541, FN: 10185
+Epoch 3/25, Average Loss: 0.5784996868056409, Accuracy: 0.6977696078431378, Precision: 0.6943992180307152, Recall: 0.7101343547107382, F1 Score: 0.694506629390119
+Epoch 3/25, Average Val Loss: 0.8599722981452942, Val Accuracy: 0.5085509472606243, Val Precision: 0.5103614436554826, Val Recall: 0.2828815878426965, Val F1 Score: 0.35730333091607847
+TP: 3682, FP: 3503, TN: 9552, FN: 9287
+Epoch 4/25, Average Loss: 0.5556396240843278, Accuracy: 0.713658088235294, Precision: 0.7096098768360245, Recall: 0.7313960245659824, F1 Score: 0.7133842806840276
+Epoch 4/25, Average Val Loss: 0.9538625478744507, Val Accuracy: 0.47459037378392177, Val Precision: 0.4654259550018819, Val Recall: 0.3123191582425732, Val F1 Score: 0.3669155431751681
+TP: 4095, FP: 4705, TN: 8256, FN: 8968
+Early stopping triggered. No improvement in validation accuracy. Best epoch: 0

@@ -1,0 +1,22 @@
+
+Epoch 1/50, Sample 0/5316 Loss: 0.7316087484359741
+Traceback (most recent call last):
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/main.py", line 41, in <module>
+    for batch in dataloader:
+  File "/nfs/home/students/t.reim/.conda/envs/vscodeconnection/lib/python3.11/site-packages/torch/utils/data/dataloader.py", line 633, in __next__
+    data = self._next_data()
+           ^^^^^^^^^^^^^^^^^
+  File "/nfs/home/students/t.reim/.conda/envs/vscodeconnection/lib/python3.11/site-packages/torch/utils/data/dataloader.py", line 677, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/home/students/t.reim/.conda/envs/vscodeconnection/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 51, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/home/students/t.reim/.conda/envs/vscodeconnection/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 51, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+            ~~~~~~~~~~~~^^^^^
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 263, in __getitem__
+    padd_sequence(seq1, self.max)
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 215, in padd_sequence
+    sequence.extend(np.zeros((1,20)))
+KeyboardInterrupt

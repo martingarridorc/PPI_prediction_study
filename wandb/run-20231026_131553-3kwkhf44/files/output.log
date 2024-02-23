@@ -1,0 +1,39 @@
+
+Using Cuda
+Epoch 1/25, Average Loss: 0.3314130896811976, Accuracy: 0.8569888291855204, Precision: 0.84844695794057, Recall: 0.8526873150684315, F1 Score: 0.8491376636509
+Epoch 1/25, Average Val Loss: 2.001525402069092, Val Accuracy: 0.5028356481481482, Val Precision: 0.5029857202479422, Val Recall: 0.9664574477809771, Val F1 Score: 0.6598186289950334
+Epoch 2/25, Average Loss: 0.0641324824982268, Accuracy: 0.9788779694570136, Precision: 0.9792452295663178, Recall: 0.9776727794160446, F1 Score: 0.9780663985104191
+Epoch 2/25, Average Val Loss: 3.0008435249328613, Val Accuracy: 0.49432870370370374, Val Precision: 0.49692182364308823, Val Recall: 0.9538874228159292, Val F1 Score: 0.6527360458995668
+Epoch 3/25, Average Loss: 0.0244013066540527, Accuracy: 0.9930005656108598, Precision: 0.9942329381871922, Recall: 0.99183995814542, F1 Score: 0.9929530948449783
+Epoch 3/25, Average Val Loss: 3.138869524002075, Val Accuracy: 0.5028356481481482, Val Precision: 0.5013706117688682, Val Recall: 0.9789176894354696, Val F1 Score: 0.6621942523355361
+Epoch 4/25, Average Loss: 0.015635461683439857, Accuracy: 0.9944852941176471, Precision: 0.9940077366327424, Recall: 0.9946453837717816, F1 Score: 0.994260935318767
+Epoch 4/25, Average Val Loss: 3.510080337524414, Val Accuracy: 0.49716435185185187, Val Precision: 0.49886097207508306, Val Recall: 0.9594671292793584, Val F1 Score: 0.6556178687356977
+Epoch 5/25, Average Loss: 0.008364371424677837, Accuracy: 0.9974724264705882, Precision: 0.9976332444424336, Recall: 0.9973399054572742, F1 Score: 0.9974670205689931
+Epoch 5/25, Average Val Loss: 3.6061527729034424, Val Accuracy: 0.5028356481481482, Val Precision: 0.5016064173829897, Val Recall: 0.967718790875932, Val F1 Score: 0.6598853770823878
+Epoch 6/25, Average Loss: 0.007877497300368679, Accuracy: 0.9970128676470589, Precision: 0.9963177259273738, Recall: 0.9976774052477202, F1 Score: 0.9969770780920337
+Epoch 6/25, Average Val Loss: 3.9433789253234863, Val Accuracy: 0.5085069444444444, Val Precision: 0.5072631073493568, Val Recall: 0.971787552986386, Val F1 Score: 0.6659712680033095
+Epoch 7/25, Average Loss: 0.01131576074711869, Accuracy: 0.9977022058823529, Precision: 0.9979878284615145, Recall: 0.9972092049250918, F1 Score: 0.997578461197058
+Epoch 7/25, Average Val Loss: 3.7065963745117188, Val Accuracy: 0.5141782407407408, Val Precision: 0.5162659835483688, Val Recall: 0.9613811623557316, Val F1 Score: 0.6690302521592839
+Epoch 8/25, Average Loss: 0.005398324192570084, Accuracy: 0.9986213235294118, Precision: 0.9990429505135389, Recall: 0.9982389009115351, F1 Score: 0.9986303135252195
+Epoch 8/25, Average Val Loss: 4.0910964012146, Val Accuracy: 0.49716435185185187, Val Precision: 0.4971711501626274, Val Recall: 0.953091558647725, Val F1 Score: 0.6527143092031197
+Epoch 9/25, Average Loss: 0.008288308149477577, Accuracy: 0.9972426470588235, Precision: 0.9971850639858689, Recall: 0.9975885752540163, F1 Score: 0.9973563463494389
+Epoch 9/25, Average Val Loss: 4.190733432769775, Val Accuracy: 0.5028356481481482, Val Precision: 0.5012805887816545, Val Recall: 0.9542935102159831, Val F1 Score: 0.6570518603861859
+Epoch 10/25, Average Loss: 0.006237433276563773, Accuracy: 0.997596153846154, Precision: 0.9968509284930228, Recall: 0.9981290399721945, F1 Score: 0.9974657185136697
+Epoch 10/25, Average Val Loss: 4.272840976715088, Val Accuracy: 0.49432870370370374, Val Precision: 0.4939255393137286, Val Recall: 0.9580011011257762, Val F1 Score: 0.6503919719241534
+Epoch 11/25, Average Loss: 0.019429047699839642, Accuracy: 0.9940610859728506, Precision: 0.9910005563843818, Recall: 0.9961045229246482, F1 Score: 0.9932133782079423
+Traceback (most recent call last):
+  File "main.py", line 112, in <module>
+    for val_batch in vdataloader:
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 630, in __next__
+    data = self._next_data()
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 674, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 275, in __getitem__
+    padd_sequence(seq1, self.max)
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 225, in padd_sequence
+    sequence.extend(np.zeros((1,24)))
+KeyboardInterrupt

@@ -1,0 +1,26 @@
+
+Using Cuda
+Epoch 1/25, Average Loss: 0.3742031577755423, Accuracy: 0.825862556561086, Precision: 0.8180934971830446, Recall: 0.8258346210885024, F1 Score: 0.8160860742726015
+Epoch 1/25, Average Val Loss: 0.3742031577755423, Val Accuracy: 0.5141782407407408, Val Precision: 0.5144249662492014, Val Recall: 0.933157555762043, Val F1 Score: 0.6613536041674124
+Epoch 2/25, Average Loss: 0.0625192948123988, Accuracy: 0.9795496323529411, Precision: 0.9817438778209777, Recall: 0.976365825205909, F1 Score: 0.9788526467988385
+Epoch 2/25, Average Val Loss: 0.0625192948123988, Val Accuracy: 0.5028356481481482, Val Precision: 0.5024921759045466, Val Recall: 0.9727737762380512, Val F1 Score: 0.6615145070171252
+Epoch 3/25, Average Loss: 0.023978282848153922, Accuracy: 0.9935661764705882, Precision: 0.9934532942799578, Recall: 0.9932380837057613, F1 Score: 0.9932774901883694
+Epoch 3/25, Average Val Loss: 0.023978282848153922, Val Accuracy: 0.5, Val Precision: 0.5017710660497746, Val Recall: 0.9719094102539879, Val F1 Score: 0.659708606118268
+Traceback (most recent call last):
+  File "main.py", line 68, in <module>
+    for batch in dataloader:
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 630, in __next__
+    data = self._next_data()
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 674, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 273, in __getitem__
+    seq1 = sequence_to_vector(data['sequence_a'])
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 199, in sequence_to_vector
+    onehot = one_hotting(item)
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 139, in one_hotting
+    elif letter == 'C':
+KeyboardInterrupt

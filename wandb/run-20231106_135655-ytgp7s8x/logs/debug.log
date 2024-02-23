@@ -1,0 +1,27 @@
+2023-11-06 13:56:55,358 INFO    MainThread:1524972 [wandb_setup.py:_flush():76] Current SDK version is 0.15.12
+2023-11-06 13:56:55,358 INFO    MainThread:1524972 [wandb_setup.py:_flush():76] Configure stats pid to 1524972
+2023-11-06 13:56:55,358 INFO    MainThread:1524972 [wandb_setup.py:_flush():76] Loading settings from /nfs/home/students/t.reim/.config/wandb/settings
+2023-11-06 13:56:55,358 INFO    MainThread:1524972 [wandb_setup.py:_flush():76] Loading settings from /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/settings
+2023-11-06 13:56:55,358 INFO    MainThread:1524972 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2023-11-06 13:56:55,358 INFO    MainThread:1524972 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2023-11-06 13:56:55,359 INFO    MainThread:1524972 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'main.py', 'program_abspath': '/nfs/home/students/t.reim/bachelor/pytorchtest/main.py', 'program': 'main.py'}
+2023-11-06 13:56:55,359 INFO    MainThread:1524972 [wandb_init.py:_log_setup():528] Logging user logs to /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231106_135655-ytgp7s8x/logs/debug.log
+2023-11-06 13:56:55,359 INFO    MainThread:1524972 [wandb_init.py:_log_setup():529] Logging internal logs to /nfs/home/students/t.reim/bachelor/pytorchtest/wandb/run-20231106_135655-ytgp7s8x/logs/debug-internal.log
+2023-11-06 13:56:55,359 INFO    MainThread:1524972 [wandb_init.py:init():568] calling init triggers
+2023-11-06 13:56:55,359 INFO    MainThread:1524972 [wandb_init.py:init():575] wandb.init called with sweep_config: {}
+config: {'learning_rate': 0.001, 'epochs': 50, 'max_size': 1166, 'subset': False, 'subset_size': 0.5, 'batchsize': 2048, 'use_embeddings': True, 'embedding_name': 'esm2_t36_3B', 'mean_embedding': True, 'dataset': 'huang'}
+2023-11-06 13:56:55,359 INFO    MainThread:1524972 [wandb_init.py:init():618] starting backend
+2023-11-06 13:56:55,359 INFO    MainThread:1524972 [wandb_init.py:init():622] setting up manager
+2023-11-06 13:56:55,360 INFO    MainThread:1524972 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2023-11-06 13:56:55,362 INFO    MainThread:1524972 [wandb_init.py:init():628] backend started and connected
+2023-11-06 13:56:55,364 INFO    MainThread:1524972 [wandb_init.py:init():720] updated telemetry
+2023-11-06 13:56:55,389 INFO    MainThread:1524972 [wandb_init.py:init():753] communicating run to backend with 90.0 second timeout
+2023-11-06 13:56:56,102 INFO    MainThread:1524972 [wandb_run.py:_on_init():2220] communicating current version
+2023-11-06 13:56:56,170 INFO    MainThread:1524972 [wandb_run.py:_on_init():2229] got version response 
+2023-11-06 13:56:56,170 INFO    MainThread:1524972 [wandb_init.py:init():804] starting run threads in backend
+2023-11-06 13:56:58,843 INFO    MainThread:1524972 [wandb_run.py:_console_start():2199] atexit reg
+2023-11-06 13:56:58,844 INFO    MainThread:1524972 [wandb_run.py:_redirect():2054] redirect: wrap_raw
+2023-11-06 13:56:58,844 INFO    MainThread:1524972 [wandb_run.py:_redirect():2119] Wrapping output streams.
+2023-11-06 13:56:58,844 INFO    MainThread:1524972 [wandb_run.py:_redirect():2144] Redirects installed.
+2023-11-06 13:56:58,844 INFO    MainThread:1524972 [wandb_init.py:init():845] run started, returning control to user process
+2023-11-06 13:57:07,242 WARNING MsgRouterThr:1524972 [router.py:message_loop():77] message_loop has been closed

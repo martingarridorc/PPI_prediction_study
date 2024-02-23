@@ -1,0 +1,1 @@
+{"batch_loss": 0.17363998293876648, "batch_accuracy": 0, "batch_precision": 0.0, "batch_recall": 0, "batch_f1_score": 0.0, "_timestamp": 1698262097.3627262, "_runtime": 16.19210720062256, "_step": 21, "_wandb": {"runtime": 15}}

@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/main.py", line 126, in <module>
+    if dscript:
+NameError: name 'dscript' is not defined

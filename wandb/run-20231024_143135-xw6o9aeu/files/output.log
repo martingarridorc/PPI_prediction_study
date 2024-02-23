@@ -1,0 +1,42 @@
+
+Using Cuda
+Epoch 1/25, Average Loss: 0.534149211077463
+Epoch 1/25, Validation Loss: 0.8029620051383972
+Epoch 2/25, Average Loss: 0.38032970967746915
+Epoch 2/25, Validation Loss: 0.8068227171897888
+Epoch 3/25, Average Loss: 0.3634275297323863
+Epoch 3/25, Validation Loss: 0.8037251830101013
+Epoch 4/25, Average Loss: 0.3522332388730276
+Epoch 4/25, Validation Loss: 0.8094244003295898
+Epoch 5/25, Average Loss: 0.34744441012541455
+Epoch 5/25, Validation Loss: 0.80390864610672
+Epoch 6/25, Average Loss: 0.34263664413066136
+Epoch 6/25, Validation Loss: 0.8048645853996277
+Epoch 7/25, Average Loss: 0.342531572495188
+Epoch 7/25, Validation Loss: 0.8074929118156433
+Epoch 8/25, Average Loss: 0.33777101054078057
+Epoch 8/25, Validation Loss: 0.8039447665214539
+Epoch 9/25, Average Loss: 0.3339599697362809
+Epoch 9/25, Validation Loss: 0.808096706867218
+Epoch 10/25, Average Loss: 0.3356138787099293
+Epoch 10/25, Validation Loss: 0.8076928853988647
+Epoch 11/25, Average Loss: 0.3343109978096826
+Epoch 11/25, Validation Loss: 0.8112648129463196
+Epoch 12/25, Average Loss: 0.3368472989116396
+Epoch 12/25, Validation Loss: 0.8077588081359863
+Traceback (most recent call last):
+  File "main.py", line 45, in <module>
+    for batch in dataloader:
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 630, in __next__
+    data = self._next_data()
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 674, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 51, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 263, in __getitem__
+    padd_sequence(seq1, self.max)
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/data/data.py", line 215, in padd_sequence
+    sequence.extend(np.zeros((1,20)))
+KeyboardInterrupt

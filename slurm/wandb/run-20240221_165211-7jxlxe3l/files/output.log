@@ -1,0 +1,35 @@
+Parameters:
+learning_rate: 0.001
+epochs: 25
+max_size: 10000
+subset: True
+subset_size: 0.5
+batchsize: 10
+use_embeddings: True
+embedding_name: esm2_t33_650
+mean_embedding: False
+embedding_dim: 1280
+dataset: gold_stand
+model: Rich-ATT
+use_wandb: True
+early_stopping: 6
+forward_expansion: 1
+dropout: 0.1
+num_heads: 4
+Using Subset
+Subset Size:  81592
+Val Subset Size:  26024
+Using Embeddings:  esm2_t33_650  Mean:  False
+Using CUDA
+Traceback (most recent call last):
+  File "/nfs/home/students/t.reim/bachelor/pytorchtest/main.py", line 240, in <module>
+    loss = criterion(outputs, labels.to(device))
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/nn/modules/loss.py", line 618, in forward
+    return F.binary_cross_entropy(input, target, weight=self.weight, reduction=self.reduction)
+  File "/nfs/home/students/t.reim/.conda/envs/mamba2/lib/python3.8/site-packages/torch/nn/functional.py", line 3113, in binary_cross_entropy
+    raise ValueError(
+ValueError: Using a target size (torch.Size([10, 1])) that is different to the input size (torch.Size([10, 1, 1])) is deprecated. Please ensure they have the same size.

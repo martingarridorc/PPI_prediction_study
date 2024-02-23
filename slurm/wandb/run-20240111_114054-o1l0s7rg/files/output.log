@@ -1,0 +1,15 @@
+Using Data:  gold_stand
+Using Model:  richoux
+Using Wandb:  True
+Learning Rate:  0.001
+Max Sequence Length:  10000
+Epochs:  25
+early stopping:  True
+Batchsize:  1024
+Using Subset
+Subset Size:  81592
+Val Subset Size:  26024
+Using Embeddings:  esm2_t48_15B  Mean:  True
+Using CUDA
+Epoch 1/25, Average Loss: 0.6646730162203311, Accuracy: 0.5909827922952586, Precision: 0.5861470915058964, Recall: 0.5986617928322537, F1 Score: 0.5912148158507103
+Epoch 1/25, Average Val Loss: 0.6729634404182434, Val Accuracy: 0.585400319756894, Val Precision: 0.5879219707579726, Val Recall: 0.56498999772594, Val F1 Score: 0.5759310166917133

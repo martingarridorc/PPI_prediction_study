@@ -1,0 +1,60 @@
+Parameters:
+learning_rate: 0.001
+epochs: 25
+max_size: 10000
+subset: True
+subset_size: 0.5
+batchsize: 10
+use_embeddings: True
+embedding_name: esm2_t33_650
+mean_embedding: False
+embedding_dim: 1280
+dataset: gold_stand
+model: ICAN_cross
+use_wandb: True
+early_stopping: 6
+forward_expansion: 1
+dropout: 0.3
+num_heads: 8
+Using Subset
+Subset Size:  81592
+Val Subset Size:  26024
+Using Embeddings:  esm2_t33_650  Mean:  False
+Using CUDA
+Epoch 1/25, Average Loss: 0.6935991151587052, Accuracy: 0.49745098039215613, Precision: 0.47736757897603466, Recall: 0.6188178882664188, F1 Score: 0.487421422579094
+TP: 25198, FP: 25514, TN: 15435, FN: 15445
+Epoch 1/25, Average Val Loss: 0.6938609480857849, Val Accuracy: 0.49544756050710714, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+TP: 0, FP: 0, TN: 12922, FN: 13102
+Epoch 2/25, Average Loss: 0.6932500317181443, Accuracy: 0.49676470588235305, Precision: 0.400101832399627, Recall: 0.4348783749610948, F1 Score: 0.36996488053464555
+TP: 17746, FP: 18048, TN: 22838, FN: 22960
+Epoch 2/25, Average Val Loss: 0.6931681632995605, Val Accuracy: 0.4990395697272384, Val Precision: 0.4990395697272384, Val Recall: 0.9984633115635805, Val F1 Score: 0.6504742134897532
+TP: 12987, FP: 13037, TN: 0, FN: 0
+Epoch 3/25, Average Loss: 0.6932109285219042, Accuracy: 0.4990441176470595, Precision: 0.36813025210084016, Recall: 0.5106096327419846, F1 Score: 0.38866941144119144
+TP: 20858, FP: 20912, TN: 19906, FN: 19916
+Epoch 3/25, Average Val Loss: 0.6931027770042419, Val Accuracy: 0.5035920092201314, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+TP: 0, FP: 0, TN: 13144, FN: 12880
+Epoch 4/25, Average Loss: 0.6931910625859803, Accuracy: 0.5004656862745095, Precision: 0.40632615546218603, Recall: 0.5260858232181764, F1 Score: 0.42281747139144304
+TP: 21430, FP: 21328, TN: 19473, FN: 19361
+Epoch 4/25, Average Val Loss: 0.6932951211929321, Val Accuracy: 0.497598924318094, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+TP: 0, FP: 0, TN: 12958, FN: 13066
+Epoch 5/25, Average Loss: 0.693204561730518, Accuracy: 0.5012009803921572, Precision: 0.47024125622471213, Recall: 0.8356385192966078, F1 Score: 0.579594462247544
+TP: 34344, FP: 33961, TN: 6558, FN: 6729
+Epoch 5/25, Average Val Loss: 0.6931467652320862, Val Accuracy: 0.49610065309258494, Val Precision: 0.49610065309258494, Val Recall: 0.9996158278908951, Val F1 Score: 0.6484250478680145
+TP: 12909, FP: 13115, TN: 0, FN: 0
+Epoch 6/25, Average Loss: 0.6931963434698535, Accuracy: 0.4973897058823516, Precision: 0.21019607843137322, Recall: 0.4232843137254902, F1 Score: 0.2745909000527407
+TP: 17152, FP: 17408, TN: 23477, FN: 23555
+Epoch 6/25, Average Val Loss: 0.6931674480438232, Val Accuracy: 0.5006146753745689, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+TP: 0, FP: 0, TN: 13058, FN: 12966
+Epoch 7/25, Average Loss: 0.693211778194881, Accuracy: 0.49734068627450795, Precision: 0.1794852941176472, Recall: 0.3618872549019608, F1 Score: 0.2343731598634572
+TP: 14646, FP: 14924, TN: 25949, FN: 26073
+Epoch 7/25, Average Val Loss: 0.6931361556053162, Val Accuracy: 0.5028044563964651, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+TP: 0, FP: 0, TN: 13105, FN: 12919
+Epoch 8/25, Average Loss: 0.6931699005412121, Accuracy: 0.5015073529411744, Precision: 0.34616421568627415, Recall: 0.6881127450980392, F1 Score: 0.4506914914872214
+TP: 28247, FP: 27943, TN: 12706, FN: 12696
+Epoch 8/25, Average Val Loss: 0.6932119727134705, Val Accuracy: 0.4974836726853635, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+TP: 0, FP: 0, TN: 12968, FN: 13056
+Epoch 9/25, Average Loss: 0.693191788666973, Accuracy: 0.49917892156862864, Precision: 0.1727450980392159, Recall: 0.34705882352941175, F1 Score: 0.22522470791542332
+TP: 14096, FP: 14224, TN: 26677, FN: 26595
+Epoch 9/25, Average Val Loss: 0.6931555271148682, Val Accuracy: 0.4967537456780643, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+TP: 0, FP: 0, TN: 12946, FN: 13078
+Early stopping triggered. No improvement in validation accuracy. Best epoch: 3

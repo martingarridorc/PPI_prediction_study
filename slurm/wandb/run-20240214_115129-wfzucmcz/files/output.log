@@ -1,0 +1,52 @@
+Parameters:
+learning_rate: 0.001
+epochs: 25
+max_size: 10000
+subset: True
+subset_size: 0.5
+batchsize: 10
+use_embeddings: True
+embedding_name: esm2_t33_650
+mean_embedding: False
+embedding_dim: 1280
+dataset: gold_stand
+model: selfattention
+use_wandb: True
+early_stopping: True
+forward_expansion: 1
+dropout: 0.1
+num_heads: 8
+Using Subset
+Subset Size:  81592
+Val Subset Size:  26024
+Using Embeddings:  esm2_t33_650  Mean:  False
+Using CUDA
+Epoch 1/25, Average Loss: 0.69324564221589, Accuracy: 0.5017401960784313, Precision: 0.08014705882352947, Recall: 0.15992647058823528, F1 Score: 0.10442876212430886
+TP: 6540, FP: 6522, TN: 34452, FN: 34078
+Epoch 1/25, Average Val Loss: 0.6934817433357239, Val Accuracy: 0.4942182097579722, Val Precision: 0.4942182097579722, Val Recall: 0.9980791394544756, Val F1 Score: 0.6462124388276667
+TP: 12863, FP: 13161, TN: 0, FN: 0
+Epoch 2/25, Average Loss: 0.6931856602722524, Accuracy: 0.5000980392156851, Precision: 0.3020343137254903, Recall: 0.6029411764705882, F1 Score: 0.39311599126210495
+TP: 24646, FP: 24604, TN: 16164, FN: 16178
+Epoch 2/25, Average Val Loss: 0.6932294964790344, Val Accuracy: 0.4989435266999614, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+TP: 0, FP: 0, TN: 13006, FN: 13018
+Epoch 3/25, Average Loss: 0.6931968277356788, Accuracy: 0.49991421568627686, Precision: 0.1499264705882354, Recall: 0.3002450980392157, F1 Score: 0.19544399217273395
+TP: 12234, FP: 12278, TN: 28599, FN: 28481
+Epoch 3/25, Average Val Loss: 0.6932529807090759, Val Accuracy: 0.4930849020361112, Val Precision: 0.4930849020361112, Val Recall: 0.9984633115635805, Val F1 Score: 0.6450941924342026
+TP: 12835, FP: 13189, TN: 0, FN: 0
+Epoch 4/25, Average Loss: 0.6931839871421164, Accuracy: 0.4991544117647056, Precision: 0.15246323529411782, Recall: 0.30772058823529413, F1 Score: 0.19936379445861324
+TP: 12441, FP: 12679, TN: 28322, FN: 28150
+Epoch 4/25, Average Val Loss: 0.6931427121162415, Val Accuracy: 0.5019016519400694, Val Precision: 0.0, Val Recall: 0.0, Val F1 Score: 0.0
+TP: 0, FP: 0, TN: 13083, FN: 12941
+Epoch 5/25, Average Loss: 0.6931849291584655, Accuracy: 0.5003676470588225, Precision: 0.20712009803921547, Recall: 0.4134803921568627, F1 Score: 0.27012248010359197
+TP: 16901, FP: 16851, TN: 23979, FN: 23861
+Epoch 5/25, Average Val Loss: 0.6931483149528503, Val Accuracy: 0.49650403380714475, Val Precision: 0.49650403380714475, Val Recall: 1.0, Val F1 Score: 0.6480035210554681
+TP: 12921, FP: 13103, TN: 0, FN: 0
+Epoch 6/25, Average Loss: 0.693207489501904, Accuracy: 0.49732843137254945, Precision: 0.30368872549019593, Recall: 0.6084558823529411, F1 Score: 0.3957517562871783
+TP: 24777, FP: 24895, TN: 15831, FN: 16089
+Epoch 6/25, Average Val Loss: 0.6931613087654114, Val Accuracy: 0.49825201690357335, Val Precision: 0.49825201690357335, Val Recall: 0.9988474836726854, Val F1 Score: 0.6485880810014576
+TP: 12965, FP: 13059, TN: 0, FN: 0
+Epoch 7/25, Average Loss: 0.6931841744000421, Accuracy: 0.4981127450980396, Precision: 0.3339828431372549, Recall: 0.6664215686274509, F1 Score: 0.4350770791554556
+TP: 27249, FP: 27163, TN: 13443, FN: 13737
+Epoch 7/25, Average Val Loss: 0.6931477189064026, Val Accuracy: 0.5012677679600469, Val Precision: 0.5012677679600469, Val Recall: 0.9988474836726854, Val F1 Score: 0.651757760589096
+TP: 13045, FP: 12979, TN: 0, FN: 0
+Early stopping triggered. No improvement in validation accuracy. Best epoch: 4
