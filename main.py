@@ -32,8 +32,8 @@ def metrics(y_true, y_pred):
 
 
 
-data_name = "gold_stand"
-model_name = "Rich-ATT"
+data_name = "huang"
+model_name = "selfattention"
 learning_rate = 0.001
 num_epochs = 25
 bs = 2

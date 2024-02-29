@@ -39,7 +39,7 @@ def addseqtodf(df):
     df['sequence_b'] = seq_b
     return df
 
-def addseqtodf_ff(df, fasta_df):
+def addseqtodf_ff(df, fasta_df, max_len):
     seq_a = []
     seq_b = []
     drop = []
@@ -48,15 +48,19 @@ def addseqtodf_ff(df, fasta_df):
         id2 = row['Id2']
         if id1 in fasta_df["ID"].values:
             a = str(fasta_df[fasta_df["ID"] == id1]["Sequence"].values[0])
-        else:   
+        else:
+            drop.append(index)    
+            continue
             a = get_seq(id1)  
             print(id1)
         if id2 in fasta_df["ID"].values:
             b = str(fasta_df[fasta_df["ID"] == id2]["Sequence"].values[0])
-        else:   
+        else: 
+            drop.append(index)   
+            continue
             b = get_seq(id2) 
             print(id2)
-        if len(a) <= 1166 and len(b) <= 1166:
+        if len(a) <= max_len and len(b) <= max_len:
             seq_a.append(a)
             seq_b.append(b)
         else:
@@ -78,15 +82,15 @@ def read_fasta_as_df(fasta):
     return df
 
 
-fasta_df = read_fasta_as_df('bachelor/pytorchtest/data/human_swissprot_oneliner.fasta')
+fasta_df = read_fasta_as_df('bachelor/pytorchtest/data/swissprot/human_swissprot_oneliner.fasta')
 
 
 print(fasta_df)
 
-train_pos = file2df("bachelor/pytorchtest/data/pan_train_pos.txt", 1)
-train_neg = file2df("bachelor/pytorchtest/data/pan_train_neg.txt", 0)
-test_pos = file2df("bachelor/pytorchtest/data/pan_test_pos.txt", 1)
-test_neg = file2df("bachelor/pytorchtest/data/pan_test_pos.txt", 0)
+train_pos = file2df("bachelor/pytorchtest/data/richoux_regular/richoux_regular_train_pos.txt", 1)
+train_neg = file2df("bachelor/pytorchtest/data/richoux_regular/richoux_regular_train_neg.txt", 0)
+test_pos = file2df("bachelor/pytorchtest/data/richoux_regular/richoux_regular_test_pos.txt", 1)
+test_neg = file2df("bachelor/pytorchtest/data/richoux_regular/richoux_regular_test_neg.txt", 0)
 
 print(1)
 print(train_pos)
@@ -100,11 +104,13 @@ print(train_all)
 
 
 
-train_all_seq = addseqtodf_ff(train_all, fasta_df)
-test_all_seq = addseqtodf_ff(test_all, fasta_df)
+train_all_seq = addseqtodf_ff(train_all, fasta_df, 10000)
+test_all_seq = addseqtodf_ff(test_all, fasta_df, 10000)
 
-train_all_seq.to_csv('bachelor/pytorchtest/data/pan_train_all_seq_1166.csv')
-test_all_seq.to_csv('bachelor/pytorchtest/data/pan_test_all_seq_1166.csv')
+train_all_seq.to_csv('bachelor/pytorchtest/data/richoux_regular/richoux_regular_train_all_seq.csv')
+test_all_seq.to_csv('bachelor/pytorchtest/data/richoux_regular/richoux_regular_test_all_seq.csv')
+
+
 '''
 train = pd.read_csv('bachelor/pytorchtest/data/train_all_seq_1166.csv')
 ones = train['Interact'].value_counts().get(1, 0)

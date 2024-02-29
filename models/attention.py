@@ -223,7 +223,7 @@ class CrossAttInteraction(nn.Module):
 
 
 class SelfAttInteraction(nn.Module):
-    def __init__(self, embed_dim, num_heads, dropout=0.25, forward_expansion=1):
+    def __init__(self, embed_dim, num_heads, dropout=0.2, forward_expansion=1):
         super(SelfAttInteraction,self).__init__()
 
         self.transformer_block = TransformerBlock(embed_dim, num_heads, dropout, forward_expansion)

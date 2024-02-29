@@ -12,8 +12,8 @@
 #SBATCH --mem-per-gpu=40G
 
 srun python /nfs/home/students/t.reim/bachelor/pytorchtest/main.py \
--data gold_stand \
--model Rich-ATT \
+-data huang \
+-model crossattention \
 -lr 0.001 \
 -max 10000 \
 -es 6 \
