@@ -34,7 +34,7 @@ class FC2_20_2Dense(nn.Module):
 
     def forward(self, x):
         test = x.split(1, dim=1)
-
+        
         x1 = test[0]
         x1 = x1.to(torch.float32)
         x1 = x1.contiguous()

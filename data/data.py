@@ -256,9 +256,8 @@ def padd_embedding(embedding, maximum):
     padding = torch.zeros((maximum - embedding.shape[0], embedding.shape[1]))
     padded_embedding = torch.cat((embedding, padding), dim=0)
 
-    mask = (padded_embedding != 0)
 
-    return padded_embedding, mask
+    return padded_embedding
 
 
 def tensorize(sequence1, sequence2):
@@ -281,7 +280,7 @@ def get_embedding_mean(dirpath, protein_id, layer):
 
 
 class MyDataset(data.Dataset):
-    def __init__(self, filename, layer, max_len=None, embedding=True, mean=True,
+    def __init__(self, filename, layer, max_len=10000, embedding=True, mean=True,
                   embedding_directory="/nfs/scratch/t.reim/embeddings/esm2_t36_3B/"):
         self.df = pd.read_csv(filename)  # Load the data from the CSV file
         if max_len is None:
@@ -309,15 +308,13 @@ class MyDataset(data.Dataset):
                 seq1 = get_embedding_per_tok(self.embedding_directory, data['Id1'], self.layer)
                 seq2 = get_embedding_per_tok(self.embedding_directory, data['Id2'], self.layer)
                 
-                seq1, mask1 = padd_embedding(seq1, self.max)
-                seq2, mask2 = padd_embedding(seq2, self.max)
+                seq1 = padd_embedding(seq1, self.max)
+                seq2 = padd_embedding(seq2, self.max)
                 tensor = torch.stack([seq1, seq2])
-                masks = torch.stack([mask1, mask2])
             else:
                 seq1 = get_embedding_mean(self.embedding_directory, data['Id1'], self.layer)
                 seq2 = get_embedding_mean(self.embedding_directory, data['Id2'], self.layer)
                 tensor = torch.stack([seq1, seq2])
-                masks = None
                 
         else:    
             seq1 = sequence_to_vector(data['sequence_a'])
@@ -326,9 +323,8 @@ class MyDataset(data.Dataset):
             padd_sequence(seq2, self.max)
             seq_array = np.array([seq1, seq2])
             tensor = torch.tensor(seq_array)
-            masks = None
 
-        sample = {'name1': data['Id1'], 'name2': data['Id2'], 'tensor': tensor, 'interaction': data['Interact'], 'mask': masks}
+        sample = {'name1': data['Id1'], 'name2': data['Id2'], 'tensor': tensor, 'interaction': data['Interact']}
         return sample
     
         

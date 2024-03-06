@@ -10,12 +10,16 @@ import wandb
 import argparse
 
 
-
-def metrics(y_true, y_pred):
+def confmat(y_true, y_pred):
     true_positive = torch.sum((y_true == 1) & (y_pred == 1)).item()
     false_positive = torch.sum((y_true == 0) & (y_pred == 1)).item()
     true_negative = torch.sum((y_true == 0) & (y_pred == 0)).item()
     false_negative = torch.sum((y_true == 1) & (y_pred == 0)).item()
+    return true_positive, false_positive, true_negative, false_negative
+
+
+def metrics(true_positive, false_positive, true_negative, false_negative):
+    N = true_positive + false_positive + true_negative + false_negative
 
     pred_positive = true_positive + false_positive
     real_positive = true_positive + false_negative
@@ -23,21 +27,21 @@ def metrics(y_true, y_pred):
     if real_positive == 0:
         accuracy = precision = recall = f1_score = 0
     else:
-        accuracy = (true_positive + true_negative) / len(y_true)
+        accuracy = (true_positive + true_negative) / N
         precision = true_positive / pred_positive if pred_positive > 0 else 0
         recall = true_positive / real_positive if real_positive > 0 else 0
-        f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+        f1_score = (2 * (precision * recall)) / (precision + recall) if (precision + recall) > 0 else 0
 
-    return accuracy, precision, recall, f1_score, true_positive, false_positive, true_negative, false_negative
+    return accuracy, precision, recall, f1_score
 
 
 
-data_name = "huang"
-model_name = "selfattention"
+data_name = "gold_stand"
+model_name = "TUnA"
 learning_rate = 0.001
 num_epochs = 25
 bs = 2
-max = 10000
+max = 1000
 subset = True
 subset_size = 0.5
 use_embeddings = True
@@ -45,13 +49,9 @@ mean_embedding = False
 embedding_dim = 1280
 use_wandb = False
 early_stopping = True
-forward_expansion = 1
 dropout = 0.3
-num_heads = 4
-
-
-# example call: python main.py -d gold_stand -lr 0.001 -epo 50 -bs 1024 --max 1166
-#               -s True -ss 0.5 -e True -m True -ed 2560 -wb True
+num_heads = 8
+run_name = None
 
 if True:   #set false for debug, True for training on server
     parser = argparse.ArgumentParser(description='PyTorch Training')
@@ -68,9 +68,9 @@ if True:   #set false for debug, True for training on server
     parser.add_argument('-emb_dim', '--embedding_dim', type=int, default=2560, help='embedding dimension')
     parser.add_argument('-wandb', '--use_wandb', action='store_true', help='use wandb')
     parser.add_argument('-es', '--early_stopping', type=int, default=0, help='early stopping patience')
-    parser.add_argument('-fe', '--forward_expansion', type=int, default=1, help='forward expansion for attention module')
-    parser.add_argument('-dropout', '--dropout', type=float, default=0.3, help='dropout value between 0 and 1')
-    parser.add_argument('-heads', '--num_heads', type=int, default=4, help='number of heads for attention')
+    parser.add_argument('-dropout', '--dropout', type=float, default=0.2, help='dropout value between 0 and 1')
+    parser.add_argument('-heads', '--num_heads', type=int, default=8, help='number of heads for attention')
+    parser.add_argument('-run', '--run_name', type=str, default=None, help='name of the run to appear in wandb')
 
     args = parser.parse_args()
 
@@ -87,13 +87,14 @@ if True:   #set false for debug, True for training on server
     embedding_dim = args.embedding_dim
     use_wandb = args.use_wandb
     early_stopping = args.early_stopping
-    forward_expansion = args.forward_expansion
     dropout = args.dropout
     num_heads = args.num_heads
+    run_name = args.run_name
 
 per_tok_models = ["baseline2d", "dscript_like", "selfattention", "crossattention",
-                   "ICAN_cross", "D-ATT_script", "Rich-ATT"]
+                   "ICAN_cross", "AttDscript", "Rich-ATT", "TUnA"]
 mean_models = ["richoux"]
+padded_models = ["TUnA", "richoux"]
 
 # some cases, could be done better or more elegant
 if model_name in per_tok_models:
@@ -101,9 +102,13 @@ if model_name in per_tok_models:
     use_embeddings = True
     use_2d_data = True
 elif model_name in mean_models:
+    use_embeddings = True
     use_2d_data = False
 else:
     raise ValueError("The model name does not exist. Please check for spelling errors.")
+
+if model_name in padded_models:
+    use_2d_data = False    
 
 train_data = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/" + data_name + "/" + data_name + "_train_all_seq.csv"
 test_data = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/" + data_name + "/" + data_name + "_test_all_seq.csv"
@@ -127,6 +132,9 @@ else:
 if use_embeddings:
     embedding_dir = "/nfs/scratch/t.reim/embeddings/" + emb_name + "/" + emb_type + "/"
 
+if run_name is None:
+    run_name = f"{model_name}_{emb_name}_{subset_size}"
+
 config={"learning_rate": learning_rate,
         "epochs": num_epochs,
         "max_size": max,
@@ -141,13 +149,12 @@ config={"learning_rate": learning_rate,
         "model": model_name,
         "use_wandb": use_wandb,
         "early_stopping": early_stopping,
-        "forward_expansion": forward_expansion,
         "dropout": dropout,
         "num_heads": num_heads}
 
 if use_wandb == True:
     wandb.init(project="bachelor",
-               name=f"{model_name}_{emb_name}_{subset_size}",
+               name=run_name,
                config=config)    
     
 print("Parameters:")
@@ -195,11 +202,12 @@ model_mapping = {
     "dscript_like": dscript_like.DScriptLike(embed_dim=insize, d=100, w=7, h=50, x0=0.5, k=20),
     "richoux": richoux.FC2_20_2Dense(embed_dim=insize),
     "baseline2d": baseline2d.baseline2d(embed_dim=insize, h=0),
-    "selfattention": attention.SelfAttInteraction(embed_dim=insize, num_heads=num_heads, dropout=dropout, forward_expansion=forward_expansion),
-    "crossattention": attention.CrossAttInteraction(embed_dim=insize, num_heads=num_heads, dropout=dropout, forward_expansion=forward_expansion),
-    "ICAN_cross": attention.ICAN_cross(embed_dim=insize, num_heads=num_heads, forward_expansion=forward_expansion),
-    "D-ATT_script": attention.AttentionDscript(embed_dim=insize, num_heads=num_heads, forward_expansion=forward_expansion),
-    "Rich-ATT": attention.AttentionRichoux(embed_dim=insize, num_heads=num_heads, forward_expansion=forward_expansion)
+    "selfattention": attention.SelfAttInteraction(embed_dim=insize, num_heads=num_heads, dropout=dropout),
+    "crossattention": attention.CrossAttInteraction(embed_dim=insize, num_heads=num_heads, dropout=dropout),
+    "ICAN_cross": attention.ICAN_cross(embed_dim=insize, num_heads=num_heads, cnn_drop=dropout),
+    "AttDscript": attention.AttentionDscript(embed_dim=insize, num_heads=num_heads, dropout=dropout),
+    "Rich-ATT": attention.AttentionRichoux(embed_dim=insize, num_heads=num_heads, dropout=dropout),
+    "TUnA": attention.TUnA(embed_dim=insize, num_heads=num_heads, dropout=dropout)
 }
 
 model = model_mapping.get(model_name)
@@ -225,50 +233,49 @@ patience = early_stopping
 counter = 0
 
 for epoch in range(num_epochs):
-    epoch_loss, epoch_acc, epoch_prec, epoch_rec, epoch_f1 = 0.0, 0.0, 0.0, 0.0, 0.0
+    epoch_loss= 0.0
     tp, fp, tn, fn = 0, 0, 0, 0
     model.train()
     for batch in dataloader:
         optimizer.zero_grad()
+
         if use_2d_data:
             outputs = model.batch_iterate(batch, device, layer, embedding_dir)
         else:
             tensor = batch['tensor'].to(device)
             outputs = model(tensor) 
+
         labels = batch['interaction']
         labels = labels.unsqueeze(1).float()
+        predicted_labels = torch.round(outputs.float())
+
         loss = criterion(outputs, labels.to(device))
         loss.backward()
         optimizer.step()
+
         epoch_loss += loss.item()
-        predicted_labels = torch.round(outputs.float())
-        met = metrics(labels.to(device), predicted_labels)
-        epoch_acc += met[0]
-        epoch_prec += met[1]
-        epoch_rec += met[2]
-        epoch_f1 += met[3]
-        tp, fp, tn, fn = tp + met[4], fp + met[5], tn + met[6], fn + met[7]
-    avg_acc = epoch_acc / len(dataloader)
-    avg_prec = epoch_prec / len(dataloader)
-    avg_rec = epoch_rec / len(dataloader)
-    avg_f1 = epoch_f1 / len(dataloader)
+        met = confmat(labels.to(device), predicted_labels)
+        tp, fp, tn, fn = tp + met[0], fp + met[1], tn + met[2], fn + met[3]
+
+    acc, prec, rec, f1 = metrics(tp, fp, tn, fn)
     avg_loss = epoch_loss / len(dataloader)
     if use_wandb == True:
         wandb.log({
             "epoch_loss": avg_loss,
-            "epoch_accuracy": avg_acc,
-            "epoch_precision": avg_prec,
-            "epoch_recall": avg_rec,
-            "epoch_f1_score": avg_f1
+            "epoch_accuracy": acc,
+            "epoch_precision": prec,
+            "epoch_recall": rec,
+            "epoch_f1_score": f1
         })
-    print(f"Epoch {epoch+1}/{num_epochs}, Average Loss: {avg_loss}, Accuracy: {avg_acc}, Precision: {avg_prec}, Recall: {avg_rec}, F1 Score: {avg_f1}")
+    print(f"Epoch {epoch+1}/{num_epochs}, Average Loss: {avg_loss}, Accuracy: {acc}, Precision: {prec}, Recall: {rec}, F1 Score: {f1}")
     print(f"TP: {tp}, FP: {fp}, TN: {tn}, FN: {fn}")
     
     model.eval()
-    val_loss, val_acc, val_prec, val_rec, val_f1 = 0.0, 0.0, 0.0, 0.0, 0.0
+    val_loss = 0.0
     tp, fp, tn, fn = 0, 0, 0, 0
     with torch.no_grad():
         for val_batch in vdataloader:
+
             if use_2d_data:
                 val_outputs = model.batch_iterate(val_batch, device, layer, embedding_dir)
             else:
@@ -278,36 +285,28 @@ for epoch in range(num_epochs):
             val_labels = val_batch['interaction']
             val_labels = val_labels.unsqueeze(1).float()
             predicted_labels = torch.round(val_outputs.float())
-            met = metrics(val_labels.to(device), predicted_labels)
-            val_acc += met[0]
-            val_prec += met[1]
-            val_rec  += met[2]
-            val_f1  += met[3]
+
+            met = confmat(val_labels.to(device), predicted_labels)
             val_loss += criterion(val_outputs, val_labels.to(device))
-
             # Compute TP, FP, TN, FN
-            tp, fp, tn, fn = tp + met[4], fp + met[5], tn + met[6], fn + met[7]
-
+            tp, fp, tn, fn = tp + met[0], fp + met[1], tn + met[2], fn + met[3]
 
     avg_loss = val_loss / len(vdataloader)
-    avg_acc = val_acc / len(vdataloader)
-    avg_prec = val_prec / len(vdataloader)
-    avg_rec = val_rec / len(vdataloader)
-    avg_f1 = val_f1 / len(vdataloader)
+    acc, prec, rec, f1 = metrics(tp, fp, tn, fn)
     if use_wandb == True:
         wandb.log({
             "val_loss": avg_loss,
-            "val_accuracy": avg_acc,
-            "val_precision": avg_prec,
-            "val_recall": avg_rec,
-            "val_f1_score": avg_f1
+            "val_accuracy": acc,
+            "val_precision": prec,
+            "val_recall": rec,
+            "val_f1_score": f1
         })  
-    print(f"Epoch {epoch+1}/{num_epochs}, Average Val Loss: {avg_loss}, Val Accuracy: {avg_acc}, Val Precision: {avg_prec}, Val Recall: {avg_rec}, Val F1 Score: {avg_f1}")
+    print(f"Epoch {epoch+1}/{num_epochs}, Average Val Loss: {avg_loss}, Val Accuracy: {acc}, Val Precision: {prec}, Val Recall: {rec}, Val F1 Score: {f1}")
     print(f"TP: {tp}, FP: {fp}, TN: {tn}, FN: {fn}")
 
     if es:
-        if avg_acc > best_val_acc:
-            best_val_acc = avg_acc
+        if acc > best_val_acc:
+            best_val_acc = acc
             counter = 0
         else:
             counter += 1
@@ -315,8 +314,9 @@ for epoch in range(num_epochs):
                 print("Early stopping triggered. No improvement in validation accuracy. Best epoch: " + str(epoch+1 - patience))
                 break
 
+'''
 if use_embeddings:
     torch.save(model.state_dict(), '/nfs/home/students/t.reim/bachelor/pytorchtest/models/pretrained/'+model_name+ '_'+ data_name +'_'+ emb_name+'_'+ emb_type+'.pt')
 else:
     torch.save(model.state_dict(), '/nfs/home/students/t.reim/bachelor/pytorchtest/models/pretrained/'+model_name+'_'+ data_name +'_no_emb.pt')
-
+'''

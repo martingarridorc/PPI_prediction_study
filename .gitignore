@@ -1,7 +1,9 @@
 data/gold_stand
 data/huang
 data/pan
-data/richoux-regular
+data/richoux_regular
 data/swissprot
-slurm/err
-slurm/out
+slurm/
+wandb/
+models/__pycache__
+data/__pycache__
