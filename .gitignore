@@ -3,7 +3,10 @@ data/huang
 data/pan
 data/richoux_regular
 data/swissprot
-slurm/
-wandb/
+slurm/err
+slurm/out
+slurm/wandb
+wandb
 models/__pycache__
 data/__pycache__
+models/pretrained
