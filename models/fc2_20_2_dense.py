@@ -1,18 +1,20 @@
 import torch
+
 import torch.nn as nn
 import torch.nn.functional as F
-
+import torch.nn.utils.spectral_norm as spectral_norm
 
 class FC2_20_2Dense(nn.Module):
 
-    def __init__(self, embed_dim):
+    def __init__(self, embed_dim, spec_norm=False):
         super(FC2_20_2Dense, self).__init__()
 
         self.embed_dim = embed_dim
+        self.spec_norm = spec_norm
         
         # Define layers and modules
-        self.fc1 = nn.Linear(embed_dim, 20)
-        self.fc2 = nn.Linear(20, 20)
+        self.fc1 = self._add_spectral_norm(nn.Linear(embed_dim, 20))
+        self.fc2 = self._add_spectral_norm(nn.Linear(20, 20))
 
         self.bn1 = nn.BatchNorm1d(20)
         self.bn2 = nn.BatchNorm1d(20)
@@ -21,13 +23,13 @@ class FC2_20_2Dense(nn.Module):
         self.bn5 = nn.BatchNorm1d(20)
 
         # The same is done for input sequence 2.
-        self.fc3 = nn.Linear(embed_dim, 20)
-        self.fc4 = nn.Linear(20, 20)
+        self.fc3 = self._add_spectral_norm(nn.Linear(embed_dim, 20))
+        self.fc4 = self._add_spectral_norm(nn.Linear(20, 20))
 
         # Both outputs are concatenated and fed to a fully connected layer with 20 neurons. Then, batch normalization is applied.
-        self.fc5 = nn.Linear(40, 20)
+        self.fc5 = self._add_spectral_norm(nn.Linear(40, 20))
         # The output of this layer is fed to a fully connected layer with 1 neuron.
-        self.fc6 = nn.Linear(20, 1)
+        self.fc6 = self._add_spectral_norm(nn.Linear(20, 1))
 
         # The model has 2 classes, 0 and 1
         self.classes = (0,1)
@@ -70,4 +72,8 @@ class FC2_20_2Dense(nn.Module):
     def get_classes(self):
         return self.classes
     
-   
+    def _add_spectral_norm(self, layer):
+        if self.spec_norm:
+            return spectral_norm(layer)
+        else:
+            return layer

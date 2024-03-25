@@ -8,20 +8,7 @@
 #SBATCH --time=2-0
 #SBATCH --error=/nfs/home/students/t.reim/bachelor/pytorchtest/slurm/err/%j.err
 #SBATCH --output=/nfs/home/students/t.reim/bachelor/pytorchtest/slurm/out/%j.out
-#SBATCH --job-name=ppi-richoux
+#SBATCH --job-name=sweep
 #SBATCH --mem-per-gpu=40G
 
-srun python /nfs/home/students/t.reim/bachelor/pytorchtest/main.py \
--data gold_stand \
--model richoux \
--lr 0.001 \
--epoch 25 \
--es 6 \
--batch 1024 \
--sub \
--subsize 0.5 \
--emb \
--emb_dim 1280 \
--mean \
--wandb \
--run richoux_no_specnorm
+srun python /nfs/home/students/t.reim/bachelor/pytorchtest/main.py -sweep

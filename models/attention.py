@@ -12,100 +12,17 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 import data.data as d
 
 
-class ICAN_CNN(nn.Module):
-    def __init__(self, embed_dim, poolsize, dropout):
-        super(ICAN_CNN, self).__init__()
-        self.conv1 = nn.Conv1d(embed_dim, 32, kernel_size=5, stride=1, padding = 2)
-        self.maxpool = nn.MaxPool1d(kernel_size=2, stride=2)
-        self.conv2 = nn.Conv1d(32, 32, kernel_size=5, stride=1, padding = 2)
-        self.adaptive_pool = nn.AdaptiveMaxPool1d(poolsize)  # Add adaptive pooling layer
-        self.dense_1 = nn.Linear(32 * poolsize, 128)
-        self.dense_2 = nn.Linear(128, 32)
-        self.dense_3 = nn.Linear(32, 1)
-        self.relu = nn.ReLU()
-        self.sigmoid_func = nn.Sigmoid()
-        self.dropout = nn.Dropout(dropout)
-
-    def forward(self, input):
-        output = torch.transpose(input, -1, -2)
-        output = self.conv1(output)
-        output = self.relu(output)
-        output = self.maxpool(output)
-        output = self.dropout(output)
-        
-        output = self.conv2(output)
-        output = self.relu(output)
-        output = self.maxpool(output)
-        output = self.dropout(output)
-        
-        output = self.adaptive_pool(output)  # Apply adaptive pooling
-        output = output.view(-1, output.size(1) * output.size(2))
-        
-        #fully connected layer
-        output = self.dense_1(output)
-        output = self.relu(output)
-        output = self.dropout(output)
-        output = self.dense_2(output)
-        output = self.relu(output)
-        output = self.dropout(output)
-        output = self.dense_3(output)
-        output = self.sigmoid_func(output)
-       
-        return output
-
-
-class ICAN_cross(nn.Module):
-    def __init__(self, embed_dim, num_heads, cnn_drop = 0.4, transformer_drop=0.25,
-                 poolsize=50, pre_cnn_drop=0.5):
-        super(ICAN_cross, self).__init__()
-
-        self.torchencoderlayer = nn.TransformerEncoderLayer(d_model=embed_dim, nhead=num_heads)
-        self.torchencoder = nn.TransformerEncoder(self.torchencoderlayer, num_layers=3)
-
-        self.CNN = ICAN_CNN(embed_dim, poolsize, cnn_drop)
-        self.pre_cnn_drop = nn.Dropout(pre_cnn_drop)
-
-    def forward(self, protein1, protein2, mask1, mask2):
-        x1 = protein1.to(torch.float32)
-        x2 = protein2.to(torch.float32)
-
-        cross1 = self.transformer_block(x1, x1, x2, mask1)
-        cross2 = self.transformer_block(x2, x2, x1, mask2)   
-
-        cross1_drop = self.pre_cnn_drop(cross1)
-        cross2_drop = self.pre_cnn_drop(cross2)
-
-        out1 = self.CNN(cross1_drop)
-        out2 = self.CNN(cross2_drop)
-
-
-        return max(out1, out2).view(1)
-    
-    def batch_iterate(self, batch, device, layer, emb_dir):
-            pred = []
-            for i in range(len(batch['interaction'])):
-                id1 = batch['name1'][i]
-                id2 = batch['name2'][i]
-                seq1 = d.get_embedding_per_tok(emb_dir, id1, layer).unsqueeze(0).to(device)
-                seq2 = d.get_embedding_per_tok(emb_dir, id2, layer).unsqueeze(0).to(device)
-                p = self.forward(seq1, seq2, None, None)
-                pred.append(p)
-            return torch.stack(pred)
-
-
 class CrossAttInteraction(nn.Module):
-    def __init__(self, embed_dim, num_heads, dropout=0.2):
+    def __init__(self, embed_dim, num_heads, h3=64, dropout=0.2):
         super(CrossAttInteraction, self).__init__()
     
-
-        self.torchencoderlayer = nn.TransformerEncoderLayer(d_model=embed_dim, nhead=num_heads)
-        self.torchencoder = nn.TransformerEncoder(self.torchencoderlayer, num_layers=3)
-
-        self.multihead = nn.MultiheadAttention(embed_dim, num_heads)
-        
         h = int(embed_dim//4)
         h2 = int(h//4)    
-        h3 = int(h2//4) 
+
+        self.cross_encoder = CrossEncoderLayer(h3, num_heads, 256, dropout)
+
+        self.multihead = Attention(h3, num_heads, dropout)
+        
 
         self.conv = nn.Conv2d(h3, 1, kernel_size=(2, 2))
         self.pool = nn.AvgPool2d(kernel_size=4)
@@ -123,17 +40,19 @@ class CrossAttInteraction(nn.Module):
         x1 = protein1.to(torch.float32)
         x2 = protein2.to(torch.float32)
 
-        cross1, cross1weights = self.multihead(x1, x1, x2, mask1)
-        cross2, cross2weights = self.multihead(x2, x2, x1, mask2)
 
-        # option 1, copy of 2dbaseline, using both cross1 and cross2
-        x1 = self.ReLU(self.fc1(cross1))
+        x1 = self.ReLU(self.fc1(x1))
         x1 = self.ReLU(self.fc2(x1))
         x1 = self.ReLU(self.fc3(x1))
     
-        x2 = self.ReLU(self.fc1(cross2))
+        x2 = self.ReLU(self.fc1(x2))
         x2 = self.ReLU(self.fc2(x2))
         x2 = self.ReLU(self.fc3(x2))
+
+        x1 = self.cross_encoder(x1, x2, mask1)
+        x2 = self.cross_encoder(x2, x1, mask2)
+
+        # option 1, copy of 2dbaseline, using both cross1 and cross2
 
         mat = torch.einsum('bik,bjk->bijk', x1, x2)    # normale matrix multiplikation
         mat = mat.permute(0, 3, 1, 2)
@@ -169,10 +88,9 @@ class CrossAttInteraction(nn.Module):
 
 
 class SelfAttInteraction(nn.Module):
-    def __init__(self, embed_dim, num_heads, dropout=0.2, encoder_layers=1):
+    def __init__(self, embed_dim, num_heads, dropout=0.2, encoder_layers=1, ff_dim=256):
         super(SelfAttInteraction,self).__init__()
 
-        #self.transformer_block = TransformerBlock(embed_dim, num_heads, dropout, forward_expansion)
         h = int(embed_dim//4)
         h2 = int(h//4)    
         h3 = 64
@@ -180,8 +98,7 @@ class SelfAttInteraction(nn.Module):
         self.torchencoderlayer = nn.TransformerEncoderLayer(d_model=h3, nhead=num_heads)
         self.torchencoder = nn.TransformerEncoder(self.torchencoderlayer, num_layers=encoder_layers)
 
-        self.multihead = nn.MultiheadAttention(h3, num_heads)
-
+        self.spectral_Encoder = EncoderLayer(h3, num_heads, ff_dim, dropout)
 
         self.conv = nn.Conv2d(h3, 1, kernel_size=(2, 2))
         self.pool = nn.AvgPool2d(kernel_size=4)
@@ -199,7 +116,7 @@ class SelfAttInteraction(nn.Module):
 
         self.sigmoid = nn.Sigmoid()
 
-    def forward(self, protein1, protein2, mask1, mask2, use_encoder=True):
+    def forward(self, protein1, protein2, mask1, mask2, spec_norm=True):
         x1 = protein1.to(torch.float32)
         x2 = protein2.to(torch.float32)
 
@@ -212,12 +129,12 @@ class SelfAttInteraction(nn.Module):
         x2 = self.ReLU(self.fc2(x2))
         x2 = self.ReLU(self.fc3(x2))
 
-        if use_encoder:
+        if spec_norm:
+            x1 = self.spectral_Encoder(x1, mask1)
+            x2 = self.spectral_Encoder(x2, mask2)
+        else:
             x1 = self.torchencoder(x1)
             x2 = self.torchencoder(x2)
-        else:
-            x1, _ = self.multihead(x1, x1, x1, mask1)
-            x2, _ = self.multihead(x2, x2, x2, mask2)
 
         mat = torch.einsum('bik,bjk->bijk', x1, x2)    # normale matrix multiplikation
         mat = mat.permute(0, 3, 1, 2)
@@ -246,28 +163,36 @@ class SelfAttInteraction(nn.Module):
 
 
 class AttentionDscript(nn.Module):
-    def __init__(self, embed_dim, num_heads, dropout=0.25):
+    def __init__(self, embed_dim, num_heads, dropout=0.25, ff_dim=256):
         super(AttentionDscript, self).__init__()
 
 
         self.torchencoderlayer = nn.TransformerEncoderLayer(d_model=embed_dim, nhead=num_heads)
         self.torchencoder = nn.TransformerEncoder(self.torchencoderlayer, num_layers=3)
 
-        self.pymultihead = nn.MultiheadAttention(embed_dim, num_heads)
+        self.spectral_Encoder = EncoderLayer(embed_dim, num_heads, ff_dim, dropout)
+
+        self.spectral_cross_Encoder = CrossEncoderLayer(embed_dim, num_heads, ff_dim, dropout)
 
         self.dscript = dscript_like.DScriptLike(embed_dim)
 
-    def forward(self, protein1, protein2, mask1, mask2):
+    def forward(self, protein1, protein2, mask1, mask2, spec_norm=True, cross=False):
         x1 = protein1.to(torch.float32)
         x2 = protein2.to(torch.float32)
 
-        #self1, _ = self.pymultihead(x1, x1, x1, mask1)
-        #self2, _ = self.pymultihead(x2, x2, x2, mask2)
+        
+        if spec_norm:
+            if cross:
+                x1 = self.spectral_cross_Encoder(x1, mask2)
+                x2 = self.spectral_cross_Encoder(x2, mask1)
+            else:
+                x1 = self.spectral_Encoder(x1, mask1)
+                x2 = self.spectral_Encoder(x2, mask2)
+        else:
+            x1 = self.torchencoder(x1)
+            x2 = self.torchencoder(x2)
 
-        self1 = self.torchencoder(x1)
-        self2 = self.torchencoder(x2)
-
-        return self.dscript(self1, self2)
+        return self.dscript(x1, x2)
     
     def batch_iterate(self, batch, device, layer, emb_dir):
                 pred = []
@@ -282,31 +207,38 @@ class AttentionDscript(nn.Module):
 
 
 class TUnA(nn.Module):
-    def __init__(self, embed_dim, num_heads, num_layers=1, hid_dim = 64, dropout=0.25):
+    def __init__(self, embed_dim, num_heads, num_layers=1, hid_dim = 64, dropout=0.25, ff_dim=256):
         super(TUnA, self).__init__()
 
         self.hid_dim = hid_dim
         self.num_heads = num_heads
 
-        self.Intra_Encoder_layer = nn.TransformerEncoderLayer(d_model=hid_dim, nhead=num_heads, batch_first=True)
-        self.Intra_Encoder = nn.TransformerEncoder(self.Intra_Encoder_layer, num_layers=num_layers)
+        #from previous tests to implement nn.TransformerEncoder into TUnA
+        #self.Intra_Encoder_layer = nn.TransformerEncoderLayer(d_model=hid_dim, nhead=num_heads, batch_first=True)
+        #self.Intra_Encoder = nn.TransformerEncoder(self.Intra_Encoder_layer, num_layers=num_layers)
+        #self.Inter_Encoder_layer = nn.TransformerEncoderLayer(d_model=hid_dim, nhead=num_heads, batch_first=True)
+        #self.Inter_Encoder = nn.TransformerEncoder(self.Inter_Encoder_layer, num_layers=num_layers)
 
-        self.Intra2 = EncoderLayer(hid_dim, num_heads, 256, dropout)
+        self.Intra = EncoderLayer(hid_dim, num_heads, ff_dim, dropout)
+        self.Intra2 = EncoderLayer_nospecnorm(hid_dim, num_heads, ff_dim, dropout)
 
-        self.Inter_Encoder_layer = nn.TransformerEncoderLayer(d_model=hid_dim, nhead=num_heads, batch_first=True)
-        self.Inter_Encoder = nn.TransformerEncoder(self.Inter_Encoder_layer, num_layers=num_layers)
-
-        self.Inter2 = EncoderLayer(hid_dim, num_heads, 256, dropout)
+        self.Inter = EncoderLayer(hid_dim, num_heads, ff_dim, dropout)
+        self.Inter2 = EncoderLayer_nospecnorm(hid_dim, num_heads, ff_dim, dropout)
 
         self.lin1 = spectral_norm(nn.Linear(embed_dim, hid_dim))
+        self.lin2 = nn.Linear(embed_dim, hid_dim)
 
-        self.pred_layer = VanillaRFFLayer(hid_dim, 1024, 1)
+        self.pred_layer = VanillaRFFLayer(hid_dim, 1028, 1, likelihood="binary_logistic")
 
-    def forward(self, proteins, spec_norm = True):
+    def forward(self, proteins, x1 = None, x2 = None, spec_norm=True):
         #split protein and create masks
-        x1, x2 = proteins.split(1, dim=1)
-        x1 = x1.squeeze(1)
-        x2 = x2.squeeze(1)
+        if proteins is not None:
+            x1, x2 = proteins.split(1, dim=1)
+            x1 = x1.squeeze(1)
+            x2 = x2.squeeze(1)
+        else:
+            x1 = x1.squeeze(1)
+            x2 = x2.squeeze(1)
 
         if(spec_norm):
             mask1 = self.create_square_mask(x1)
@@ -314,6 +246,30 @@ class TUnA(nn.Module):
 
             x1 = self.lin1(x1)
             x2 = self.lin1(x2)
+
+            x1_encoded = self.Intra(x1, mask1)
+            x2_encoded = self.Intra(x2, mask2)
+
+            x12 = torch.cat((x1_encoded, x2_encoded), dim=1)
+            x21 = torch.cat((x2_encoded, x1_encoded), dim=1)
+
+            x12_mask = self.combine_masks(mask1, mask2)
+            x21_mask = self.combine_masks(mask2, mask1)
+
+            x12_encoded = self.Inter(x12, x12_mask)
+            x21_encoded = self.Inter(x21, x21_mask)
+
+            x12_mask_2d = x12_mask[:,0,:,0]
+            x21_mask_2d = x21_mask[:,0,:,0]
+
+            x12_interact = torch.sum(x12_encoded*x12_mask_2d[:,:,None], dim=1)/x12_mask_2d.sum(dim=1, keepdims=True)
+            x21_interact = torch.sum(x21_encoded*x21_mask_2d[:,:,None], dim=1)/x21_mask_2d.sum(dim=1, keepdims=True)
+        else:
+            mask1 = self.create_square_mask(x1)
+            mask2 = self.create_square_mask(x2)
+
+            x1 = self.lin2(x1)
+            x2 = self.lin2(x2)
 
             x1_encoded = self.Intra2(x1, mask1)
             x2_encoded = self.Intra2(x2, mask2)
@@ -332,8 +288,7 @@ class TUnA(nn.Module):
 
             x12_interact = torch.sum(x12_encoded*x12_mask_2d[:,:,None], dim=1)/x12_mask_2d.sum(dim=1, keepdims=True)
             x21_interact = torch.sum(x21_encoded*x21_mask_2d[:,:,None], dim=1)/x21_mask_2d.sum(dim=1, keepdims=True)
-        else:
-        
+            '''
             mask1 = self.create_mask(x1)
             mask2 = self.create_mask(x2)
 
@@ -360,7 +315,7 @@ class TUnA(nn.Module):
             # average over the real parts of the sequence
             x12_interact = torch.sum(x12_encoded*x12_mask[:,:,None], dim=1)/x12_mask.sum(dim=1, keepdims=True)
             x21_interact = torch.sum(x21_encoded*x21_mask[:,:,None], dim=1)/x21_mask.sum(dim=1, keepdims=True)
-
+            '''
 
         ppi_feature_vector, _ = torch.max(torch.stack([x12_interact, x21_interact], dim=-1), dim=-1)
 
@@ -374,8 +329,7 @@ class TUnA(nn.Module):
         return mask
 
     def create_square_mask(self, x):
-        if torch.cuda.is_available():
-            device = torch.device("cuda")
+        device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")   
         N, seq_len, _ = x.size()  # batch size and sequence length
         mask = torch.zeros((N, seq_len, seq_len), device=device)
 
@@ -391,14 +345,109 @@ class TUnA(nn.Module):
         return mask
 
     def combine_masks(self, maskA, maskB):
-        if torch.cuda.is_available():
-            device = torch.device("cuda")
+        device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")   
         lenA, lenB = maskA.size(2), maskB.size(2)
         combined_mask = torch.zeros(maskA.size(0), 1, lenA + lenB, lenA + lenB, device=device)
         combined_mask[:, :, :lenA, :lenA] = maskA
         combined_mask[:, :, lenA:, lenA:] = maskB
-        return combined_mask    
+        return combined_mask
 
+    def batch_iterate(self, batch, device, layer, emb_dir):
+            pred = []
+            for i in range(len(batch['interaction'])):
+                id1 = batch['name1'][i]
+                id2 = batch['name2'][i]
+                seq1 = d.get_embedding_per_tok(emb_dir, id1, layer).unsqueeze(0).to(device)
+                seq2 = d.get_embedding_per_tok(emb_dir, id2, layer).unsqueeze(0).to(device)
+                p = self.forward(proteins=None, x1=seq1, x2=seq2)
+                pred.append(p)
+            return torch.stack(pred).squeeze(1)
+    
+
+
+
+# added spectral norm to all Convolutional and linear layers
+class ICAN_CNN(nn.Module):
+    def __init__(self, embed_dim, poolsize, dropout):
+        super(ICAN_CNN, self).__init__()
+        self.conv1 = spectral_norm(nn.Conv1d(embed_dim, 32, kernel_size=5, stride=1, padding = 2))
+        self.maxpool = nn.MaxPool1d(kernel_size=2, stride=2)
+        self.conv2 = spectral_norm(nn.Conv1d(32, 32, kernel_size=5, stride=1, padding = 2))
+        self.adaptive_pool = nn.AdaptiveMaxPool1d(poolsize)  # Add adaptive pooling layer
+        self.dense_1 = spectral_norm(nn.Linear(32 * poolsize, 128))
+        self.dense_2 = spectral_norm(nn.Linear(128, 32))
+        self.dense_3 = spectral_norm(nn.Linear(32, 1))
+        self.relu = nn.ReLU()
+        self.sigmoid_func = nn.Sigmoid()
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, input):
+        output = torch.transpose(input, -1, -2)
+        output = self.conv1(output)
+        output = self.relu(output)
+        output = self.maxpool(output)
+        output = self.dropout(output)
+        
+        output = self.conv2(output)
+        output = self.relu(output)
+        output = self.maxpool(output)
+        output = self.dropout(output)
+        
+        output = self.adaptive_pool(output)  # Apply adaptive pooling
+        output = output.view(-1, output.size(1) * output.size(2))
+        
+        #fully connected layer
+        output = self.dense_1(output)
+        output = self.relu(output)
+        output = self.dropout(output)
+        output = self.dense_2(output)
+        output = self.relu(output)
+        output = self.dropout(output)
+        output = self.dense_3(output)
+        output = self.sigmoid_func(output)
+       
+        return output
+class ICAN_cross(nn.Module):
+    def __init__(self, embed_dim, num_heads, cnn_drop = 0.25, transformer_drop=0.25,
+                 poolsize=256, pre_cnn_drop=0.25, ff_dim=256, hid_dim=64):
+        super(ICAN_cross, self).__init__()
+
+        self.emb_reduction = nn.Linear(embed_dim, hid_dim)
+
+        self.spec_encoder = CrossEncoderLayer(hid_dim, num_heads, ff_dim, transformer_drop)
+
+        self.CNN = ICAN_CNN(hid_dim, poolsize, cnn_drop)
+        self.pre_cnn_drop = nn.Dropout(pre_cnn_drop)
+
+    def forward(self, protein1, protein2, mask1, mask2):
+        x1 = protein1.to(torch.float32)
+        x2 = protein2.to(torch.float32)
+
+        x1 = self.emb_reduction(x1)
+        x2 = self.emb_reduction(x2)
+
+        cross1 = self.spec_encoder(x1, x2, mask1)
+        cross2 = self.spec_encoder(x2, x1, mask2)   
+
+        cross1_drop = self.pre_cnn_drop(cross1)
+        cross2_drop = self.pre_cnn_drop(cross2)
+
+        out1 = self.CNN(cross1_drop)
+        out2 = self.CNN(cross2_drop)
+
+
+        return max(out1, out2).view(1)
+    
+    def batch_iterate(self, batch, device, layer, emb_dir):
+            pred = []
+            for i in range(len(batch['interaction'])):
+                id1 = batch['name1'][i]
+                id2 = batch['name2'][i]
+                seq1 = d.get_embedding_per_tok(emb_dir, id1, layer).unsqueeze(0).to(device)
+                seq2 = d.get_embedding_per_tok(emb_dir, id2, layer).unsqueeze(0).to(device)
+                p = self.forward(seq1, seq2, None, None)
+                pred.append(p)
+            return torch.stack(pred)
 # mean embeddings after attetion are meaningless
 class AttentionRichoux(nn.Module):
     def __init__(self, embed_dim, num_heads, dropout=0):
@@ -453,8 +502,6 @@ class AttentionRichoux(nn.Module):
                     p = self.forward(seq1, seq2, None, None)
                     pred.append(p)
                 return torch.stack(pred)
-
-
 # can be ignored, may be deleted
 class LightAttention(nn.Module):
     def __init__(self, embeddings_dim=1024, output_dim=11, dropout=0.25, kernel_size=9, conv_dropout: float = 0.25):
@@ -503,14 +550,10 @@ class LightAttention(nn.Module):
         o2, _ = torch.max(o, dim=-1)  # [batchsize, embeddings_dim]
         o = torch.cat([o1, o2], dim=-1)  # [batchsize, 2*embeddings_dim]
         o = self.linear(o)  # [batchsize, 32]
-        return self.output(o)  # [batchsize, output_dim]
-    
-
+        return self.output(o)  # [batchsize, output_dim]    
 
 # from https://github.com/Wang-lab-UCSD/uncertaintyAwareDeepLearn/blob/main/uncertaintyAwareDeepLearn/classic_rffs.py
 _ACCEPTED_LIKELIHOODS = ("gaussian", "binary_logistic", "multiclass")
-
-
 class VanillaRFFLayer(nn.Module):
     """
     A PyTorch layer for random features-based regression, binary classification and
@@ -718,12 +761,12 @@ class VanillaRFFLayer(nn.Module):
                     self.momentum * self.precision
                     + (1 - self.momentum) * precision_matrix_minibatch)
 
-
+#from https://github.com/Wang-lab-UCSD/TUnA/blob/main/results/bernett/TUnA/model.py, essentially a copy 
+# of 'attention is all you need' (as is nn.MultiHeadAttention), but with spectral normalization
 class Attention(nn.Module):
     def __init__(self, hid_dim, n_heads, dropout):
         super().__init__()
-        if torch.cuda.is_available():
-            device = torch.device("cuda")
+        device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")   
 
         self.hid_dim = hid_dim
         self.n_heads = n_heads
@@ -767,7 +810,7 @@ class Attention(nn.Module):
         attention = self.do(F.softmax(energy, dim=-1))
         
         # Apply attention to the value matrix
-        x = torch.matmul(attention, V)
+        x = torch.matmul(attention, V)  # transpose
 
         # Reshape and concatenate heads
         x = x.permute(0, 2, 1, 3).contiguous()
@@ -844,3 +887,164 @@ class EncoderLayer(nn.Module):
 
 
         return trg
+
+# modified EncoderLayer for cross attention
+class CrossEncoderLayer(nn.Module):
+
+    def __init__(self, hid_dim, n_heads, ff_dim, dropout, activation_fn='swish'):
+        super().__init__()
+        self.ln1 = nn.LayerNorm(hid_dim)
+        self.ln2 = nn.LayerNorm(hid_dim)
+        
+        self.do1 = nn.Dropout(dropout)
+        self.do2 = nn.Dropout(dropout)
+        
+        self.sa = Attention(hid_dim, n_heads, dropout)
+        self.ff = Feedforward(hid_dim, ff_dim, dropout, activation_fn)
+        
+    def forward(self, trg, cross, mask=None):
+
+        #trg_1 = trg
+        #trg = self.sa(trg, trg, trg, trg_mask)
+        #trg = self.ln1(trg_1 + self.do1(trg))
+        #
+        #trg = self.ln2(trg + self.do2(self.ff(trg)))
+
+        trg = self.ln1(trg + self.do1(self.sa(trg, cross, cross, mask)))
+        trg = self.ln2(trg + self.do2(self.ff(trg)))
+
+
+        return trg    
+    
+
+# copy attention and encoder but removing spectral norm to see difference
+class Attention_nospecnorm(nn.Module):
+    def __init__(self, hid_dim, n_heads, dropout):
+        super().__init__()
+        if torch.cuda.is_available():
+            device = torch.device("cuda")
+        else:
+            device = torch.device("cpu")
+
+        self.hid_dim = hid_dim
+        self.n_heads = n_heads
+        assert hid_dim % n_heads == 0, "hid_dim must be divisible by n_heads"
+
+        # Linear transformations for query, key, and value
+        self.w_q = (nn.Linear(hid_dim, hid_dim))
+        self.w_k = (nn.Linear(hid_dim, hid_dim))
+        self.w_v = (nn.Linear(hid_dim, hid_dim))
+
+        # Final linear transformation
+        self.fc = (nn.Linear(hid_dim, hid_dim))
+
+        # Dropout for attention
+        self.do = nn.Dropout(dropout)
+
+        # Scaling factor for the dot product attention
+        self.scale = torch.sqrt(torch.FloatTensor([hid_dim // n_heads])).to(device)
+
+    def forward(self, query, key, value, mask=None):
+        bsz = query.shape[0]
+
+        # Compute query, key, value matrices [batch size, sent len, hid dim]
+        Q = self.w_q(query)
+        K = self.w_k(key)
+        V = self.w_v(value)
+
+        # Reshape for multi-head attention and permute to bring heads forward
+        Q = Q.view(bsz, -1, self.n_heads, self.hid_dim // self.n_heads).permute(0, 2, 1, 3)
+        K = K.view(bsz, -1, self.n_heads, self.hid_dim // self.n_heads).permute(0, 2, 1, 3)
+        V = V.view(bsz, -1, self.n_heads, self.hid_dim // self.n_heads).permute(0, 2, 1, 3)
+
+        # Compute scaled dot-product attention
+        energy = torch.matmul(Q, K.permute(0, 1, 3, 2)) / self.scale
+
+        # Apply mask if provided
+        if mask is not None:
+            energy = energy.masked_fill(mask == 0, -1e10)
+
+        # Compute attention weights [batch size, n heads, sent len_Q, sent len_K]
+        attention = self.do(F.softmax(energy, dim=-1))
+        
+        # Apply attention to the value matrix
+        x = torch.matmul(attention, V)  # transpose
+
+        # Reshape and concatenate heads
+        x = x.permute(0, 2, 1, 3).contiguous()
+        x = x.view(bsz, -1, self.n_heads * (self.hid_dim // self.n_heads))
+
+        # Final linear transformation [batch size, sent len_Q, hid dim]
+        x = self.fc(x)
+
+        return x
+
+class Feedforward_nospecnorm(nn.Module):
+    def __init__(self, hid_dim, ff_dim, dropout, activation_fn):
+        super().__init__()
+
+        self.hid_dim = hid_dim
+        self.ff_dim = ff_dim
+
+        self.fc_1 = (nn.Linear(hid_dim, ff_dim))  
+        self.fc_2 = (nn.Linear(ff_dim, hid_dim))  
+
+        self.do = nn.Dropout(dropout)
+        self.activation = self._get_activation_fn(activation_fn)
+    
+    def _get_activation_fn(self, activation_fn):
+        """Return the corresponding activation function."""
+        if activation_fn == "relu":
+            return nn.ReLU()
+        elif activation_fn == "gelu":
+            return nn.GELU()
+        elif activation_fn == "elu":
+            return nn.ELU()
+        elif activation_fn == "swish":
+            return nn.SiLU()
+        elif activation_fn == "leaky_relu":
+            return nn.LeakyReLU()
+        elif activation_fn == "mish":
+            return nn.Mish()
+        # Add other activation functions if needed
+        else:
+            raise ValueError(f"Activation function {activation_fn} not supported.")
+    
+    def forward(self, x):
+        # x = [batch size, sent len, hid dim]
+
+        x = self.do(self.activation(self.fc_1(x)))
+        # x = [batch size, ff dim, sent len]
+
+        x = self.fc_2(x)
+        # x = [batch size, hid dim, sent len]
+        return x
+
+class EncoderLayer_nospecnorm(nn.Module):
+
+    def __init__(self, hid_dim, n_heads, ff_dim, dropout, activation_fn='swish'):
+        super().__init__()
+        self.ln1 = nn.LayerNorm(hid_dim)
+        self.ln2 = nn.LayerNorm(hid_dim)
+        
+        self.do1 = nn.Dropout(dropout)
+        self.do2 = nn.Dropout(dropout)
+        
+        self.sa = Attention_nospecnorm(hid_dim, n_heads, dropout)
+        self.ff = Feedforward_nospecnorm(hid_dim, ff_dim, dropout, activation_fn)
+        
+    def forward(self, trg, mask=None):
+
+        #trg_1 = trg
+        #trg = self.sa(trg, trg, trg, trg_mask)
+        #trg = self.ln1(trg_1 + self.do1(trg))
+        #
+        #trg = self.ln2(trg + self.do2(self.ff(trg)))
+
+        trg = self.ln1(trg + self.do1(self.sa(trg, trg, trg, mask)))
+        trg = self.ln2(trg + self.do2(self.ff(trg)))
+
+
+        return trg        
+    
+    
