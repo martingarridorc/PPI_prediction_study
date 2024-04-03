@@ -11,19 +11,4 @@
 #SBATCH --job-name=ppi-attention
 #SBATCH --mem-per-gpu=40G
 
-srun python /nfs/home/students/t.reim/bachelor/pytorchtest/main.py \
--data gold_stand \
--model TUnA \
--lr 0.001 \
--max 1000 \
--epoch 25 \
--batch 32 \
--sub \
--subsize 0.5 \
--es 6 \
--emb \
--emb_dim 1280 \
--wandb \
--heads 8 \
--dropout 0.2 \
--run crossatt_sweeptest
+srun python /nfs/home/students/t.reim/bachelor/pytorchtest/models/start_agent.py --sweep_id ar82d8ts

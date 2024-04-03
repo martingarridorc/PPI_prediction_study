@@ -35,12 +35,12 @@ def metrics(true_positive, false_positive, true_negative, false_negative):
     return accuracy, precision, recall, f1_score
 
 sweep_config = {
-    "name": "modelname_sweep",
+    "name": "CrossAttention_sweep1",
     "method": "random",
-    "metric": {"goal": "minimize", "name": "val_loss"},
+    "metric": {"goal": "minimize", "name": "avg_loss"},
     "parameters": {
         "data_name": {"value": "gold_stand"},
-        "num_epochs": {"value": 25},
+        "num_epochs": {"value": 10},
         "subset": {"value": True},
         "subset_size": {"value": 0.5},
         "use_embeddings": {"value": True},
@@ -77,10 +77,12 @@ sweep_config = {
 
 def train(config=None, sweep=False):
     ############################################################__Parameters__#################################################################
+    print(config)
     if config is None:
-        wandb.init(config=config) 
+        wandb.init(config=config, project="hypertune") 
         config = wandb.config
 
+    print(config)
     data_name = config['data_name']
     model_name = config['model_name']
     learning_rate = config['learning_rate']
@@ -102,7 +104,7 @@ def train(config=None, sweep=False):
     per_tok_models = ["baseline2d", "dscript_like", "selfattention", "crossattention",
                     "ICAN_cross", "AttDscript", "Rich-ATT", "TUnA"]
     mean_models = ["richoux"]
-    padded_models = ["richoux"]
+    padded_models = ["richoux", "TUnA"]
 
     # some cases, could be done better or more elegant
     if model_name in per_tok_models:
@@ -118,7 +120,7 @@ def train(config=None, sweep=False):
         use_2d_data = False    
 
     train_data = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/" + data_name + "/" + data_name + "_train_all_seq.csv"
-    val_data = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/" + data_name + "/" + data_name + "_test_all_seq.csv"
+    val_data = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/" + data_name + "/" + data_name + "_val_all_seq.csv"
 
     if embedding_dim == 2560:
         emb_name = 'esm2_t36_3B'
@@ -243,6 +245,7 @@ def train(config=None, sweep=False):
     confident_train_predictions = []
     confident_val_predictions = []
     threshold = 0.95
+    save_confpred = False
 
     for epoch in range(num_epochs):
         epoch_loss= 0.0
@@ -256,21 +259,17 @@ def train(config=None, sweep=False):
             else:
                 tensor = batch['tensor'].to(device)
                 outputs = model(tensor) 
+            
+            if save_confpred:
+                names1 = batch['name1']
+                names2 = batch['name2']
+                output_values = outputs.detach().cpu().numpy()
+                predicted_labels = torch.round(outputs.float()).detach().cpu().numpy()
+                labels = batch['interaction'].numpy()
 
-            #create list of protein names
-            names1 = batch['name1']
-            names2 = batch['name2']
-            output_values = outputs.detach().cpu().numpy()
-            predicted_labels = torch.round(outputs.float()).detach().cpu().numpy()
-            labels = batch['interaction'].numpy()
-
-            # Iterate over the output values, predicted labels, and protein names
-            for value, predicted_label, label, name1, name2 in zip(output_values, predicted_labels, labels, names1, names2):
-                # Check if the output value is above the threshold and the interaction was correctly predicted positive
-                if value > threshold and predicted_label == 1 and label == 1:
-                    # Save the PPI
-                    confident_train_predictions.append((name1, name2))
-            #end
+                for value, predicted_label, label, name1, name2 in zip(output_values, predicted_labels, labels, names1, names2):
+                    if value > threshold and predicted_label == 1 and label == 1:
+                        confident_train_predictions.append((name1, name2))
 
             labels = batch['interaction']
             labels = labels.unsqueeze(1).float()
@@ -311,20 +310,16 @@ def train(config=None, sweep=False):
                     val_inputs = val_batch['tensor'].to(device)
                     val_outputs = model(val_inputs)
 
-                #create list of protein names
-                names1 = batch['name1']
-                names2 = batch['name2']
-                output_values = val_outputs.detach().cpu().numpy()
-                interactions = torch.round(val_outputs).detach().cpu().numpy()
-                labels = batch['interaction'].numpy()
+                if save_confpred:
+                    names1 = batch['name1']
+                    names2 = batch['name2']
+                    output_values = val_outputs.detach().cpu().numpy()
+                    interactions = torch.round(val_outputs).detach().cpu().numpy()
+                    labels = batch['interaction'].numpy()
 
-                # Iterate over the output values, predicted labels, and protein names
-                for value, interaction, label, name1, name2 in zip(output_values, interactions, labels, names1, names2):
-                    # Check if the output value is above the threshold and the interaction was correctly predicted positive
-                    if value > threshold and interaction == 1 and label == 1:
-                        # Save the PPI
-                        confident_val_predictions.append((name1, name2))
-                #end
+                    for value, interaction, label, name1, name2 in zip(output_values, interactions, labels, names1, names2):
+                        if value > threshold and interaction == 1 and label == 1:
+                            confident_val_predictions.append((name1, name2))
                         
                 val_labels = val_batch['interaction']
                 val_labels = val_labels.unsqueeze(1).float()
@@ -332,7 +327,6 @@ def train(config=None, sweep=False):
 
                 met = confmat(val_labels.to(device), predicted_labels)
                 val_loss += criterion(val_outputs, val_labels.to(device))
-                # Compute TP, FP, TN, FN
                 tp, fp, tn, fn = tp + met[0], fp + met[1], tn + met[2], fn + met[3]
 
         avg_loss = val_loss / len(vdataloader)
@@ -358,13 +352,14 @@ def train(config=None, sweep=False):
                     print("Early stopping triggered. No improvement in validation accuracy. Best epoch: " + str(epoch+1 - patience))
                     break
         
-        with open(f"/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/confident_train_pred_{model_name}.csv", 'w') as f:
-            for name1, name2 in confident_train_predictions:
-                f.write(f'{name1}\t{name2}\n')                
+        if save_confpred:
+            with open(f"/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/confident_train_pred_{model_name}.csv", 'w') as f:
+                for name1, name2 in confident_train_predictions:
+                    f.write(f'{name1}\t{name2}\n')                
 
-        with open(f"/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/confident_val_pred_{model_name}.csv", 'w') as f:
-            for name1, name2 in confident_val_predictions:
-                f.write(f'{name1}\t{name2}\n')
+            with open(f"/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/confident_val_pred_{model_name}.csv", 'w') as f:
+                for name1, name2 in confident_val_predictions:
+                    f.write(f'{name1}\t{name2}\n')
 
 
 def main():
@@ -386,8 +381,11 @@ def main():
             early_stopping=True,
             dropout=0.3,
             num_heads=8,
-            run_name=None
+            run_name=None,
+            attention_dim=64
         )
+        params = vars(args)
+        train(params)   
     else:
         parser = argparse.ArgumentParser(description='PyTorch Training')
         parser.add_argument('-data', '--data_name', type=str, default='gold_stand', help='name of dataset')
@@ -411,10 +409,11 @@ def main():
         args = parser.parse_args()
         if args.sweep:
             sweep_id = wandb.sweep(sweep_config, project="hypertune")
-            wandb.agent(sweep_id, function=train(sweep=True), count=5)
+            print("Sweep ID: ", sweep_id)
+            wandb.agent(sweep_id, function=train(sweep=True), count=1)
         else:    
             params = vars(args)
-            train(params)
+            train(params)            
 
 if __name__ == "__main__":
     main()

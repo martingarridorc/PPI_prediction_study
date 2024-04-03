@@ -1,7 +1,7 @@
 import pandas as pd
 
-model = 'crossattention'
-dataset = 'Intra0'
+model = 'TUnA'
+dataset = 'Intra1'
 mapp = {
     'Intra0': 'val',
     'Intra1': 'train',

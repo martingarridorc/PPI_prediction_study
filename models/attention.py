@@ -207,115 +207,66 @@ class AttentionDscript(nn.Module):
 
 
 class TUnA(nn.Module):
-    def __init__(self, embed_dim, num_heads, num_layers=1, hid_dim = 64, dropout=0.25, ff_dim=256):
+    def __init__(self, embed_dim, num_heads, num_layers=1, hid_dim = 64, dropout=0.25, ff_dim=256, cross=False):
         super(TUnA, self).__init__()
 
+        self.cross = cross
         self.hid_dim = hid_dim
         self.num_heads = num_heads
 
-        #from previous tests to implement nn.TransformerEncoder into TUnA
-        #self.Intra_Encoder_layer = nn.TransformerEncoderLayer(d_model=hid_dim, nhead=num_heads, batch_first=True)
-        #self.Intra_Encoder = nn.TransformerEncoder(self.Intra_Encoder_layer, num_layers=num_layers)
-        #self.Inter_Encoder_layer = nn.TransformerEncoderLayer(d_model=hid_dim, nhead=num_heads, batch_first=True)
-        #self.Inter_Encoder = nn.TransformerEncoder(self.Inter_Encoder_layer, num_layers=num_layers)
-
+        self.Cross_Intra = CrossEncoderLayer(hid_dim, num_heads, ff_dim, dropout)
         self.Intra = EncoderLayer(hid_dim, num_heads, ff_dim, dropout)
-        self.Intra2 = EncoderLayer_nospecnorm(hid_dim, num_heads, ff_dim, dropout)
-
+    
+        self.Cross_Inter = CrossEncoderLayer(hid_dim, num_heads, ff_dim, dropout)
         self.Inter = EncoderLayer(hid_dim, num_heads, ff_dim, dropout)
-        self.Inter2 = EncoderLayer_nospecnorm(hid_dim, num_heads, ff_dim, dropout)
 
         self.lin1 = spectral_norm(nn.Linear(embed_dim, hid_dim))
-        self.lin2 = nn.Linear(embed_dim, hid_dim)
 
         self.pred_layer = VanillaRFFLayer(hid_dim, 1028, 1, likelihood="binary_logistic")
 
-    def forward(self, proteins, x1 = None, x2 = None, spec_norm=True):
+    def forward(self, proteins, x1 = None, x2 = None):
         #split protein and create masks
         if proteins is not None:
             x1, x2 = proteins.split(1, dim=1)
-            x1 = x1.squeeze(1)
-            x2 = x2.squeeze(1)
-        else:
-            x1 = x1.squeeze(1)
-            x2 = x2.squeeze(1)
+       
+        x1 = x1.squeeze(1)
+        x2 = x2.squeeze(1)
 
-        if(spec_norm):
+        if self.cross:
+            mask1 = self.create_cross_mask(x1, x2)
+            mask2 = self.create_cross_mask(x2, x1)
+        else:
             mask1 = self.create_square_mask(x1)
             mask2 = self.create_square_mask(x2)
 
-            x1 = self.lin1(x1)
-            x2 = self.lin1(x2)
+        x1 = self.lin1(x1)
+        x2 = self.lin1(x2)
 
+        if self.cross:
+            x1_encoded = self.Cross_Intra(x1, x2, mask1)
+            x2_encoded = self.Cross_Intra(x2, x1, mask2)
+        else:
             x1_encoded = self.Intra(x1, mask1)
             x2_encoded = self.Intra(x2, mask2)
 
-            x12 = torch.cat((x1_encoded, x2_encoded), dim=1)
-            x21 = torch.cat((x2_encoded, x1_encoded), dim=1)
+        x12 = torch.cat((x1_encoded, x2_encoded), dim=1)
+        x21 = torch.cat((x2_encoded, x1_encoded), dim=1)
 
-            x12_mask = self.combine_masks(mask1, mask2)
-            x21_mask = self.combine_masks(mask2, mask1)
+        x12_mask = self.combine_masks(mask1, mask2)
+        x21_mask = self.combine_masks(mask2, mask1)
 
+        if self.cross:
+            x12_encoded = self.Cross_Inter(x12, x21, x21_mask)
+            x21_encoded = self.Cross_Inter(x21, x12, x21_mask)
+        else:
             x12_encoded = self.Inter(x12, x12_mask)
             x21_encoded = self.Inter(x21, x21_mask)
 
-            x12_mask_2d = x12_mask[:,0,:,0]
-            x21_mask_2d = x21_mask[:,0,:,0]
+        x12_mask_2d = x12_mask[:,0,:,0]
+        x21_mask_2d = x21_mask[:,0,:,0]
 
-            x12_interact = torch.sum(x12_encoded*x12_mask_2d[:,:,None], dim=1)/x12_mask_2d.sum(dim=1, keepdims=True)
-            x21_interact = torch.sum(x21_encoded*x21_mask_2d[:,:,None], dim=1)/x21_mask_2d.sum(dim=1, keepdims=True)
-        else:
-            mask1 = self.create_square_mask(x1)
-            mask2 = self.create_square_mask(x2)
-
-            x1 = self.lin2(x1)
-            x2 = self.lin2(x2)
-
-            x1_encoded = self.Intra2(x1, mask1)
-            x2_encoded = self.Intra2(x2, mask2)
-
-            x12 = torch.cat((x1_encoded, x2_encoded), dim=1)
-            x21 = torch.cat((x2_encoded, x1_encoded), dim=1)
-
-            x12_mask = self.combine_masks(mask1, mask2)
-            x21_mask = self.combine_masks(mask2, mask1)
-
-            x12_encoded = self.Inter2(x12, x12_mask)
-            x21_encoded = self.Inter2(x21, x21_mask)
-
-            x12_mask_2d = x12_mask[:,0,:,0]
-            x21_mask_2d = x21_mask[:,0,:,0]
-
-            x12_interact = torch.sum(x12_encoded*x12_mask_2d[:,:,None], dim=1)/x12_mask_2d.sum(dim=1, keepdims=True)
-            x21_interact = torch.sum(x21_encoded*x21_mask_2d[:,:,None], dim=1)/x21_mask_2d.sum(dim=1, keepdims=True)
-            '''
-            mask1 = self.create_mask(x1)
-            mask2 = self.create_mask(x2)
-
-            #reduce dim to hid_dim (part of intra-encoder)
-            x1 = self.lin1(x1)
-            x2 = self.lin1(x2)
-
-            #first encoder
-            x1_encoded = self.Intra_Encoder(x1, src_key_padding_mask=mask1)
-            x2_encoded = self.Intra_Encoder(x2, src_key_padding_mask=mask2)
-
-            #combine both permutations, proteins ...
-            x12 = torch.cat((x1_encoded, x2_encoded), dim=1)
-            x21 = torch.cat((x2_encoded, x1_encoded), dim=1)
-
-            #... and masks
-            x12_mask = torch.cat((mask1, mask2), dim=1)
-            x21_mask = torch.cat((mask2, mask1), dim=1)
-
-            #second encoder
-            x12_encoded = self.Inter_Encoder(x12, src_key_padding_mask=x12_mask)
-            x21_encoded = self.Inter_Encoder(x21, src_key_padding_mask=x21_mask)
-
-            # average over the real parts of the sequence
-            x12_interact = torch.sum(x12_encoded*x12_mask[:,:,None], dim=1)/x12_mask.sum(dim=1, keepdims=True)
-            x21_interact = torch.sum(x21_encoded*x21_mask[:,:,None], dim=1)/x21_mask.sum(dim=1, keepdims=True)
-            '''
+        x12_interact = torch.sum(x12_encoded*x12_mask_2d[:,:,None], dim=1)/x12_mask_2d.sum(dim=1, keepdims=True)
+        x21_interact = torch.sum(x21_encoded*x21_mask_2d[:,:,None], dim=1)/x21_mask_2d.sum(dim=1, keepdims=True)
 
         ppi_feature_vector, _ = torch.max(torch.stack([x12_interact, x21_interact], dim=-1), dim=-1)
 
@@ -344,6 +295,21 @@ class TUnA(nn.Module):
         mask = mask.unsqueeze(1)
         return mask
 
+    def create_cross_mask(self, tensorA, tensorB):
+        device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")   
+        lenA, lenB = tensorA.size(1), tensorB.size(1)
+        combined_mask = torch.zeros(tensorA.size(0), 1, lenA, lenB, device=device)
+
+        # Create a 1D mask for tensorA
+        maskA = (tensorA.sum(dim=-1) != 0)
+        combined_mask[:, :, :, :lenB] = maskA.unsqueeze(1).unsqueeze(3)
+
+        # Create a 1D mask for tensorB
+        maskB = (tensorB.sum(dim=-1) != 0)
+        combined_mask[:, :, :lenA, :] = maskB.unsqueeze(1).unsqueeze(2)
+
+        return combined_mask
+
     def combine_masks(self, maskA, maskB):
         device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")   
         lenA, lenB = maskA.size(2), maskB.size(2)
@@ -363,6 +329,70 @@ class TUnA(nn.Module):
                 pred.append(p)
             return torch.stack(pred).squeeze(1)
     
+    def old_code(self):
+        # Old code using torch encoder
+        #self.Intra_Encoder_layer = nn.TransformerEncoderLayer(d_model=hid_dim, nhead=num_heads, batch_first=True)
+        #self.Intra_Encoder = nn.TransformerEncoder(self.Intra_Encoder_layer, num_layers=num_layers)
+        #self.Inter_Encoder_layer = nn.TransformerEncoderLayer(d_model=hid_dim, nhead=num_heads, batch_first=True)
+        #self.Inter_Encoder = nn.TransformerEncoder(self.Inter_Encoder_layer, num_layers=num_layers)
+        '''
+            mask1 = self.create_mask(x1)
+            mask2 = self.create_mask(x2)
+
+            #reduce dim to hid_dim (part of intra-encoder)
+            x1 = self.lin1(x1)
+            x2 = self.lin1(x2)
+
+            #first encoder
+            x1_encoded = self.Intra_Encoder(x1, src_key_padding_mask=mask1)
+            x2_encoded = self.Intra_Encoder(x2, src_key_padding_mask=mask2)
+
+            #combine both permutations, proteins ...
+            x12 = torch.cat((x1_encoded, x2_encoded), dim=1)
+            x21 = torch.cat((x2_encoded, x1_encoded), dim=1)
+
+            #... and masks
+            x12_mask = torch.cat((mask1, mask2), dim=1)
+            x21_mask = torch.cat((mask2, mask1), dim=1)
+
+            #second encoder
+            x12_encoded = self.Inter_Encoder(x12, src_key_padding_mask=x12_mask)
+            x21_encoded = self.Inter_Encoder(x21, src_key_padding_mask=x21_mask)
+
+            # average over the real parts of the sequence
+            x12_interact = torch.sum(x12_encoded*x12_mask[:,:,None], dim=1)/x12_mask.sum(dim=1, keepdims=True)
+            x21_interact = torch.sum(x21_encoded*x21_mask[:,:,None], dim=1)/x21_mask.sum(dim=1, keepdims=True)
+            '''
+        # old code not using spectral norm (for test)
+        # no specnorm self.Intra2 = EncoderLayer_nospecnorm(hid_dim, num_heads, ff_dim, dropout)
+        # no specnorm self.Inter2 = EncoderLayer_nospecnorm(hid_dim, num_heads, ff_dim, dropout)
+        # no specnorm self.lin2 = nn.Linear(embed_dim, hid_dim)
+        '''    
+            mask1 = self.create_square_mask(x1)
+            mask2 = self.create_square_mask(x2)
+
+            x1 = self.lin2(x1)
+            x2 = self.lin2(x2)
+
+            x1_encoded = self.Intra2(x1, mask1)
+            x2_encoded = self.Intra2(x2, mask2)
+
+            x12 = torch.cat((x1_encoded, x2_encoded), dim=1)
+            x21 = torch.cat((x2_encoded, x1_encoded), dim=1)
+
+            x12_mask = self.combine_masks(mask1, mask2)
+            x21_mask = self.combine_masks(mask2, mask1)
+
+            x12_encoded = self.Inter2(x12, x12_mask)
+            x21_encoded = self.Inter2(x21, x21_mask)
+
+            x12_mask_2d = x12_mask[:,0,:,0]
+            x21_mask_2d = x21_mask[:,0,:,0]
+
+            x12_interact = torch.sum(x12_encoded*x12_mask_2d[:,:,None], dim=1)/x12_mask_2d.sum(dim=1, keepdims=True)
+            x21_interact = torch.sum(x21_encoded*x21_mask_2d[:,:,None], dim=1)/x21_mask_2d.sum(dim=1, keepdims=True)
+            '''
+        return None
 
 
 
@@ -904,15 +934,8 @@ class CrossEncoderLayer(nn.Module):
         
     def forward(self, trg, cross, mask=None):
 
-        #trg_1 = trg
-        #trg = self.sa(trg, trg, trg, trg_mask)
-        #trg = self.ln1(trg_1 + self.do1(trg))
-        #
-        #trg = self.ln2(trg + self.do2(self.ff(trg)))
-
         trg = self.ln1(trg + self.do1(self.sa(trg, cross, cross, mask)))
         trg = self.ln2(trg + self.do2(self.ff(trg)))
-
 
         return trg    
     
