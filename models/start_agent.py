@@ -16,4 +16,4 @@ else:
     args = parser.parse_args()
 
     sweep_id = args.sweep_id
-    wandb.agent(sweep_id, function=train(sweep=True), count=1)
+    wandb.agent(sweep_id, function=train, count=5, project="hypertune")

@@ -11,4 +11,4 @@
 #SBATCH --job-name=ppi-attention
 #SBATCH --mem-per-gpu=40G
 
-srun python /nfs/home/students/t.reim/bachelor/pytorchtest/models/start_agent.py --sweep_id ar82d8ts
+srun python /nfs/home/students/t.reim/bachelor/pytorchtest/models/start_agent.py --sweep_id k8qj1lnt

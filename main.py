@@ -66,7 +66,7 @@ sweep_config = {
         "num_heads": {
             "values": [2, 4, 8, 16]
         },
-        "h3": {
+        "attention_dim": {
             "distribution": "q_uniform",
             "min": 16,
             "max": 1024,
@@ -410,7 +410,7 @@ def main():
         if args.sweep:
             sweep_id = wandb.sweep(sweep_config, project="hypertune")
             print("Sweep ID: ", sweep_id)
-            wandb.agent(sweep_id, function=train(sweep=True), count=1)
+            #wandb.agent(sweep_id, function=train(sweep=True), count=1)
         else:    
             params = vars(args)
             train(params)            
