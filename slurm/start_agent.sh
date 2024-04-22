@@ -8,7 +8,7 @@
 #SBATCH --time=2-0
 #SBATCH --error=/nfs/home/students/t.reim/bachelor/pytorchtest/slurm/err/%j.err
 #SBATCH --output=/nfs/home/students/t.reim/bachelor/pytorchtest/slurm/out/%j.out
-#SBATCH --job-name=ppi-attention
+#SBATCH --job-name=agent-sweep
 #SBATCH --mem-per-gpu=40G
 
-srun python /nfs/home/students/t.reim/bachelor/pytorchtest/models/start_agent.py --sweep_id k8qj1lnt
+srun python /nfs/home/students/t.reim/bachelor/pytorchtest/models/start_agent.py --sweep_id v4mc8xof --missions 5

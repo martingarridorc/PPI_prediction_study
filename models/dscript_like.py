@@ -1,14 +1,14 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
 import data.data as d
 
 
 class DScriptLike(nn.Module):
 
     def __init__(self, embed_dim, d=100, w=7, h=50,
-                x0 = 0.5, k = 20,
-                do_pool = False, pool_size=9, do_w = True, theta_init=1, lambda_init=0, gamma_init = 0):
+                x0 = 0.5, k = 20, pool_size=9, do_pool=False, do_w = True, theta_init=1, lambda_init=0, gamma_init = 0):
         
         super(DScriptLike, self).__init__()
         self.embed_dim = embed_dim
@@ -110,7 +110,8 @@ class DScriptLike(nn.Module):
             mu = torch.mean(yhat)
             sigma = torch.var(yhat)
             Q = torch.relu(yhat - mu - (self.gamma * sigma))
-        else:   
+        else:  
+            #old code 
             mean = torch.mean(yhat, dim=[1,2], keepdim=True)
             std_dev = torch.sqrt(torch.var(yhat, dim=[1,2], keepdim=True) + 1e-5)
             Q = torch.relu(yhat - mean - (self.gamma * std_dev))

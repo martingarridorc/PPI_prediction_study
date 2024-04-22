@@ -13,20 +13,22 @@ import data.data as d
 
 
 class CrossAttInteraction(nn.Module):
-    def __init__(self, embed_dim, num_heads, h3=64, dropout=0.2):
+    def __init__(self, embed_dim, num_heads, h3=64, dropout=0.2, ff_dim=256, pooling='avg', kernel_size=2):
         super(CrossAttInteraction, self).__init__()
     
         h = int(embed_dim//4)
         h2 = int(h//4)    
 
-        self.cross_encoder = CrossEncoderLayer(h3, num_heads, 256, dropout)
+        self.cross_encoder = CrossEncoderLayer(h3, num_heads, ff_dim, dropout)
 
         self.multihead = Attention(h3, num_heads, dropout)
         
 
-        self.conv = nn.Conv2d(h3, 1, kernel_size=(2, 2))
-        self.pool = nn.AvgPool2d(kernel_size=4)
-        self.maxpool = nn.MaxPool2d(kernel_size=4)
+        self.conv = nn.Conv2d(h3, 1, kernel_size=kernel_size)
+        if pooling == 'max':
+            self.pool = nn.MaxPool2d(kernel_size=kernel_size)
+        elif pooling == 'avg':
+            self.pool = nn.AvgPool2d(kernel_size=kernel_size)    
 
         self.ReLU = nn.ReLU()
         self.fc1 = nn.Linear(embed_dim, h)
@@ -36,7 +38,7 @@ class CrossAttInteraction(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
 
-    def forward(self, protein1, protein2, mask1, mask2):
+    def forward(self, protein1, protein2, mask1=None, mask2=None):
         x1 = protein1.to(torch.float32)
         x2 = protein2.to(torch.float32)
 
@@ -82,7 +84,7 @@ class CrossAttInteraction(nn.Module):
                 id2 = batch['name2'][i]
                 seq1 = d.get_embedding_per_tok(emb_dir, id1, layer).unsqueeze(0).to(device)
                 seq2 = d.get_embedding_per_tok(emb_dir, id2, layer).unsqueeze(0).to(device)
-                p, cm = self.forward(seq1, seq2, None, None)
+                p, cm = self.forward(seq1, seq2)
                 pred.append(p)
             return torch.stack(pred)
 
@@ -207,7 +209,7 @@ class AttentionDscript(nn.Module):
 
 
 class TUnA(nn.Module):
-    def __init__(self, embed_dim, num_heads, num_layers=1, hid_dim = 64, dropout=0.25, ff_dim=256, cross=False):
+    def __init__(self, embed_dim, num_heads, num_layers=1, hid_dim = 64, dropout=0.25, ff_dim=256, rffs=1028, cross=False):
         super(TUnA, self).__init__()
 
         self.cross = cross
@@ -222,7 +224,7 @@ class TUnA(nn.Module):
 
         self.lin1 = spectral_norm(nn.Linear(embed_dim, hid_dim))
 
-        self.pred_layer = VanillaRFFLayer(hid_dim, 1028, 1, likelihood="binary_logistic")
+        self.pred_layer = VanillaRFFLayer(hid_dim, rffs, 1, likelihood="binary_logistic")
 
     def forward(self, proteins, x1 = None, x2 = None):
         #split protein and create masks
