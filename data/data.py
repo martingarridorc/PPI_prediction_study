@@ -1,14 +1,11 @@
 import torch
 import torch.utils.data as data
-import torch.cuda as cuda
 from torch.nn.utils.rnn import pad_sequence
 
 import pandas as pd
 import numpy as np
 
 import os
-import sys
-import collections
 
 
 class DataFileFormatException(Exception):

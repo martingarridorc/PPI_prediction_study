@@ -24,7 +24,7 @@ class CrossAttInteraction(nn.Module):
         self.multihead = Attention(h3, num_heads, dropout)
         
 
-        self.conv = nn.Conv2d(h3, 1, kernel_size=kernel_size)
+        self.conv = nn.Conv2d(h3, 1, kernel_size=kernel_size, padding='same')
         if pooling == 'max':
             self.pool = nn.MaxPool2d(kernel_size=kernel_size)
         elif pooling == 'avg':
@@ -53,8 +53,6 @@ class CrossAttInteraction(nn.Module):
 
         x1 = self.cross_encoder(x1, x2, mask1)
         x2 = self.cross_encoder(x2, x1, mask2)
-
-        # option 1, copy of 2dbaseline, using both cross1 and cross2
 
         mat = torch.einsum('bik,bjk->bijk', x1, x2)    # normale matrix multiplikation
         mat = mat.permute(0, 3, 1, 2)
@@ -90,7 +88,7 @@ class CrossAttInteraction(nn.Module):
 
 
 class SelfAttInteraction(nn.Module):
-    def __init__(self, embed_dim, num_heads, dropout=0.2, encoder_layers=1, ff_dim=256):
+    def __init__(self, embed_dim, num_heads, dropout=0.2, encoder_layers=1, ff_dim=256, kernel_size=2):
         super(SelfAttInteraction,self).__init__()
 
         h = int(embed_dim//4)
@@ -102,7 +100,7 @@ class SelfAttInteraction(nn.Module):
 
         self.spectral_Encoder = EncoderLayer(h3, num_heads, ff_dim, dropout)
 
-        self.conv = nn.Conv2d(h3, 1, kernel_size=(2, 2))
+        self.conv = nn.Conv2d(h3, 1, kernel_size=kernel_size, padding=kernel_size // 2)
         self.pool = nn.AvgPool2d(kernel_size=4)
         self.maxpool = nn.MaxPool2d(kernel_size=4)
 

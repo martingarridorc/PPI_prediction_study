@@ -39,9 +39,9 @@ def metrics(true_positive, false_positive, true_negative, false_negative):
 
 sweep_config = {
     'crossattention':{
-        "name": "CrossAttention_sweep_bayesian",
+        "name": "CrossAttention_sweep_bayesian_val",
         "method": "bayes",
-        "metric": {"goal": "minimize", "name": "epoch_loss"},
+        "metric": {"goal": "maximize", "name": "val_accuracy"},
         "parameters": {
             "data_name": {"value": "gold_stand"},
             "num_epochs": {"value": 20},
@@ -88,9 +88,9 @@ sweep_config = {
         }
     },
     'TUnA':{
-        "name": "TUnA_sweep_bayesian",
+        "name": "TUnA_sweep_bayesian_val",
         "method": "bayes",
-        "metric": {"goal": "minimize", "name": "epoch_loss"},
+        "metric": {"goal": "maximize", "name": "val_accuracy"},
         "parameters": {
             "data_name": {"value": "gold_stand"},
             "num_epochs": {"value": 20},
@@ -121,7 +121,7 @@ sweep_config = {
             "attention_dim": {
                 "distribution": "q_uniform",
                 "min": 16,
-                "max": 1024,
+                "max": 512,
                 "q": 16
             },
             "ff_dim":{
@@ -136,9 +136,9 @@ sweep_config = {
         }
     },
     'richoux':{
-        "name": "Richoux_sweep_bayesian",
+        "name": "Richoux_sweep_bayesian_val",
         "method": "bayes",
-        "metric": {"goal": "minimize", "name": "epoch_loss"},
+        "metric": {"goal": "maximize", "name": "val_accuracy"},
         "parameters": {
             "data_name": {"value": "gold_stand"},
             "num_epochs": {"value": 20},
@@ -179,9 +179,9 @@ sweep_config = {
         }
     },
     'dscript_like':{
-        "name": "dscript_like_sweep_bayesian",
+        "name": "dscript_like_sweep_bayesian_val",
         'method': 'bayes',
-        "metric": {"goal": "minimize", "name": "epoch_loss"},
+        "metric": {"goal": "maximize", "name": "val_accuracy"},
         'parameters': {
             "data_name": {"value": "gold_stand"},
             "num_epochs": {"value": 20},
@@ -203,8 +203,8 @@ sweep_config = {
             },
             'd': {
                 'distribution': 'int_uniform',
-                'min': 16,
-                'max': 512
+                'min': 20,
+                'max': 300
             },
             'w': {
                 'distribution': 'int_uniform',
@@ -213,8 +213,8 @@ sweep_config = {
             },
             'h': {
                 'distribution': 'int_uniform',
-                'min': 16,
-                'max': 512
+                'min': 10,
+                'max': 150
             },
             'x0': {
                 'distribution': 'uniform',
@@ -466,15 +466,15 @@ def train(config=None, sweep=False):
                     outputs = model(tensor) 
                 
                 if save_confpred:
-                    names1 = batch['name1']
-                    names2 = batch['name2']
+                    id1 = batch['name1']
+                    id2 = batch['name2']
                     output_values = outputs.detach().cpu().numpy()
                     predicted_labels = torch.round(outputs.float()).detach().cpu().numpy()
                     labels = batch['interaction'].numpy()
 
-                    for value, predicted_label, label, name1, name2 in zip(output_values, predicted_labels, labels, names1, names2):
+                    for value, predicted_label, label, id1, id2 in zip(output_values, predicted_labels, labels, names1, names2):
                         if value > threshold and predicted_label == 1 and label == 1:
-                            confident_train_predictions.append((name1, name2))
+                            confident_train_predictions.append((id1, id2))
 
                 labels = batch['interaction']
                 labels = labels.unsqueeze(1).float()

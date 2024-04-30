@@ -8,28 +8,26 @@ def main(model, dataset):
         'Intra1': 'train',
         'Intra2': 'test',
     }
+    def sort_ids(row):
+        return tuple(sorted((row[0], row[1])))
+
     sett = mapp[dataset]
     # Read the CSV files
     df1 = pd.read_csv(f'/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/confident_{sett}_pred_{model}.csv', sep='\t')
     df2 = pd.read_csv(f'/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/ppis_with_structures_{dataset}_pos_rr.csv', sep=',',skiprows=1)
 
 
-    pairs1 = [frozenset((row[0], row[1])) for row in df1.values]
-    pairs2 = [frozenset((row[0], row[1])) for row in df2.values]
+    pairs1 = [sort_ids(row) for row in df1.values]
+    pairs2 = {sort_ids(row): row[2] for row in df2.values}
 
     # Find the intersection of the two sets
-    common_pairs = set(pairs1) & set(pairs2)
+    common_pairs = {pair: pairs2[pair] for pair in pairs1 if pair in pairs2}
 
+    print(f'Found {len(common_pairs)} common pairs')
 
-    df_new = df2[df2.apply(lambda row: frozenset((row[0], row[1])) in common_pairs, axis=1)]
-    df_new.columns = ['prot1', 'prot2', 'pdb_matches']
-    #df_new.to_csv(f'/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/conf_ppis_with_structures_{dataset}_{model}.csv', sep=',', index=False)
-    print(f'Found {len(df_new)} common pairs')
-    df_new['pdb_matches'] = df_new['pdb_matches'].apply(ast.literal_eval)
-    confpred_dict = {frozenset([row['prot1'], row['prot2']]): row['pdb_matches'][0] if row['pdb_matches'] else None for _, row in df_new.iterrows()}
-
+    confpred_dict = {pair: ast.literal_eval(common_pairs[pair])[0] if ast.literal_eval(common_pairs[pair]) else None for pair in common_pairs}
     with open(f'/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/confpred_dict_{dataset}_{model}.pkl', 'wb') as f:
         pickle.dump(confpred_dict, f)
 
 if __name__ == "__main__":
-    main(dataset='Intra2', model='crossattention')        
+    main(dataset='Intra1', model='crossattention')        

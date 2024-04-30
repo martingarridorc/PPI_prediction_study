@@ -1,4 +1,3 @@
-import data.find_confpreds_with_structure as fcws
 import data.get_cmap as gc
 import data.data as d
 import models.dscript_like as dscript_like
@@ -6,34 +5,120 @@ import models.baseline2d as baseline2d
 import models.fc2_20_2_dense as richoux
 import models.attention as attention
 import numpy as np
-import ast
+from Bio.SeqUtils import seq1
+from Bio.SeqUtils import seq3
+from Bio import Align
+import Bio.PDB
 import os
 import requests
 import pickle
 import torch
 import matplotlib.pyplot as plt
+import pandas as pd
+import warnings
 
 def main(dataset='Intra1', model='TUnA'):
+    warnings.filterwarnings("ignore")
     confpred_dict = load_dict(dataset, model)
-    for interaction in list(confpred_dict.keys())[5:]:
+    seq_data = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/gold_stand_train_all_seq.csv"
+    df = pd.read_csv(seq_data)
+    for interaction in list(confpred_dict.keys()):
         list_interaction = list(interaction)
         id1 = list_interaction[0]
         id2 = list_interaction[1]
         complex_id = confpred_dict[interaction]
-
-        cmap = get_pred_cmap(id1, id2, complex_id, model=model, emb_name='esm2_t33_650', emb_type='per_tok')
-        plot_predcmap(cmap, f'{complex_id}_{model}')
         pdb_file = download_pdb_files([complex_id])
+        '''
         real_cmap = gc.get_cmap(pdb_filename=pdb_file)
-        gc.plot_cmap(real_cmap)
-        dist_map, x_labels, y_labels = gc.get_distmap(complex_id, pdb_file)
-        gc.plot_distmap(dist_map, x_labels, y_labels)
-        gc.plot_distmap(cmap, None, None)
+        start_pos_seq1, end_pos_seq1 = int(real_cmap.index[0].split(':')[1]), int(real_cmap.index[-1].split(':')[1])
+        start_pos_seq2, end_pos_seq2 = int(real_cmap.columns[0].split(':')[1]), int(real_cmap.columns[-1].split(':')[1])
+        #gc.plot_cmap(real_cmap)
+        '''
+        print(f'Interaction: {id1} - {id2}: {complex_id}')
+        distmap, x0_labels, y0_labels, x1_labels, y1_labels, start_pos_seq1, end_pos_seq1, start_pos_seq2, end_pos_seq2, num_chains = aligned_distmap(id1, id2, complex_id, pdb_file, df)
+        #if num_chains > 4:
+        #    print(f'Number of chains in {complex_id} is {num_chains}. Skipping...')
+        #    continue
+        pred_dist = get_pred_cmap(id1, id2, complex_id, model=model, emb_name='esm2_t33_650', emb_type='per_tok')
+        pred_dist_cut = pred_dist[start_pos_seq1:end_pos_seq1, start_pos_seq2:end_pos_seq2]
+        print(f'Pred_cut shape: {pred_dist_cut.shape}')
+        print(f'pred_cut labels: {len(x1_labels)}, {len(y1_labels)}')
+        print(f'Real shape: {distmap.shape}')
+        print(f'distmap labels: {len(x0_labels)}, {len(y0_labels)}')
+        cor = gc.plot_distmaps(distmap, pred_dist_cut, x0_labels, y0_labels, x1_labels, y1_labels, complex_id, id1, id2)
+        #gc.plot_distmap(distmap, x0_labels, y0_labels)
+        #gc.plot_distmap(pred_dist_cut, x1_labels, y1_labels)
 
 def load_dict(dataset, model):
     with open(f'/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/confpred_dict_{dataset}_{model}.pkl', 'rb') as f:
         return pickle.load(f)
     
+def aligned_distmap(id1, id2, pdb_id, pdb_file, seq_df):
+    structure = Bio.PDB.PDBParser().get_structure(pdb_id, pdb_file)
+    prot_to_cs = get_protein_to_chains_mapping(pdb_file)
+    chains_seqs = {chain.id: seq1(''.join(residue.resname for residue in chain)) for chain in structure.get_chains()}
+
+    row = seq_df[((seq_df['Id1'] == id1) | (seq_df['Id2'] == id1)) & ((seq_df['Id1'] == id2) | (seq_df['Id2'] == id2))]
+    seq_a = row['sequence_a'].values[0]
+    seq_b = row['sequence_b'].values[0]
+
+    if id1 in row['Id2'].values and id2 in row['Id1'].values:
+        # Swap id1 and id2
+        id1, id2 = id2, id1
+        seq_a, seq_b = seq_b, seq_a
+
+    print(f'Number of chains in {pdb_id}: {len(chains_seqs)}')
+    chain_prot1 = prot_to_cs[id1][0]
+    chain_prot2 = prot_to_cs[id2][0]
+    print(f'Chains: {id1}: {chain_prot1}, {id2}: {chain_prot2}')
+
+    aligner = Align.PairwiseAligner()
+    aligner.mode = 'local'
+    aligner.open_gap_score = -100
+
+    alignmentA = aligner.align(seq_a, chains_seqs[chain_prot1])[0]
+    alignment_start_seq_a, alignment_end_seq_a = alignmentA.coordinates[0]
+    alignment_start_chain_a, alignment_end_chain_a = alignmentA.coordinates[1]
+
+    alignmentB = aligner.align(seq_b, chains_seqs[chain_prot2])[0]
+    alignment_start_seq_b, alignment_end_seq_b = alignmentB.coordinates[0]
+    alignment_start_chain_b, alignment_end_chain_b = alignmentB.coordinates[1]
+
+    distmap, x0, y0 = get_distmap(structure, alignment_start_chain_a, alignment_end_chain_a, alignment_start_chain_b, alignment_end_chain_b,
+                                  chain_prot1, chain_prot2)
+
+    x1 = one_to_three(seq_b, alignment_start_seq_b, alignment_end_seq_b)
+    y1 = one_to_three(seq_a, alignment_start_seq_a, alignment_end_seq_a)
+
+    return distmap, x0, y0, x1, y1, alignment_start_seq_a, alignment_end_seq_a, alignment_start_seq_b, alignment_end_seq_b, len(chains_seqs)
+
+def get_distmap(structure, start_A, end_A, start_B, end_B, chain_prot1, chain_prot2):
+    model = structure[0]
+    chain_1 = [res for i, res in enumerate(model[chain_prot1]) if start_A <= i < end_A]
+    chain_2 = [res for i, res in enumerate(model[chain_prot2]) if start_B <= i < end_B]
+    dist_matrix = calc_dist_matrix(chain_1, chain_2)
+    x = [f"{str(res.resname)}:{str(res.id[1])}" for res in chain_2]
+    y = [f"{str(res.resname)}:{str(res.id[1])}" for res in chain_1]
+    return dist_matrix, x, y   
+
+def calc_dist_matrix(chain_one, chain_two) :
+    """Returns a matrix of C-alpha distances between two chains"""
+    answer = np.zeros((len(chain_one), len(chain_two)), np.float64)
+    for row, residue_one in enumerate(chain_one) :
+        for col, residue_two in enumerate(chain_two) :
+            answer[row, col] = calc_residue_dist(residue_one, residue_two)
+    return answer
+
+def calc_residue_dist(residue_one, residue_two) :
+    """Returns the C-alpha distance between two residues"""
+    if "CA" not in residue_one or "CA" not in residue_two:
+        return np.nan
+    diff_vector  = residue_one["CA"].coord - residue_two["CA"].coord
+    return np.sqrt(np.sum(diff_vector * diff_vector))
+
+def one_to_three(seq, start, end):
+    seq = seq[start:end]
+    return [f"{seq3(residue).upper()}:{i+start}" for i, residue in enumerate(seq)]
 
 def get_pred_cmap(id1, id2, complex_id, model, emb_name='esm2_t33_650', emb_type='per_tok'):
     model_path = f'/nfs/home/students/t.reim/bachelor/pytorchtest/models/pretrained/{model}_{emb_name}.pt'
@@ -57,6 +142,19 @@ def plot_predcmap(cmap, name):
     plt.colorbar()
     plt.savefig(f'/nfs/home/students/t.reim/bachelor/pytorchtest/plots/contact_map_{name}.png')
     plt.clf()
+
+def get_protein_to_chains_mapping(pdb_file):
+    protein_to_chain = {}
+    with open(pdb_file, 'r') as f:
+        for line in f:
+            if line.startswith('DBREF'):
+                fields = line.split()
+                chain_id = fields[2]
+                uniprot_id = fields[6]
+                if uniprot_id not in protein_to_chain:
+                    protein_to_chain[uniprot_id] = []
+                protein_to_chain[uniprot_id].append(chain_id)
+    return protein_to_chain
 
 def download_pdb_files(complex_ids, directory='/nfs/home/students/t.reim/bachelor/pytorchtest/data/pdb_files'):
     if not os.path.exists(directory):

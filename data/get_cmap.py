@@ -1,8 +1,10 @@
 import Bio.PDB
 import numpy as np
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from pcmap import contactMap
 import pandas as pd
+
 
 pdb_code = "2K7W"
 pdb_filename = "data/pdb2k7w.ent"
@@ -135,3 +137,59 @@ def plot_distmap(distmap, x, y):
         width=1000,
         height=1000)
     fig.show()
+
+
+def plot_distmaps(distmap1, distmap2, x0, y0, x1, y1, complex_id, id1, id2):
+
+    distmap1_flat = distmap1.flatten()
+    distmap2_flat = distmap2.flatten()
+    correlation = np.corrcoef(distmap1_flat, distmap2_flat)[0, 1]
+
+    fig = make_subplots(rows=1, cols=2)
+
+    # real
+    fig.add_trace(
+        go.Heatmap(z=distmap1.astype(np.float64),
+                   x=x0,
+                   y=y0,
+                   colorscale='blues',
+                   reversescale=True,
+                   showscale=False),
+        row=1, col=1)
+
+    # predicted
+    fig.add_trace(
+        go.Heatmap(z=distmap2.astype(np.float64),
+                   x=x1,
+                   y=y1,
+                   colorscale='blues',
+                   reversescale=True,
+                   showscale=False),
+        row=1, col=2)
+
+    # correlation
+    fig.add_annotation(
+        x=0.5,
+        y=-0.1,
+        xref='paper',
+        yref='paper',
+        text=f'Correlation: {correlation:.2f}',
+        showarrow=False,
+        font=dict(
+            size=18,
+            color="black"
+        ))
+    
+    fig.update_xaxes(title_text="Real", title_font=dict(size=18), row=1, col=1)
+    fig.update_xaxes(title_text="Predicted", title_font=dict(size=18), row=1, col=2)
+
+    fig.update_layout(
+        title=f"Complex ID: {complex_id}, IDs: {id1}, {id2}",
+        title_x=0.5,
+        title_font=dict(size=24),
+        width=2000,
+        height=1000)
+
+    fig.show()
+
+    return correlation
