@@ -54,7 +54,7 @@ class CrossAttInteraction(nn.Module):
         x1 = self.cross_encoder(x1, x2, mask1)
         x2 = self.cross_encoder(x2, x1, mask2)
 
-        mat = torch.einsum('bik,bjk->bijk', x1, x2)    # normale matrix multiplikation
+        mat = torch.einsum('bik,bjk->bijk', x1, x2)    # normale matrix multiplikation?
         mat = mat.permute(0, 3, 1, 2)
         mat = self.conv(mat)
         x = self.pool(mat)    
@@ -88,35 +88,31 @@ class CrossAttInteraction(nn.Module):
 
 
 class SelfAttInteraction(nn.Module):
-    def __init__(self, embed_dim, num_heads, dropout=0.2, encoder_layers=1, ff_dim=256, kernel_size=2):
-        super(SelfAttInteraction,self).__init__()
-
+    def __init__(self, embed_dim, num_heads, h3=64, dropout=0.2, ff_dim=256, pooling='avg', kernel_size=2):
+        super(SelfAttInteraction, self).__init__()
+    
         h = int(embed_dim//4)
         h2 = int(h//4)    
-        h3 = 64
 
-        self.torchencoderlayer = nn.TransformerEncoderLayer(d_model=h3, nhead=num_heads)
-        self.torchencoder = nn.TransformerEncoder(self.torchencoderlayer, num_layers=encoder_layers)
+        self.encoder = EncoderLayer(h3, num_heads, ff_dim, dropout)
 
-        self.spectral_Encoder = EncoderLayer(h3, num_heads, ff_dim, dropout)
+        self.multihead = Attention(h3, num_heads, dropout)
+        
 
-        self.conv = nn.Conv2d(h3, 1, kernel_size=kernel_size, padding=kernel_size // 2)
-        self.pool = nn.AvgPool2d(kernel_size=4)
-        self.maxpool = nn.MaxPool2d(kernel_size=4)
+        self.conv = nn.Conv2d(h3, 1, kernel_size=kernel_size, padding='same')
+        if pooling == 'max':
+            self.pool = nn.MaxPool2d(kernel_size=kernel_size)
+        elif pooling == 'avg':
+            self.pool = nn.AvgPool2d(kernel_size=kernel_size)    
 
         self.ReLU = nn.ReLU()
         self.fc1 = nn.Linear(embed_dim, h)
-        #self.bn1 = nn.BatchNorm1d(h)
         self.fc2 = nn.Linear(h, h2)
-        #self.bn2 = nn.BatchNorm1d(h2)
-
         self.fc3 = nn.Linear(h2, h3)
-        #self.bn3 = nn.BatchNorm1d(h3)
-        #self.fc4 = nn.Linear(h3, 1) 
 
         self.sigmoid = nn.Sigmoid()
 
-    def forward(self, protein1, protein2, mask1, mask2, spec_norm=True):
+    def forward(self, protein1, protein2, mask1=None, mask2=None):
         x1 = protein1.to(torch.float32)
         x2 = protein2.to(torch.float32)
 
@@ -129,12 +125,8 @@ class SelfAttInteraction(nn.Module):
         x2 = self.ReLU(self.fc2(x2))
         x2 = self.ReLU(self.fc3(x2))
 
-        if spec_norm:
-            x1 = self.spectral_Encoder(x1, mask1)
-            x2 = self.spectral_Encoder(x2, mask2)
-        else:
-            x1 = self.torchencoder(x1)
-            x2 = self.torchencoder(x2)
+        x1 = self.encoder(x1, mask1)
+        x2 = self.encoder(x2, mask2)
 
         mat = torch.einsum('bik,bjk->bijk', x1, x2)    # normale matrix multiplikation
         mat = mat.permute(0, 3, 1, 2)
@@ -151,60 +143,180 @@ class SelfAttInteraction(nn.Module):
 
 
     def batch_iterate(self, batch, device, layer, emb_dir):
-                pred = []
-                for i in range(len(batch['interaction'])):
-                    id1 = batch['name1'][i]
-                    id2 = batch['name2'][i]
-                    seq1 = d.get_embedding_per_tok(emb_dir, id1, layer).unsqueeze(0).to(device)
-                    seq2 = d.get_embedding_per_tok(emb_dir, id2, layer).unsqueeze(0).to(device)
-                    p, _ = self.forward(seq1, seq2, None, None, True)
-                    pred.append(p)
-                return torch.stack(pred)
+            pred = []
+            for i in range(len(batch['interaction'])):
+                id1 = batch['name1'][i]
+                id2 = batch['name2'][i]
+                seq1 = d.get_embedding_per_tok(emb_dir, id1, layer).unsqueeze(0).to(device)
+                seq2 = d.get_embedding_per_tok(emb_dir, id2, layer).unsqueeze(0).to(device)
+                p, cm = self.forward(seq1, seq2)
+                pred.append(p)
+            return torch.stack(pred)
 
 
 class AttentionDscript(nn.Module):
-    def __init__(self, embed_dim, num_heads, dropout=0.25, ff_dim=256):
+
+    def __init__(self, embed_dim, d=128, w=7, h=50,
+                x0 = 0.5, k = 20, pool_size=9, do_pool=False, do_w = True, theta_init=1, lambda_init=0, gamma_init = 0,
+                norm="instance", num_heads=8, ff_dim=256, dropout=0.2):
+        
         super(AttentionDscript, self).__init__()
 
+        self.spectral_Encoder = EncoderLayer(d, num_heads, ff_dim, dropout)
 
-        self.torchencoderlayer = nn.TransformerEncoderLayer(d_model=embed_dim, nhead=num_heads)
-        self.torchencoder = nn.TransformerEncoder(self.torchencoderlayer, num_layers=3)
+        self.spectral_cross_Encoder = CrossEncoderLayer(d, num_heads, ff_dim, dropout)
 
-        self.spectral_Encoder = EncoderLayer(embed_dim, num_heads, ff_dim, dropout)
+        self.embed_dim = embed_dim
+        # activation func params
+        self.k = nn.Parameter(torch.FloatTensor([float(k)]), requires_grad=True)
+        self.x0 = x0
 
-        self.spectral_cross_Encoder = CrossEncoderLayer(embed_dim, num_heads, ff_dim, dropout)
+        # interaction module params
+        self.do_w = do_w
+        self.do_pool = do_pool
+        self.maxPool = nn.MaxPool2d(pool_size, padding=pool_size // 2)
+        # for weighing contact map
+        self.xx = nn.Parameter(torch.arange(2000), requires_grad=False)
 
-        self.dscript = dscript_like.DScriptLike(embed_dim)
+        self.gamma = nn.Parameter(torch.FloatTensor([gamma_init]))
 
-    def forward(self, protein1, protein2, mask1, mask2, spec_norm=True, cross=False):
-        x1 = protein1.to(torch.float32)
-        x2 = protein2.to(torch.float32)
+        if self.do_w:
+            self.theta = nn.Parameter(torch.FloatTensor([theta_init]))
+            self.lambda_ = nn.Parameter(torch.FloatTensor([lambda_init]))
 
+        self.clip()    
+
+        # == FullyConnectedEmbed = embedding
+        self.fc1 = nn.Linear(self.embed_dim, d)
+        self.relu1 = nn.ReLU()
+        self.dropout1 = nn.Dropout(0.5)
+
+        # from contact.py: FullyConnected
+        self.conv2 = nn.Conv2d(2 * d, h, 1)
+        self.relu2 = nn.ReLU()  
+        if norm == "instance":
+            self.norm1 = nn.InstanceNorm2d(h)   
+        else:    
+            self.norm1 = nn.BatchNorm2d(h)
         
-        if spec_norm:
-            if cross:
-                x1 = self.spectral_cross_Encoder(x1, mask2)
-                x2 = self.spectral_cross_Encoder(x2, mask1)
-            else:
-                x1 = self.spectral_Encoder(x1, mask1)
-                x2 = self.spectral_Encoder(x2, mask2)
+
+        #from contact.py: ContactCNN
+        self.conv = nn.Conv2d(h, 1, w, padding=w // 2)
+        if norm == "instance":
+            self.norm2 = nn.InstanceNorm2d(1)   
+        else:    
+            self.norm2 = nn.BatchNorm2d(1)
+        self.relu3 = nn.ReLU()
+        
+   
+    def forward(self, x1, x2, mask1=None, mask2=None, cross=True):
+
+        # == FullyConnectedEmbed = embedding
+        x1 = x1.to(torch.float32).unsqueeze(0)
+        x2 = x2.to(torch.float32).unsqueeze(0)
+
+        x1 = x1.contiguous()
+        x1 = x1.view(x1.size(0),-1, self.embed_dim)
+        x1 = self.fc1(x1)
+        x1 = self.relu1(x1)
+        x1 = self.dropout1(x1)
+
+        x2 = x2.contiguous()
+        x2 = x2.view(x2.size(0),-1, self.embed_dim)
+        x2 = self.fc1(x2)
+        x2 = self.relu1(x2)
+        x2 = self.dropout1(x2)
+
+        if cross:
+            x1 = self.spectral_cross_Encoder(x1, x2)
+            x2 = self.spectral_cross_Encoder(x2, x1)
         else:
-            x1 = self.torchencoder(x1)
-            x2 = self.torchencoder(x2)
+            x1 = self.spectral_Encoder(x1)
+            x2 = self.spectral_Encoder(x2)
 
-        return self.dscript(x1, x2)
-    
+
+        # from contact.py: FullyConnected
+        diff = torch.abs(x1.unsqueeze(2) - x2.unsqueeze(1))
+        mul = x1.unsqueeze(2) * x2.unsqueeze(1)
+
+        m = torch.cat([diff, mul], dim=-1)
+
+        m = m.permute(0, 3, 1, 2)
+        m = self.conv2(m)
+        m = self.norm1(m)
+        m = self.relu2(m)
+
+
+        #from contact.py: ContactCNN
+        C = self.conv(m)
+        C = self.norm2(C)
+        C = self.relu3(C)
+
+        # from interaction.py: map_predict
+        if self.do_w:
+            N, M = C.shape[2:]
+
+            x1 = -1 * torch.square(
+                (self.xx[:N] + 1 - ((N + 1) / 2)) / (-1 * ((N + 1) / 2))
+            )
+
+            x2 = -1 * torch.square(
+                (self.xx[:M] + 1 - ((M + 1) / 2)) / (-1 * ((M + 1) / 2))
+            )
+
+            x1 = torch.exp(self.lambda_ * x1)
+            x2 = torch.exp(self.lambda_ * x2)
+
+            W = x1.unsqueeze(1) * x2
+            W = (1 - self.theta) * W + self.theta
+            yhat = C * W
+
+        else:
+            yhat = C
+        if self.do_pool:
+            yhat = self.maxPool(yhat)    
+
+        if True:
+            mu = torch.mean(yhat)
+            sigma = torch.var(yhat)
+            Q = torch.relu(yhat - mu - (self.gamma * sigma))
+        else:  
+            #old code 
+            mean = torch.mean(yhat, dim=[1,2], keepdim=True)
+            std_dev = torch.sqrt(torch.var(yhat, dim=[1,2], keepdim=True) + 1e-5)
+            Q = torch.relu(yhat - mean - (self.gamma * std_dev))
+
+        phat = torch.sum(Q) / (torch.sum(torch.sign(Q)) + 1)
+
+        phat = torch.clamp(
+            1 / (1 + torch.exp(-self.k * (phat - self.x0))), min=0, max=1
+        )
+
+        return phat, C
+
+
     def batch_iterate(self, batch, device, layer, emb_dir):
-                pred = []
-                for i in range(len(batch['interaction'])):
-                    id1 = batch['name1'][i]
-                    id2 = batch['name2'][i]
-                    seq1 = d.get_embedding_per_tok(emb_dir, id1, layer).unsqueeze(0).to(device)
-                    seq2 = d.get_embedding_per_tok(emb_dir, id2, layer).unsqueeze(0).to(device)
-                    p, _ = self.forward(seq1, seq2, None, None)
-                    pred.append(p)
-                return torch.stack(pred)
+        pred = []
+        for i in range(len(batch['interaction'])):
+            id1 = batch['name1'][i]
+            id2 = batch['name2'][i]
+            seq1 = d.get_embedding_per_tok(emb_dir, id1, layer).to(device)
+            seq2 = d.get_embedding_per_tok(emb_dir, id2, layer).to(device)
+            p, cm = self.forward(seq1, seq2)
+            pred.append(p)
+        return torch.stack(pred)      
 
+    def clip(self):
+        """
+        Clamp model values
+
+        :meta private:
+        """
+        if self.do_w:
+            self.theta.data.clamp_(min=0, max=1)
+            self.lambda_.data.clamp_(min=0)
+
+        self.gamma.data.clamp_(min=0)
 
 class TUnA(nn.Module):
     def __init__(self, embed_dim, num_heads, num_layers=1, hid_dim = 64, dropout=0.25, ff_dim=256, rffs=1028, cross=False):
@@ -396,7 +508,7 @@ class TUnA(nn.Module):
 
 
 
-# added spectral norm to all Convolutional and linear layers
+# added spectral norm to all Convolutional and linear layers, ICAN doesnt seem to work either way
 class ICAN_CNN(nn.Module):
     def __init__(self, embed_dim, poolsize, dropout):
         super(ICAN_CNN, self).__init__()
@@ -442,7 +554,7 @@ class ICAN_cross(nn.Module):
                  poolsize=256, pre_cnn_drop=0.25, ff_dim=256, hid_dim=64):
         super(ICAN_cross, self).__init__()
 
-        self.emb_reduction = nn.Linear(embed_dim, hid_dim)
+        self.emb_reduction = spectral_norm(nn.Linear(embed_dim, hid_dim))
 
         self.spec_encoder = CrossEncoderLayer(hid_dim, num_heads, ff_dim, transformer_drop)
 
@@ -478,6 +590,7 @@ class ICAN_cross(nn.Module):
                 p = self.forward(seq1, seq2, None, None)
                 pred.append(p)
             return torch.stack(pred)
+
 # mean embeddings after attetion are meaningless
 class AttentionRichoux(nn.Module):
     def __init__(self, embed_dim, num_heads, dropout=0):
@@ -532,55 +645,7 @@ class AttentionRichoux(nn.Module):
                     p = self.forward(seq1, seq2, None, None)
                     pred.append(p)
                 return torch.stack(pred)
-# can be ignored, may be deleted
-class LightAttention(nn.Module):
-    def __init__(self, embeddings_dim=1024, output_dim=11, dropout=0.25, kernel_size=9, conv_dropout: float = 0.25):
-        super(LightAttention, self).__init__()
-
-        self.feature_convolution = nn.Conv1d(embeddings_dim, embeddings_dim, kernel_size, stride=1,
-                                             padding=kernel_size // 2)
-        self.attention_convolution = nn.Conv1d(embeddings_dim, embeddings_dim, kernel_size, stride=1,
-                                               padding=kernel_size // 2)
-
-        self.softmax = nn.Softmax(dim=-1)
-
-        self.dropout = nn.Dropout(conv_dropout)
-
-        self.linear = nn.Sequential(
-            nn.Linear(2 * embeddings_dim, 32),
-            nn.Dropout(dropout),
-            nn.ReLU(),
-            nn.BatchNorm1d(32)
-        )
-
-        self.output = nn.Linear(32, output_dim)
-
-    def forward(self, x: torch.Tensor, mask, **kwargs) -> torch.Tensor:
-        """
-        Args:
-            x: [batch_size, embeddings_dim, sequence_length] embedding tensor that should be classified
-            mask: [batch_size, sequence_length] mask corresponding to the zero padding used for the shorter sequecnes in the batch. All values corresponding to padding are False and the rest is True.
-
-        Returns:
-            classification: [batch_size,output_dim] tensor with logits
-        """
-        o = self.feature_convolution(x)  # [batch_size, embeddings_dim, sequence_length]
-        o = self.dropout(o)  # [batch_gsize, embeddings_dim, sequence_length]
-        attention = self.attention_convolution(x)  # [batch_size, embeddings_dim, sequence_length]
-
-        # mask out the padding to which we do not want to pay any attention (we have the padding because the sequences have different lenghts).
-        # This padding is added by the dataloader when using the padded_permuted_collate function in utils/general.py
-        attention = attention.masked_fill(mask[:, None, :] == False, -1e9)
-
-        # code used for extracting embeddings for UMAP visualizations
-        # extraction =  torch.sum(x * self.softmax(attention), dim=-1)
-        # extraction = self.id0(extraction)
-
-        o1 = torch.sum(o * self.softmax(attention), dim=-1)  # [batchsize, embeddings_dim]
-        o2, _ = torch.max(o, dim=-1)  # [batchsize, embeddings_dim]
-        o = torch.cat([o1, o2], dim=-1)  # [batchsize, 2*embeddings_dim]
-        o = self.linear(o)  # [batchsize, 32]
-        return self.output(o)  # [batchsize, output_dim]    
+  
 
 # from https://github.com/Wang-lab-UCSD/uncertaintyAwareDeepLearn/blob/main/uncertaintyAwareDeepLearn/classic_rffs.py
 _ACCEPTED_LIKELIHOODS = ("gaussian", "binary_logistic", "multiclass")

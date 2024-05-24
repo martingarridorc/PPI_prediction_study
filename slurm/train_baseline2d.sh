@@ -12,16 +12,15 @@
 #SBATCH --mem-per-gpu=40G
 
 srun python /nfs/home/students/t.reim/bachelor/pytorchtest/main.py \
--data huang \
+-data gold_stand \
 -model baseline2d \
 -lr 0.001 \
--max 10000 \
--es 6 \
+-max 1000 \
 -epoch 25 \
--batch 10 \
+-batch 40 \
 -sub \
 -subsize 0.5 \
 -emb \
--emb_dim 1280 \
+-emb_dim 5120 \
 -wandb \
--run sanity_check_baseline2d 
+-run baseline2d_test_t48 

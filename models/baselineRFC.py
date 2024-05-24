@@ -27,26 +27,33 @@ def perf_measure(y_actual, y_pred):
     return TP, FP, TN, FN
 
 start_time = time.time()
+if False:
+    parser = argparse.ArgumentParser(description='Argument Parser for baselineRFC.py')
 
-parser = argparse.ArgumentParser(description='Argument Parser for baselineRFC.py')
+    # Add arguments
+    parser.add_argument('--model', type=str, default='esm2_t48_15B', help='Model name')
+    parser.add_argument('--mean', action='store_true', help='Use mean representation')
+    parser.add_argument('--layer', type=int, default=48, help='Layer number')
+    parser.add_argument('--components', type=int, default=200, help='Number of components for PCA')
+    parser.add_argument('--pca', action='store_true', help='Use PCA')
+    parser.add_argument('--data_name', type=str, default='gold_stand', help='Data name')
 
-# Add arguments
-parser.add_argument('--model', type=str, default='esm2_t48_15B', help='Model name')
-parser.add_argument('--mean', action='store_true', help='Use mean representation')
-parser.add_argument('--layer', type=int, default=48, help='Layer number')
-parser.add_argument('--components', type=int, default=200, help='Number of components for PCA')
-parser.add_argument('--pca', action='store_true', help='Use PCA')
-parser.add_argument('--data_name', type=str, default='gold_stand', help='Data name')
+    args = parser.parse_args()
 
-args = parser.parse_args()
-
-# Access the arguments
-model = args.model
-mean = args.mean
-layer = args.layer
-components = args.components
-pca = args.pca
-data_name = args.data_name
+    # Access the arguments
+    model = args.model
+    mean = args.mean
+    layer = args.layer
+    components = args.components
+    pca = args.pca
+    data_name = args.data_name
+else:
+    model = "esm2_t33_650"
+    mean = True
+    layer = 33
+    components = 20
+    pca = True
+    data_name = "gold_stand"
 
 embedding_name = f'{model}/mean' if mean else f'{model}/per_tok'
 train = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/" + data_name + "/" + data_name + "_train_all_seq.csv"
@@ -54,6 +61,7 @@ test = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/" + data_name + "/" 
 pca_dic = "/nfs/scratch/t.reim/embeddings/" + embedding_name + "/pca/"
 embedding_dir = "/nfs/scratch/t.reim/embeddings/" + embedding_name + "/"
 max_len = 10000
+
 # params
 
 def get_embedding_mean(dirpath, protein_id, layer):

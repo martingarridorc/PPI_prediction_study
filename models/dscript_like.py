@@ -8,7 +8,7 @@ import data.data as d
 class DScriptLike(nn.Module):
 
     def __init__(self, embed_dim, d=100, w=7, h=50,
-                x0 = 0.5, k = 20, pool_size=9, do_pool=False, do_w = True, theta_init=1, lambda_init=0, gamma_init = 0):
+                x0 = 0.5, k = 20, pool_size=9, do_pool=False, do_w = True, theta_init=1, lambda_init=0, gamma_init = 0, norm="instance"):
         
         super(DScriptLike, self).__init__()
         self.embed_dim = embed_dim
@@ -38,12 +38,19 @@ class DScriptLike(nn.Module):
 
         # from contact.py: FullyConnected
         self.conv2 = nn.Conv2d(2 * d, h, 1)
-        self.relu2 = nn.ReLU()          
-        self.batchnorm1 = nn.BatchNorm2d(h)
+        self.relu2 = nn.ReLU()  
+        if norm == "instance":
+            self.norm1 = nn.InstanceNorm2d(h)   
+        else:    
+            self.norm1 = nn.BatchNorm2d(h)
+        
 
         #from contact.py: ContactCNN
         self.conv = nn.Conv2d(h, 1, w, padding=w // 2)
-        self.batchnorm2 = nn.BatchNorm2d(1)
+        if norm == "instance":
+            self.norm2 = nn.InstanceNorm2d(1)   
+        else:    
+            self.norm2 = nn.BatchNorm2d(1)
         self.relu3 = nn.ReLU()
         
    
@@ -73,13 +80,13 @@ class DScriptLike(nn.Module):
 
         m = m.permute(0, 3, 1, 2)
         m = self.conv2(m)
-        m = self.batchnorm1(m)
+        m = self.norm1(m)
         m = self.relu2(m)
 
 
         #from contact.py: ContactCNN
         C = self.conv(m)
-        C = self.batchnorm2(C)
+        C = self.norm2(C)
         C = self.relu3(C)
 
         # from interaction.py: map_predict

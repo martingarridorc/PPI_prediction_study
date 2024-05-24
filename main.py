@@ -252,15 +252,146 @@ sweep_config = {
                 'min': 0.0,
                 'max': 1.0
             },
+        }
+    },
+    'selfattention':{
+        "name": "SelfAttention_sweep_bayesian_val",
+        "method": "bayes",
+        "metric": {"goal": "maximize", "name": "val_accuracy"},
+        "parameters": {
+            "data_name": {"value": "gold_stand"},
+            "num_epochs": {"value": 20},
+            "subset": {"value": True},
+            "subset_size": {"value": 0.5},
+            "use_embeddings": {"value": True},
+            "mean_embedding": {"value": False},
+            "embedding_dim": {"value": 1280},
+            "use_wandb": {"value": True},
+            "early_stopping": {"value": 8},
+            "model_name": {"value": "selfattention"},
+            "run_name": {"value": ''},
+            "batch_size": {"value": 16},
+            "max_seq_len": {"value": 1000},
+
+            "learning_rate": {
+                "distribution": "uniform",
+                "min": 0.0001,
+                "max": 0.01
+            },
+            "dropout": {
+                "distribution": "uniform",
+                "min": 0.1,
+                "max": 0.5
+            },
+            "num_heads": {
+                "values": [2, 4, 8, 16]
+            },
+            "attention_dim": {
+                "distribution": "q_uniform",
+                "min": 16,
+                "max": 1024,
+                "q": 16
+            },
+            "ff_dim":{
+                "values": [64, 128, 256, 512, 1024]
+            },
+            "pooling":{
+                "values": ['avg', 'max']
+            },
+            "kernel_size":{
+                "values": [1, 2, 3, 4, 5, 6]
+            }
+        }
     }
+}
+
+best_configs = {
+    "crossattention": {
+        "data_name": {"value": "gold_stand"},
+        "num_epochs": {"value": 20},
+        "subset": {"value": True},
+        "subset_size": {"value": 0.5},
+        "use_embeddings": {"value": True},
+        "mean_embedding": {"value": False},
+        "embedding_dim": {"value": 1280},
+        "use_wandb": {"value": True},
+        "early_stopping": {"value": 8},
+        "model_name": {"value": "crossattention"},
+        "run_name": {"value": ''},
+        "batch_size": {"value": 16},
+        "max_seq_len": {"value": 1000},
+
+        "learning_rate": {
+            "distribution": "uniform",
+            "min": 0.0001,
+            "max": 0.01
+        },
+        "dropout": {
+            "distribution": "uniform",
+            "min": 0.1,
+            "max": 0.5
+        },
+        "num_heads": {
+            "values": [2, 4, 8, 16]
+        },
+        "attention_dim": {
+            "distribution": "q_uniform",
+            "min": 16,
+            "max": 1024,
+            "q": 16
+        },
+        "ff_dim":{
+            "values": [64, 128, 256, 512, 1024]
+        },
+        "pooling":{
+            "values": ['avg', 'max']
+        },
+        "kernel_size":{
+            "values": [1, 2, 3, 4, 5, 6]
+        }
+    },
+    "dscript_like": {
+        "seed": 3292779418,
+        "save_confpred": {"value": True},
+        "save_model": {"value": True},
+        "test": {"value": True},
+        "data_name": {"value": "gold_stand"},
+        "num_epochs": {"value": 20},
+        "subset": {"value": True},
+        "subset_size": {"value": 0.5},
+        "use_embeddings": {"value": True},
+        "mean_embedding": {"value": False},
+        "use_wandb": {"value": True},
+        "early_stopping": {"value": 8},
+        "model_name": {"value": "dscript_like"},
+        "run_name": {"value": 'best_dscript_like'},
+        "batch_size": {"value": 16},
+        "max_seq_len": {"value": 1000},
+        "embedding_dim": {"value": 1280},
+        "learning_rate": {"value": 0.008056061488991427},
+        'd': {"value": 112},
+        'w': {"value": 4},
+        'h': {"value": 44},
+        'x0': {"value": 0.4989645451223388},
+        'k': {"value": 20.296019995569164},
+        'pool_size': {"value": 8},
+        'do_pool': {"value": False},
+        'do_w': {"value": True},
+        'theta_init': {"value": 0.9537458250320732},
+        'lambda_init': {"value": 0.42347718679986945},
+        'gamma_init': {"value": 0.22024583140255627}
     }
 }
 
 def train(config=None, sweep=False):
     try:
-        seed = random.randint(0, 2**32 - 1)
-        print(f"Random seed: {seed}")
-        
+        if 'seed' not in config:
+            seed = random.randint(0, 2**32 - 1)
+            print(f"Random seed: {seed}")
+        else:
+            seed = config['seed']
+            print(f"Seed: {seed}") 
+
         random.seed(seed)
         np.random.seed(seed)
         torch.manual_seed(seed)
@@ -268,10 +399,12 @@ def train(config=None, sweep=False):
         if config is None:
             wandb.init(config=config, project="hypertune") 
             config = wandb.config
+            config['seed'] = seed
 
         print(config)
-        config['random_seed'] = seed
+
         #general params
+        test = config.get('test', False)
         data_name = config.get('data_name')
         model_name = config.get('model_name')
         learning_rate = config.get('learning_rate')
@@ -286,6 +419,7 @@ def train(config=None, sweep=False):
         use_wandb = config.get('use_wandb')
         early_stopping = config.get('early_stopping', 0)
         save_confpred = config.get('save_confpred', False)
+        save_model = config.get('save_model', False)
         #params for attention models
         dropout = config.get('dropout', 0.2) #for tuna #for cross 
         num_heads = config.get('num_heads', 8) #for tuna #for cross 
@@ -302,7 +436,7 @@ def train(config=None, sweep=False):
         ff_dim3 = config.get('ff_dim3', 20) #for rich
         spec_norm = config.get('spec_norm', False) #for rich
         #params for dscript_like
-        d_ = config.get('d',100)
+        d_ = config.get('d',128)
         w = config.get('w', 7)
         h = config.get('h', 50)
         x0 = config.get('x0', 0.5)
@@ -334,8 +468,11 @@ def train(config=None, sweep=False):
             use_2d_data = False    
 
         train_data = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/" + data_name + "/" + data_name + "_train_all_seq.csv"
+        
+        test_data = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/" + data_name + "/" + data_name + "_test_all_seq.csv"
+    
         val_data = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/" + data_name + "/" + data_name + "_val_all_seq.csv"
-
+        
         if embedding_dim == 2560:
             emb_name = 'esm2_t36_3B'
             layer = 36
@@ -396,6 +533,14 @@ def train(config=None, sweep=False):
             print("Val Subset Size: ", int(len(vdataset)*subset_size))
         else:
             vdataloader = data.DataLoader(vdataset, batch_size=bs, shuffle=True)
+        
+
+        if use_2d_data:
+            test_dataset = d.dataset2d(test_data, layer, max, embedding_dir)
+        else:
+            test_dataset = d.MyDataset(test_data, layer, max, use_embeddings, mean_embedding, embedding_dir)
+
+        test_dataloader = data.DataLoader(test_dataset, batch_size=bs, shuffle=True)
 
         if use_embeddings:
             print("Using Embeddings: ", emb_name, " Mean: ", mean_embedding)
@@ -409,12 +554,15 @@ def train(config=None, sweep=False):
             "dscript_like": dscript_like.DScriptLike(embed_dim=insize, d=d_, w=w, h=h, x0=x0, k=k, pool_size=pool_size, do_pool=do_pool,
                                                       do_w=do_w, theta_init=theta_init, lambda_init=lambda_init, gamma_init=gamma_init),
             "richoux": richoux.FC2_20_2Dense(embed_dim=insize, ff_dim1=ff_dim1, ff_dim2=ff_dim2, ff_dim3=ff_dim3, spec_norm=spec_norm),
-            "baseline2d": baseline2d.baseline2d(embed_dim=insize, h3=h3),
-            "selfattention": attention.SelfAttInteraction(embed_dim=insize, num_heads=num_heads, dropout=dropout),
+            "baseline2d": baseline2d.baseline2d(embed_dim=insize, h3=h3, kernel_size=kernel_size, pooling=pooling),
+            "selfattention": attention.SelfAttInteraction(embed_dim=insize, num_heads=num_heads, h3=h3, dropout=dropout,
+                                                            ff_dim=ff_dim, pooling=pooling, kernel_size=kernel_size),
             "crossattention": attention.CrossAttInteraction(embed_dim=insize, num_heads=num_heads, h3=h3, dropout=dropout,
                                                             ff_dim=ff_dim, pooling=pooling, kernel_size=kernel_size),
-            "ICAN_cross": attention.ICAN_cross(embed_dim=insize, num_heads=num_heads, cnn_drop=dropout),
-            "AttDscript": attention.AttentionDscript(embed_dim=insize, num_heads=num_heads, dropout=dropout),
+            "ICAN_cross": attention.ICAN_cross(embed_dim=insize, num_heads=num_heads, cnn_drop=dropout, transformer_drop=dropout, hid_dim=h3, ff_dim=ff_dim),
+            "AttDscript": attention.AttentionDscript(embed_dim=insize, num_heads=num_heads, dropout=dropout, d=h3, w=w, h=h, x0=x0, k=k,
+                                                    pool_size=pool_size, do_pool=do_pool, do_w=do_w, theta_init=theta_init,
+                                                    lambda_init=lambda_init, gamma_init=gamma_init),
             "Rich-ATT": attention.AttentionRichoux(embed_dim=insize, num_heads=num_heads, dropout=dropout),
             "TUnA": attention.TUnA(embed_dim=insize, num_heads=num_heads, dropout=dropout, rffs=rffs, cross=cross, hid_dim=h3)
         }
@@ -441,8 +589,6 @@ def train(config=None, sweep=False):
 
         ############################################################__Training__#################################################################
 
-        save_model = False
-        save_confpred = False
         best_val_acc = 0.0
         best_model = None
         es = early_stopping != 0
@@ -450,6 +596,7 @@ def train(config=None, sweep=False):
         counter = 0
         confident_train_predictions = []
         confident_val_predictions = []
+        confident_test_predictions = []
         threshold = 0.9
 
         for epoch in range(num_epochs):
@@ -516,8 +663,8 @@ def train(config=None, sweep=False):
                         val_outputs = model(val_inputs)
 
                     if save_confpred:
-                        names1 = batch['name1']
-                        names2 = batch['name2']
+                        names1 = val_batch['name1']
+                        names2 = val_batch['name2']
                         output_values = val_outputs.detach().cpu().numpy()
                         interactions = torch.round(val_outputs).detach().cpu().numpy()
                         labels = batch['interaction'].numpy()
@@ -546,10 +693,51 @@ def train(config=None, sweep=False):
                 })  
             print(f"Epoch {epoch+1}/{num_epochs}, Average Val Loss: {avg_loss}, Val Accuracy: {acc}, Val Precision: {prec}, Val Recall: {rec}, Val F1 Score: {f1}")
             print(f"TP: {tp}, FP: {fp}, TN: {tn}, FN: {fn}")
+            if test:
+                with torch.no_grad():
+                    for test_batch in test_dataloader:
 
+                        if use_2d_data:
+                            test_outputs = model.batch_iterate(test_batch, device, layer, embedding_dir)
+                        else:
+                            test_inputs = test_batch['tensor'].to(device)
+                            test_outputs = model(test_inputs)
+
+                        if save_confpred:
+                            names1 = test_batch['name1']
+                            names2 = test_batch['name2']
+                            output_values = test_outputs.detach().cpu().numpy()
+                            interactions = torch.round(test_outputs).detach().cpu().numpy()
+                            labels = batch['interaction'].numpy()
+
+                            for value, interaction, label, name1, name2 in zip(output_values, interactions, labels, names1, names2):
+                                if value > threshold and interaction == 1 and label == 1:
+                                    confident_test_predictions.append((name1, name2))
+                                
+                        test_labels = test_batch['interaction']
+                        test_labels = test_labels.unsqueeze(1).float()
+                        predicted_labels = torch.round(test_outputs.float())
+
+                        met = confmat(test_labels.to(device), predicted_labels)
+                        test_loss += criterion(test_outputs, test_labels.to(device))
+                        tp, fp, tn, fn = tp + met[0], fp + met[1], tn + met[2], fn + met[3]
+
+                avg_loss = test_loss / len(vdataloader)
+                acc, prec, rec, f1 = metrics(tp, fp, tn, fn)
+                if use_wandb == True:
+                    wandb.log({
+                        "test_loss": avg_loss,
+                        "test_accuracy": acc,
+                        "test_precision": prec,
+                        "test_recall": rec,
+                        "test_f1_score": f1
+                    })  
+                print(f"Epoch {epoch+1}/{num_epochs}, Average test Loss: {avg_loss}, Test Accuracy: {acc}, Test Precision: {prec}, Test Recall: {rec}, Test F1 Score: {f1}")
+                print(f"TP: {tp}, FP: {fp}, TN: {tn}, FN: {fn}")
+                
             if es:
-                if acc > best_val_acc:
-                    best_val_acc = acc
+                if acc > best_test_acc:
+                    best_test_acc = acc
                     best_model = model.state_dict()
                     counter = 0
                 else:
@@ -559,6 +747,8 @@ def train(config=None, sweep=False):
                         break
             else:
                 best_model = model.state_dict()
+
+
             if save_confpred:
                 with open(f"/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/confident_train_pred_{model_name}.csv", 'w') as f:
                     for name1, name2 in confident_train_predictions:
@@ -567,8 +757,15 @@ def train(config=None, sweep=False):
                 with open(f"/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/confident_val_pred_{model_name}.csv", 'w') as f:
                     for name1, name2 in confident_val_predictions:
                         f.write(f'{name1}\t{name2}\n')
+                with open(f"/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/confident_test_pred_{model_name}.csv", 'w') as f:
+                    for name1, name2 in confident_test_predictions:
+                        f.write(f'{name1}\t{name2}\n')
+
         if save_model:
-            torch.save(best_model, f"/nfs/home/students/t.reim/bachelor/pytorchtest/models/pretrained/{model_name}_{emb_name}.pt") 
+            if test:
+                torch.save(best_model, f"/nfs/home/students/t.reim/bachelor/pytorchtest/models/pretrained/{model_name}_{emb_name}_test.pt")
+            else:
+                torch.save(best_model, f"/nfs/home/students/t.reim/bachelor/pytorchtest/models/pretrained/{model_name}_{emb_name}_.pt") 
         del model
         torch.cuda.empty_cache()
         
@@ -590,7 +787,7 @@ def main():
             num_epochs=25,
             batch_size=2,
             max_seq_len=1000,
-            subset=True,
+            subset=False,
             subset_size=0.5,
             use_embeddings=True,
             mean_embedding=False,
@@ -626,12 +823,16 @@ def main():
         parser.add_argument('-sweep', '--sweep', action='store_true', help='use wandb sweep/hyperparam_tuning')
         parser.add_argument('-save_confpred', '--save_confpred', action='store_true', help='save confident predictions')
         parser.add_argument('-pool', '--pooling', type=str, default='avg', help='pooling method')
+        parser.add_argument('-tb', '--test_best', action='store_true', help='test best config')
         args = parser.parse_args()
         if args.sweep:
             model = args.model_name
             sweep_id = wandb.sweep(sweep_config[model], project="hypertune")
             print("Sweep ID: ", sweep_id)
             #wandb.agent(sweep_id, function=train(sweep=True), count=1)
+        if args.test_best:
+            model = args.model_name
+            train(best_configs[model])    
         else:    
             params = vars(args)
             train(params)            

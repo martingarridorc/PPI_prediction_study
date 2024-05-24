@@ -1,5 +1,7 @@
 import data.get_cmap as gc
 import data.data as d
+from main import metrics
+from main import confmat
 import models.dscript_like as dscript_like
 import models.baseline2d as baseline2d
 import models.fc2_20_2_dense as richoux
@@ -13,6 +15,8 @@ import os
 import requests
 import pickle
 import torch
+import torch.nn as nn
+import torch.utils.data as data
 import matplotlib.pyplot as plt
 import pandas as pd
 import warnings
@@ -41,10 +45,6 @@ def main(dataset='Intra1', model='TUnA'):
         #    continue
         pred_dist = get_pred_cmap(id1, id2, complex_id, model=model, emb_name='esm2_t33_650', emb_type='per_tok')
         pred_dist_cut = pred_dist[start_pos_seq1:end_pos_seq1, start_pos_seq2:end_pos_seq2]
-        print(f'Pred_cut shape: {pred_dist_cut.shape}')
-        print(f'pred_cut labels: {len(x1_labels)}, {len(y1_labels)}')
-        print(f'Real shape: {distmap.shape}')
-        print(f'distmap labels: {len(x0_labels)}, {len(y0_labels)}')
         cor = gc.plot_distmaps(distmap, pred_dist_cut, x0_labels, y0_labels, x1_labels, y1_labels, complex_id, id1, id2)
         #gc.plot_distmap(distmap, x0_labels, y0_labels)
         #gc.plot_distmap(pred_dist_cut, x1_labels, y1_labels)
@@ -181,19 +181,116 @@ emb_sizes = {
     'esm2_t33_650': 1280
 }
 
-def get_model(model, insize, h3=64, num_heads=8, dropout=0.2, ff_dim=256, pooling='avg', kernel_size=2):
+def get_model(model_name, insize, h3=64, num_heads=8, dropout=0.2, ff_dim=256, pooling='avg', kernel_size=2,
+              rffs=256, cross=False, d_=64, w=64, h=64, x0=0, k=1, pool_size=2, do_pool=True, do_w=True,
+              theta_init=1e-3, lambda_init=1e-3, gamma_init=1e-3, ff_dim1=512, ff_dim2=256, ff_dim3=128, spec_norm=False):
     model_mapping = {
-            "dscript_like": dscript_like.DScriptLike(embed_dim=insize, d=100, w=7, h=50, x0=0.5, k=20),
-            "richoux": richoux.FC2_20_2Dense(embed_dim=insize),
-            "baseline2d": baseline2d.baseline2d(embed_dim=insize, h3=h3),
-            "selfattention": attention.SelfAttInteraction(embed_dim=insize, num_heads=num_heads, dropout=dropout),
-            "crossattention": attention.CrossAttInteraction(embed_dim=insize, num_heads=num_heads, h3=h3, dropout=dropout,
-                                                            ff_dim=ff_dim, pooling=pooling, kernel_size=kernel_size),
-            "ICAN_cross": attention.ICAN_cross(embed_dim=insize, num_heads=num_heads, cnn_drop=dropout),
-            "AttDscript": attention.AttentionDscript(embed_dim=insize, num_heads=num_heads, dropout=dropout),
-            "Rich-ATT": attention.AttentionRichoux(embed_dim=insize, num_heads=num_heads, dropout=dropout),
-            "TUnA": attention.TUnA(embed_dim=insize, num_heads=num_heads, dropout=dropout)
-        }
-    return model_mapping[model]
+        "dscript_like": dscript_like.DScriptLike(embed_dim=insize, d=d_, w=w, h=h, x0=x0, k=k, pool_size=pool_size, do_pool=do_pool,
+                                                    do_w=do_w, theta_init=theta_init, lambda_init=lambda_init, gamma_init=gamma_init),
+        "richoux": richoux.FC2_20_2Dense(embed_dim=insize, ff_dim1=ff_dim1, ff_dim2=ff_dim2, ff_dim3=ff_dim3, spec_norm=spec_norm),
+        "baseline2d": baseline2d.baseline2d(embed_dim=insize, h3=h3, kernel_size=kernel_size, pooling=pooling),
+        "selfattention": attention.SelfAttInteraction(embed_dim=insize, num_heads=num_heads, h3=h3, dropout=dropout,
+                                                        ff_dim=ff_dim, pooling=pooling, kernel_size=kernel_size),
+        "crossattention": attention.CrossAttInteraction(embed_dim=insize, num_heads=num_heads, h3=h3, dropout=dropout,
+                                                        ff_dim=ff_dim, pooling=pooling, kernel_size=kernel_size),
+        "ICAN_cross": attention.ICAN_cross(embed_dim=insize, num_heads=num_heads, cnn_drop=dropout, transformer_drop=dropout, hid_dim=h3, ff_dim=ff_dim),
+        "AttDscript": attention.AttentionDscript(embed_dim=insize, num_heads=num_heads, dropout=dropout, d=h3, w=w, h=h, x0=x0, k=k,
+                                                pool_size=pool_size, do_pool=do_pool, do_w=do_w, theta_init=theta_init,
+                                                lambda_init=lambda_init, gamma_init=gamma_init),
+        "Rich-ATT": attention.AttentionRichoux(embed_dim=insize, num_heads=num_heads, dropout=dropout),
+        "TUnA": attention.TUnA(embed_dim=insize, num_heads=num_heads, dropout=dropout, rffs=rffs, cross=cross, hid_dim=h3)
+    }
+    return model_mapping[model_name]
+
+def test_predictions(model_name, seed, model, save_confpred):
+    test_data = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/gold_stand_val_all_seq.csv"
+    emb_name = 'esm2_t33_650'
+    layer = 33
+    bs = 30
+    per_tok_models = ["baseline2d", "dscript_like", "selfattention", "crossattention",
+                    "ICAN_cross", "AttDscript", "Rich-ATT", "TUnA"]
+    mean_models = ["richoux"]
+    padded_models = ["richoux", "TUnA"]
+    max = 1000
+    # some cases, could be done better or more elegantly
+    if model_name in per_tok_models:
+        use_embeddings = True
+        use_2d_data = True
+        emb_type = 'per_tok'
+        mean_embedding = False
+    elif model_name in mean_models:
+        use_embeddings = True
+        use_2d_data = False
+        emb_type = 'mean'
+        mean_embedding = True
+    else:
+        raise ValueError("The model name does not exist. Please check for spelling errors.")
+
+    embedding_dir = "/nfs/scratch/t.reim/embeddings/" + emb_name + "/" + emb_type + "/"
+
+    if model_name in padded_models:
+        use_2d_data = False 
+
+    if use_2d_data:
+        vdataset = d.dataset2d(test_data, layer, max, embedding_dir)
+    else:
+        vdataset = d.MyDataset(test_data, layer, max, use_embeddings, mean_embedding, embedding_dir)
+
+    dataloader = data.DataLoader(vdataset, batch_size=bs, shuffle=True)       
+
+    model = get_model(model, ) #add parameters manually with optimized models
+
+    if torch.cuda.is_available():
+        print("Using CUDA")
+        model = model.cuda()
+        criterion = criterion.cuda()
+        device = torch.device("cuda")
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+    else:    
+        print("Using CPU")
+        device = torch.device("cpu")   
+
+    criterion = nn.BCELoss()
+    confident_val_predictions = []
+    threshold = 0.9   
+    model.eval()
+    val_loss = 0.0
+    tp, fp, tn, fn = 0, 0, 0, 0
+    with torch.no_grad():
+        for batch in dataloader:
+
+            if use_2d_data:
+                val_outputs = model.batch_iterate(batch, device, layer, embedding_dir)
+            else:
+                val_inputs = batch['tensor'].to(device)
+                val_outputs = model(val_inputs)
+
+            if save_confpred:
+                names1 = batch['name1']
+                names2 = batch['name2']
+                output_values = val_outputs.detach().cpu().numpy()
+                interactions = torch.round(val_outputs).detach().cpu().numpy()
+                labels = batch['interaction'].numpy()
+
+                for value, interaction, label, name1, name2 in zip(output_values, interactions, labels, names1, names2):
+                    if value > threshold and interaction == 1 and label == 1:
+                        confident_val_predictions.append((name1, name2))
+                    
+            val_labels = batch['interaction']
+            val_labels = val_labels.unsqueeze(1).float()
+            predicted_labels = torch.round(val_outputs.float())
+
+            met = confmat(val_labels.to(device), predicted_labels)
+            val_loss += criterion(val_outputs, val_labels.to(device))
+            tp, fp, tn, fn = tp + met[0], fp + met[1], tn + met[2], fn + met[3]
+
+    avg_loss = val_loss / len(dataloader)
+    acc, prec, rec, f1 = metrics(tp, fp, tn, fn)
+    print(f'Validation Loss: {avg_loss:.3f}, Accuracy: {acc:.3f}, Precision: {prec:.3f}, Recall: {rec:.3f}, F1: {f1:.3f}')
+    print(f'TP: {tp}, FP: {fp}, TN: {tn}, FN: {fn}')
+
 
 main(dataset='Intra1', model='crossattention')

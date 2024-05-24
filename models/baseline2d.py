@@ -10,7 +10,7 @@ import data.data as d
 
 
 class baseline2d(nn.Module):
-    def __init__(self, embed_dim, h3 = 64):
+    def __init__(self, embed_dim, h3 = 64, kernel_size = 2, pooling = 'avg'):
         super(baseline2d, self).__init__()
 
     
@@ -18,9 +18,11 @@ class baseline2d(nn.Module):
         h2 = int(h//4)   
         h3 = h3 
 
-        self.conv = nn.Conv2d(h3, 1, kernel_size=(2, 2))
-        self.pool = nn.AvgPool2d(kernel_size=4)
-        self.maxpool = nn.MaxPool2d(kernel_size=4)
+        self.conv = nn.Conv2d(h3, 1, kernel_size=kernel_size, padding='same')
+        if pooling == 'max':
+            self.pool = nn.MaxPool2d(kernel_size=kernel_size)
+        elif pooling == 'avg':
+            self.pool = nn.AvgPool2d(kernel_size=kernel_size)  
 
         self.ReLU = nn.ReLU()
         self.fc1 = nn.Linear(embed_dim, h)

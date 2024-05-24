@@ -13,10 +13,9 @@
 
 srun python /nfs/home/students/t.reim/bachelor/pytorchtest/main.py \
 -data gold_stand \
--model D-ATT_script \
+-model ICAN_cross \
 -lr 0.001 \
--max 10000 \
--es 6 \
+-max 1000 \
 -epoch 25 \
 -batch 10 \
 -sub \
@@ -24,5 +23,4 @@ srun python /nfs/home/students/t.reim/bachelor/pytorchtest/main.py \
 -emb \
 -emb_dim 1280 \
 -wandb \
--heads 4 \
--fe 1
+-heads 8 \

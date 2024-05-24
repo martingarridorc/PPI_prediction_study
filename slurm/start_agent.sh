@@ -11,4 +11,4 @@
 #SBATCH --job-name=agent-sweep
 #SBATCH --mem-per-gpu=40G
 
-srun python /nfs/home/students/t.reim/bachelor/pytorchtest/models/start_agent.py --sweep_id e8rsqxmw --missions 10
+srun python /nfs/home/students/t.reim/bachelor/pytorchtest/models/start_agent.py --sweep_id pwem7fzq --missions 10
