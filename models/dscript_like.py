@@ -8,7 +8,7 @@ import data.data as d
 class DScriptLike(nn.Module):
 
     def __init__(self, embed_dim, d=100, w=7, h=50,
-                x0 = 0.5, k = 20, pool_size=9, do_pool=False, do_w = True, theta_init=1, lambda_init=0, gamma_init = 0, norm="instance"):
+                x0 = 0.5, k = 20, pool_size=9, do_pool=False, do_w = True, theta_init=1, lambda_init=0, gamma_init = 0, norm="batch"):
         
         super(DScriptLike, self).__init__()
         self.embed_dim = embed_dim
@@ -41,7 +41,7 @@ class DScriptLike(nn.Module):
         self.relu2 = nn.ReLU()  
         if norm == "instance":
             self.norm1 = nn.InstanceNorm2d(h)   
-        else:    
+        elif norm == "batch":    
             self.norm1 = nn.BatchNorm2d(h)
         
 
@@ -49,7 +49,7 @@ class DScriptLike(nn.Module):
         self.conv = nn.Conv2d(h, 1, w, padding=w // 2)
         if norm == "instance":
             self.norm2 = nn.InstanceNorm2d(1)   
-        else:    
+        elif norm == "batch":    
             self.norm2 = nn.BatchNorm2d(1)
         self.relu3 = nn.ReLU()
         

@@ -30,4 +30,4 @@ def main(model, dataset):
         pickle.dump(confpred_dict, f)
 
 if __name__ == "__main__":
-    main(dataset='Intra1', model='crossattention')        
+    main(dataset='Intra2', model='crossattention')        

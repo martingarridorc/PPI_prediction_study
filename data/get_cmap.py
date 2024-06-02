@@ -139,8 +139,14 @@ def plot_distmap(distmap, x, y):
     fig.show()
 
 
-def plot_distmaps(distmap1, distmap2, x0, y0, x1, y1, complex_id, id1, id2):
-
+def plot_distmaps(distmap1, distmap2, x0, y0, x1, y1, complex_id, id1, id2, model):
+    model_name_mapping = {
+        "dscript_like": "DSCRIPT-like",
+        "baseline2d": "2d-baseline",
+        "selfattention": "Selfattention",
+        "crossattention": "Crossattention"
+    }
+    model_name = model_name_mapping[model]
     distmap1_flat = distmap1.flatten()
     distmap2_flat = distmap2.flatten()
     correlation = np.corrcoef(distmap1_flat, distmap2_flat)[0, 1]
@@ -170,21 +176,21 @@ def plot_distmaps(distmap1, distmap2, x0, y0, x1, y1, complex_id, id1, id2):
     # correlation
     fig.add_annotation(
         x=0.5,
-        y=-0.1,
+        y=-0.2,
         xref='paper',
         yref='paper',
         text=f'Correlation: {correlation:.2f}',
         showarrow=False,
         font=dict(
-            size=18,
-            color="black"
+            size=24,
+            color="red"
         ))
     
-    fig.update_xaxes(title_text="Real", title_font=dict(size=18), row=1, col=1)
-    fig.update_xaxes(title_text="Predicted", title_font=dict(size=18), row=1, col=2)
+    fig.update_xaxes(title_text="Real", title_font=dict(size=32), row=1, col=1)
+    fig.update_xaxes(title_text="Predicted", title_font=dict(size=32), row=1, col=2)
 
     fig.update_layout(
-        title=f"Complex ID: {complex_id}, IDs: {id1}, {id2}",
+        title=f"{model_name}: Complex ID: {complex_id}, IDs: {id1}, {id2}",
         title_x=0.5,
         title_font=dict(size=24),
         width=2000,

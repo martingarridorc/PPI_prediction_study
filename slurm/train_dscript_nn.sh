@@ -15,10 +15,10 @@ srun python /nfs/home/students/t.reim/bachelor/pytorchtest/main.py \
 -data gold_stand \
 -model dscript_like \
 -lr 0.001 \
--max 10000 \
+-max 1000 \
 -epoch 25 \
 -es 6 \
--batch 40 \
+-batch 32 \
 -sub \
 -subsize 0.5 \
 -emb \

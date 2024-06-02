@@ -22,16 +22,26 @@ import pandas as pd
 import warnings
 
 def main(dataset='Intra1', model='TUnA'):
+    mapp = {
+        'Intra0': 'val',
+        'Intra1': 'train',
+        'Intra2': 'test',
+    }
+    skipped = 0
     warnings.filterwarnings("ignore")
     confpred_dict = load_dict(dataset, model)
-    seq_data = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/gold_stand_train_all_seq.csv"
+    sett = mapp[dataset]
+    seq_data = f"/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/gold_stand_{sett}_all_seq.csv"
     df = pd.read_csv(seq_data)
     for interaction in list(confpred_dict.keys()):
         list_interaction = list(interaction)
         id1 = list_interaction[0]
         id2 = list_interaction[1]
         complex_id = confpred_dict[interaction]
-        pdb_file = download_pdb_files([complex_id])
+        pdb_file, status = download_pdb_files([complex_id])
+        if not status:
+            skipped += 1
+            continue
         '''
         real_cmap = gc.get_cmap(pdb_filename=pdb_file)
         start_pos_seq1, end_pos_seq1 = int(real_cmap.index[0].split(':')[1]), int(real_cmap.index[-1].split(':')[1])
@@ -39,24 +49,41 @@ def main(dataset='Intra1', model='TUnA'):
         #gc.plot_cmap(real_cmap)
         '''
         print(f'Interaction: {id1} - {id2}: {complex_id}')
-        distmap, x0_labels, y0_labels, x1_labels, y1_labels, start_pos_seq1, end_pos_seq1, start_pos_seq2, end_pos_seq2, num_chains = aligned_distmap(id1, id2, complex_id, pdb_file, df)
-        #if num_chains > 4:
-        #    print(f'Number of chains in {complex_id} is {num_chains}. Skipping...')
-        #    continue
+        distmap, x0_labels, y0_labels, x1_labels, y1_labels, start_pos_seq1, end_pos_seq1, start_pos_seq2, end_pos_seq2, filtered = aligned_distmap(id1, id2, complex_id, pdb_file, df)
+        if filtered:
+            print(f'Sample unfit for testing. Skipping...')
+            skipped += 1
+            continue
         pred_dist = get_pred_cmap(id1, id2, complex_id, model=model, emb_name='esm2_t33_650', emb_type='per_tok')
         pred_dist_cut = pred_dist[start_pos_seq1:end_pos_seq1, start_pos_seq2:end_pos_seq2]
-        cor = gc.plot_distmaps(distmap, pred_dist_cut, x0_labels, y0_labels, x1_labels, y1_labels, complex_id, id1, id2)
+        cor = gc.plot_distmaps(distmap, pred_dist_cut, x0_labels, y0_labels, x1_labels, y1_labels, complex_id, id1, id2, model)
         #gc.plot_distmap(distmap, x0_labels, y0_labels)
         #gc.plot_distmap(pred_dist_cut, x1_labels, y1_labels)
+
+    print(f'Skipped {skipped} of {len(confpred_dict)} samples: {skipped/len(confpred_dict)*100:.2f}%')
 
 def load_dict(dataset, model):
     with open(f'/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/confpred_dict_{dataset}_{model}.pkl', 'rb') as f:
         return pickle.load(f)
-    
+
+
 def aligned_distmap(id1, id2, pdb_id, pdb_file, seq_df):
     structure = Bio.PDB.PDBParser().get_structure(pdb_id, pdb_file)
-    prot_to_cs = get_protein_to_chains_mapping(pdb_file)
     chains_seqs = {chain.id: seq1(''.join(residue.resname for residue in chain)) for chain in structure.get_chains()}
+    num_chains = len(chains_seqs)
+    min_length = 40
+    max_chains = 2
+
+    if num_chains > max_chains:
+        print(f"Too many chains in {pdb_id}: {num_chains}")
+        return None, None, None, None, None, None, None, None, None, True
+    
+    for chain_id, sequence in chains_seqs.items():
+        if len(sequence) < min_length:
+            print(f"Chain {chain_id} is too short: {len(sequence)}")
+            return None, None, None, None, None, None, None, None, None, True
+    
+    prot_to_cs = get_protein_to_chains_mapping(pdb_file)
 
     row = seq_df[((seq_df['Id1'] == id1) | (seq_df['Id2'] == id1)) & ((seq_df['Id1'] == id2) | (seq_df['Id2'] == id2))]
     seq_a = row['sequence_a'].values[0]
@@ -67,7 +94,17 @@ def aligned_distmap(id1, id2, pdb_id, pdb_file, seq_df):
         id1, id2 = id2, id1
         seq_a, seq_b = seq_b, seq_a
 
-    print(f'Number of chains in {pdb_id}: {len(chains_seqs)}')
+    print(f'Number of chains in {pdb_id}: {num_chains}')
+    
+    #because old names...
+    for id in prot_to_cs:
+        if id == id1:
+            id2 = [x for x in prot_to_cs if x != id1][0]
+            break
+        elif id == id2:
+            id1 = [x for x in prot_to_cs if x != id2][0]
+            break
+   
     chain_prot1 = prot_to_cs[id1][0]
     chain_prot2 = prot_to_cs[id2][0]
     print(f'Chains: {id1}: {chain_prot1}, {id2}: {chain_prot2}')
@@ -84,13 +121,24 @@ def aligned_distmap(id1, id2, pdb_id, pdb_file, seq_df):
     alignment_start_seq_b, alignment_end_seq_b = alignmentB.coordinates[0]
     alignment_start_chain_b, alignment_end_chain_b = alignmentB.coordinates[1]
 
+    # alignment may shorten the length
+    alignment_length_a = alignment_end_seq_a - alignment_start_seq_a
+    if alignment_length_a < min_length:
+        print(f"Alignment A is too short: {alignment_length_a}")
+        return None, None, None, None, None, None, None, None, None, True
+
+    alignment_length_b = alignment_end_seq_b - alignment_start_seq_b
+    if alignment_length_b < min_length:
+        print(f"Alignment B is too short: {alignment_length_b}")
+        return None, None, None, None, None, None, None, None, None, True
+
     distmap, x0, y0 = get_distmap(structure, alignment_start_chain_a, alignment_end_chain_a, alignment_start_chain_b, alignment_end_chain_b,
                                   chain_prot1, chain_prot2)
 
     x1 = one_to_three(seq_b, alignment_start_seq_b, alignment_end_seq_b)
     y1 = one_to_three(seq_a, alignment_start_seq_a, alignment_end_seq_a)
 
-    return distmap, x0, y0, x1, y1, alignment_start_seq_a, alignment_end_seq_a, alignment_start_seq_b, alignment_end_seq_b, len(chains_seqs)
+    return distmap, x0, y0, x1, y1, alignment_start_seq_a, alignment_end_seq_a, alignment_start_seq_b, alignment_end_seq_b, False
 
 def get_distmap(structure, start_A, end_A, start_B, end_B, chain_prot1, chain_prot2):
     model = structure[0]
@@ -121,12 +169,12 @@ def one_to_three(seq, start, end):
     return [f"{seq3(residue).upper()}:{i+start}" for i, residue in enumerate(seq)]
 
 def get_pred_cmap(id1, id2, complex_id, model, emb_name='esm2_t33_650', emb_type='per_tok'):
-    model_path = f'/nfs/home/students/t.reim/bachelor/pytorchtest/models/pretrained/{model}_{emb_name}.pt'
+    model_path = f'/nfs/home/students/t.reim/bachelor/pytorchtest/models/pretrained/{model}_{emb_name}_test.pt'
     layer = int(emb_name.split('t')[1].split('_')[0])
     emb_dir = "/nfs/scratch/t.reim/embeddings/" + emb_name + "/" + emb_type + "/"
 
     #add way to load different models
-    model = get_model(model, emb_sizes[emb_name])
+    model = get_model(model_name=model, insize=emb_sizes[emb_name])
     model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
 
     seq1 = d.get_embedding_per_tok(emb_dir, id1, layer).unsqueeze(0)
@@ -172,8 +220,9 @@ def download_pdb_files(complex_ids, directory='/nfs/home/students/t.reim/bachelo
                     file.write(response.text)
             else:
                 print(f'Failed to download PDB file for {pdb_id}')
+                return None, False
     
-    return file_path            
+    return file_path, True            
 
 emb_sizes = {
     'esm2_t48_3B': 5120,
@@ -181,27 +230,20 @@ emb_sizes = {
     'esm2_t33_650': 1280
 }
 
-def get_model(model_name, insize, h3=64, num_heads=8, dropout=0.2, ff_dim=256, pooling='avg', kernel_size=2,
-              rffs=256, cross=False, d_=64, w=64, h=64, x0=0, k=1, pool_size=2, do_pool=True, do_w=True,
-              theta_init=1e-3, lambda_init=1e-3, gamma_init=1e-3, ff_dim1=512, ff_dim2=256, ff_dim3=128, spec_norm=False):
+def get_model(model_name, insize=1280):
     model_mapping = {
-        "dscript_like": dscript_like.DScriptLike(embed_dim=insize, d=d_, w=w, h=h, x0=x0, k=k, pool_size=pool_size, do_pool=do_pool,
-                                                    do_w=do_w, theta_init=theta_init, lambda_init=lambda_init, gamma_init=gamma_init),
-        "richoux": richoux.FC2_20_2Dense(embed_dim=insize, ff_dim1=ff_dim1, ff_dim2=ff_dim2, ff_dim3=ff_dim3, spec_norm=spec_norm),
-        "baseline2d": baseline2d.baseline2d(embed_dim=insize, h3=h3, kernel_size=kernel_size, pooling=pooling),
-        "selfattention": attention.SelfAttInteraction(embed_dim=insize, num_heads=num_heads, h3=h3, dropout=dropout,
-                                                        ff_dim=ff_dim, pooling=pooling, kernel_size=kernel_size),
-        "crossattention": attention.CrossAttInteraction(embed_dim=insize, num_heads=num_heads, h3=h3, dropout=dropout,
-                                                        ff_dim=ff_dim, pooling=pooling, kernel_size=kernel_size),
-        "ICAN_cross": attention.ICAN_cross(embed_dim=insize, num_heads=num_heads, cnn_drop=dropout, transformer_drop=dropout, hid_dim=h3, ff_dim=ff_dim),
-        "AttDscript": attention.AttentionDscript(embed_dim=insize, num_heads=num_heads, dropout=dropout, d=h3, w=w, h=h, x0=x0, k=k,
-                                                pool_size=pool_size, do_pool=do_pool, do_w=do_w, theta_init=theta_init,
-                                                lambda_init=lambda_init, gamma_init=gamma_init),
-        "Rich-ATT": attention.AttentionRichoux(embed_dim=insize, num_heads=num_heads, dropout=dropout),
-        "TUnA": attention.TUnA(embed_dim=insize, num_heads=num_heads, dropout=dropout, rffs=rffs, cross=cross, hid_dim=h3)
+        "dscript_like": dscript_like.DScriptLike(embed_dim=insize, d=100, w=7, h=50, x0=0.5, k=20, pool_size=9, do_pool=False,
+                                                    do_w=True, theta_init=1, lambda_init=0, gamma_init=0),
+        "baseline2d": baseline2d.baseline2d(embed_dim=insize, h3=64, kernel_size=2, pooling="avg"),
+        "selfattention": attention.SelfAttInteraction(embed_dim=insize, num_heads=8, h3=64, dropout=0.1,
+                                                        ff_dim=256, pooling="avg", kernel_size=3),
+        "crossattention": attention.CrossAttInteraction(embed_dim=insize, num_heads=8, h3=64, dropout=0.1,
+                                                        ff_dim=256, pooling="max", kernel_size=3),
     }
     return model_mapping[model_name]
 
+
+#not used
 def test_predictions(model_name, seed, model, save_confpred):
     test_data = "/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/gold_stand_val_all_seq.csv"
     emb_name = 'esm2_t33_650'
@@ -293,4 +335,4 @@ def test_predictions(model_name, seed, model, save_confpred):
     print(f'TP: {tp}, FP: {fp}, TN: {tn}, FN: {fn}')
 
 
-main(dataset='Intra1', model='crossattention')
+main(dataset='Intra2', model='crossattention')

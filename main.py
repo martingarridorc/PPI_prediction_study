@@ -307,90 +307,173 @@ sweep_config = {
 
 best_configs = {
     "crossattention": {
-        "data_name": {"value": "gold_stand"},
-        "num_epochs": {"value": 20},
-        "subset": {"value": True},
-        "subset_size": {"value": 0.5},
-        "use_embeddings": {"value": True},
-        "mean_embedding": {"value": False},
-        "embedding_dim": {"value": 1280},
-        "use_wandb": {"value": True},
-        "early_stopping": {"value": 8},
-        "model_name": {"value": "crossattention"},
-        "run_name": {"value": ''},
-        "batch_size": {"value": 16},
-        "max_seq_len": {"value": 1000},
-
-        "learning_rate": {
-            "distribution": "uniform",
-            "min": 0.0001,
-            "max": 0.01
-        },
-        "dropout": {
-            "distribution": "uniform",
-            "min": 0.1,
-            "max": 0.5
-        },
-        "num_heads": {
-            "values": [2, 4, 8, 16]
-        },
-        "attention_dim": {
-            "distribution": "q_uniform",
-            "min": 16,
-            "max": 1024,
-            "q": 16
-        },
-        "ff_dim":{
-            "values": [64, 128, 256, 512, 1024]
-        },
-        "pooling":{
-            "values": ['avg', 'max']
-        },
-        "kernel_size":{
-            "values": [1, 2, 3, 4, 5, 6]
-        }
-    },
-    "dscript_like": {
         "seed": 3292779418,
-        "save_confpred": {"value": True},
-        "save_model": {"value": True},
-        "test": {"value": True},
-        "data_name": {"value": "gold_stand"},
-        "num_epochs": {"value": 20},
-        "subset": {"value": True},
-        "subset_size": {"value": 0.5},
-        "use_embeddings": {"value": True},
-        "mean_embedding": {"value": False},
-        "use_wandb": {"value": True},
-        "early_stopping": {"value": 8},
-        "model_name": {"value": "dscript_like"},
-        "run_name": {"value": 'best_dscript_like'},
-        "batch_size": {"value": 16},
-        "max_seq_len": {"value": 1000},
-        "embedding_dim": {"value": 1280},
-        "learning_rate": {"value": 0.008056061488991427},
-        'd': {"value": 112},
-        'w': {"value": 4},
-        'h': {"value": 44},
-        'x0': {"value": 0.4989645451223388},
-        'k': {"value": 20.296019995569164},
-        'pool_size': {"value": 8},
-        'do_pool': {"value": False},
-        'do_w': {"value": True},
-        'theta_init': {"value": 0.9537458250320732},
-        'lambda_init': {"value": 0.42347718679986945},
-        'gamma_init': {"value": 0.22024583140255627}
+        "save_confpred": True,
+        "save_model": True,
+        "test": True,
+        "data_name": "gold_stand",
+        "num_epochs": 25,
+        "subset": True,
+        "subset_size": 0.5,
+        "use_embeddings": True,
+        "mean_embedding": False,
+        "embedding_dim": 1280,
+        "use_wandb": True,
+        "early_stopping": 8,
+        "model_name": "crossattention",
+        "run_name": 'best_crossattention',
+        "batch_size": 16,
+        "max_seq_len": 1000,
+        "learning_rate": 0.0001,
+        "dropout": 0.1,
+        "num_heads": 8,
+        "attention_dim": 64,
+        "ff_dim": 256,
+        "pooling": 'avg',
+        "kernel_size": 3
+        },
+    "dscript_like": {
+    "seed": 3292779418,
+    "save_confpred": True,
+    "save_model": True,
+    "test": True,
+    "data_name": "gold_stand",
+    "num_epochs": 20,
+    "subset": True,
+    "subset_size": 0.5,
+    "use_embeddings": True,
+    "mean_embedding": False,
+    "use_wandb": True,
+    "early_stopping": 8,
+    "model_name": "dscript_like",
+    "run_name": "best_dscript_like",
+    "batch_size": 16,
+    "max_seq_len": 1000,
+    "embedding_dim": 1280,
+    "learning_rate": 0.008056061488991427,
+    "d": 112,
+    "w": 4,
+    "h": 44,
+    "x0": 0.4989645451223388,
+    "k": 20.296019995569164,
+    "pool_size": 8,
+    "do_pool": False,
+    "do_w": True,
+    "theta_init": 0.9537458250320732,
+    "lambda_init": 0.42347718679986945,
+    "gamma_init": 0.22024583140255627
+    },
+    "selfattention": {
+        "seed": 3292779418,
+        "save_confpred": True,
+        "save_model": True,
+        "test": True,
+        "data_name": "gold_stand",
+        "num_epochs": 25,
+        "subset": True,
+        "subset_size": 0.5,
+        "use_embeddings": True,
+        "mean_embedding": False,
+        "embedding_dim": 1280,
+        "use_wandb": True,
+        "early_stopping": 8,
+        "model_name": "selfattention",
+        "run_name": 'best_selfattention',
+        "batch_size": 16,
+        "max_seq_len": 1000,
+        "learning_rate": 0.0001,
+        "dropout": 0.1,
+        "num_heads": 8,
+        "attention_dim": 64,
+        "ff_dim": 256,
+        "pooling": 'max',
+        "kernel_size": 3
+    },
+    "richoux": {
+        "seed": 3292779418,
+        "save_confpred": True,
+        "save_model": True,
+        "test": True,
+        "data_name": "gold_stand",
+        "num_epochs": 25,
+        "subset": True,
+        "subset_size": 0.5,
+        "use_embeddings": True,
+        "mean_embedding": True,
+        "use_wandb": True,
+        "early_stopping": 8,
+        "model_name": "richoux",
+        "run_name": 'best_rich',
+        "batch_size": 1024,
+        "max_seq_len": 10000,
+        "embedding_dim": 2560,
+        "learning_rate": 0.001,
+        "ff_dim1": 20,
+        "ff_dim2": 20,
+        "ff_dim3": 20,
+        "spec_norm": True
+    },
+    "TUnA": {
+        "seed": 3292779418,
+        "save_confpred": True,
+        "save_model": True,
+        "test": True,
+        "data_name": "gold_stand",
+        "num_epochs": 25,
+        "subset": True,
+        "subset_size": 0.5,
+        "use_embeddings": True,
+        "mean_embedding": False,
+        "embedding_dim": 1280,
+        "use_wandb": True,
+        "early_stopping": 8,
+        "model_name": "TUnA",
+        "run_name": 'best_TUnA',
+        "batch_size": 32,
+        "max_seq_len": 1000,
+        "learning_rate": 0.0005,
+        "dropout": 0.15,
+        "num_heads": 8,
+        "attention_dim": 64,
+        "ff_dim": 256,
+        "rffs": 1028,
+        'cross': False
+    },
+    "baseline2d": {
+        "seed": None,
+        "save_confpred": True,
+        "save_model": True,
+        "test": True,
+        "data_name": "gold_stand",
+        "num_epochs": 25,
+        "subset": True,
+        "subset_size": 0.5,
+        "use_embeddings": True,
+        "mean_embedding": False,
+        "embedding_dim": 1280,
+        "use_wandb": True,
+        "early_stopping": 8,
+        "model_name": "baseline2d",
+        "run_name": 'best_baseline2d',
+        "batch_size": 40,
+        "max_seq_len": 1000,
+        "learning_rate": 0.001,
+        "h3": 64,
+        "kernel_size": 2,
+        "pooling": 'avg'
     }
 }
 
 def train(config=None, sweep=False):
     try:
-        if 'seed' not in config:
+        seed = None
+        if config is not None:
+            seed = config.get('seed', None)
+
+        if seed is None:
             seed = random.randint(0, 2**32 - 1)
-            print(f"Random seed: {seed}")
-        else:
-            seed = config['seed']
-            print(f"Seed: {seed}") 
+        
+        print(f"Random seed: {seed}")
 
         random.seed(seed)
         np.random.seed(seed)
@@ -462,7 +545,7 @@ def train(config=None, sweep=False):
             use_embeddings = True
             use_2d_data = False
         else:
-            raise ValueError("The model name does not exist. Please check for spelling errors.")
+            raise ValueError(f"The model name {model_name}  does not exist. Please check for spelling errors.")
 
         if model_name in padded_models:
             use_2d_data = False    
@@ -541,6 +624,7 @@ def train(config=None, sweep=False):
             test_dataset = d.MyDataset(test_data, layer, max, use_embeddings, mean_embedding, embedding_dir)
 
         test_dataloader = data.DataLoader(test_dataset, batch_size=bs, shuffle=True)
+        print("Test Data Size: ", int(len(test_dataset)))
 
         if use_embeddings:
             print("Using Embeddings: ", emb_name, " Mean: ", mean_embedding)
@@ -613,8 +697,8 @@ def train(config=None, sweep=False):
                     outputs = model(tensor) 
                 
                 if save_confpred:
-                    id1 = batch['name1']
-                    id2 = batch['name2']
+                    names1 = batch['name1']
+                    names2 = batch['name2']
                     output_values = outputs.detach().cpu().numpy()
                     predicted_labels = torch.round(outputs.float()).detach().cpu().numpy()
                     labels = batch['interaction'].numpy()
@@ -694,6 +778,8 @@ def train(config=None, sweep=False):
             print(f"Epoch {epoch+1}/{num_epochs}, Average Val Loss: {avg_loss}, Val Accuracy: {acc}, Val Precision: {prec}, Val Recall: {rec}, Val F1 Score: {f1}")
             print(f"TP: {tp}, FP: {fp}, TN: {tn}, FN: {fn}")
             if test:
+                test_loss = 0.0
+                tp, fp, tn, fn = 0, 0, 0, 0
                 with torch.no_grad():
                     for test_batch in test_dataloader:
 
@@ -722,7 +808,7 @@ def train(config=None, sweep=False):
                         test_loss += criterion(test_outputs, test_labels.to(device))
                         tp, fp, tn, fn = tp + met[0], fp + met[1], tn + met[2], fn + met[3]
 
-                avg_loss = test_loss / len(vdataloader)
+                avg_loss = test_loss / len(test_dataloader)
                 acc, prec, rec, f1 = metrics(tp, fp, tn, fn)
                 if use_wandb == True:
                     wandb.log({
@@ -736,8 +822,8 @@ def train(config=None, sweep=False):
                 print(f"TP: {tp}, FP: {fp}, TN: {tn}, FN: {fn}")
                 
             if es:
-                if acc > best_test_acc:
-                    best_test_acc = acc
+                if acc > best_val_acc:
+                    best_val_acc = acc
                     best_model = model.state_dict()
                     counter = 0
                 else:
