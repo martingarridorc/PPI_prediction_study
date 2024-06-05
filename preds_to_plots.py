@@ -28,6 +28,8 @@ def main(dataset='Intra1', model='TUnA'):
         'Intra2': 'test',
     }
     skipped = 0
+    chains = 0
+    length = 0
     warnings.filterwarnings("ignore")
     confpred_dict = load_dict(dataset, model)
     sett = mapp[dataset]
@@ -49,8 +51,12 @@ def main(dataset='Intra1', model='TUnA'):
         #gc.plot_cmap(real_cmap)
         '''
         print(f'Interaction: {id1} - {id2}: {complex_id}')
-        distmap, x0_labels, y0_labels, x1_labels, y1_labels, start_pos_seq1, end_pos_seq1, start_pos_seq2, end_pos_seq2, filtered = aligned_distmap(id1, id2, complex_id, pdb_file, df)
+        distmap, x0_labels, y0_labels, x1_labels, y1_labels, start_pos_seq1, end_pos_seq1, start_pos_seq2, end_pos_seq2, filtered, err  = aligned_distmap(id1, id2, complex_id, pdb_file, df)
         if filtered:
+            if err == "chains":
+                chains += 1
+            elif err == "length":
+                length += 1
             print(f'Sample unfit for testing. Skipping...')
             skipped += 1
             continue
@@ -60,7 +66,9 @@ def main(dataset='Intra1', model='TUnA'):
         #gc.plot_distmap(distmap, x0_labels, y0_labels)
         #gc.plot_distmap(pred_dist_cut, x1_labels, y1_labels)
 
-    print(f'Skipped {skipped} of {len(confpred_dict)} samples: {skipped/len(confpred_dict)*100:.2f}%')
+    print(f'Skipped {skipped} of {len(confpred_dict)} samples: {skipped/len(confpred_dict)*100:.2f}%<-------------------------')
+    print(f'Chains: {chains}, Length: {length}<---------------------------------------------------')
+    print('\n')
 
 def load_dict(dataset, model):
     with open(f'/nfs/home/students/t.reim/bachelor/pytorchtest/data/gold_stand/confpred_dict_{dataset}_{model}.pkl', 'rb') as f:
@@ -76,23 +84,32 @@ def aligned_distmap(id1, id2, pdb_id, pdb_file, seq_df):
 
     if num_chains > max_chains:
         print(f"Too many chains in {pdb_id}: {num_chains}")
-        return None, None, None, None, None, None, None, None, None, True
+        return None, None, None, None, None, None, None, None, None, True, "chains"
     
     for chain_id, sequence in chains_seqs.items():
         if len(sequence) < min_length:
             print(f"Chain {chain_id} is too short: {len(sequence)}")
-            return None, None, None, None, None, None, None, None, None, True
+            return None, None, None, None, None, None, None, None, None, True, "length"
     
     prot_to_cs = get_protein_to_chains_mapping(pdb_file)
 
-    row = seq_df[((seq_df['Id1'] == id1) | (seq_df['Id2'] == id1)) & ((seq_df['Id1'] == id2) | (seq_df['Id2'] == id2))]
-    seq_a = row['sequence_a'].values[0]
-    seq_b = row['sequence_b'].values[0]
+    row = seq_df[(seq_df['Id1'] == id1) & (seq_df['Id2'] == id2)]
+    if not row.empty:
+        seq_a = row['sequence_a'].values[0]
+        seq_b = row['sequence_b'].values[0]
+    row = seq_df[(seq_df['Id1'] == id2) & (seq_df['Id2'] == id1)]
+    if not row.empty:
+        seq_b = row['sequence_a'].values[0]
+        seq_a = row['sequence_b'].values[0]    
+    
+    #seq_a = row['sequence_a'].values[0]
+    #seq_b = row['sequence_b'].values[0]
 
-    if id1 in row['Id2'].values and id2 in row['Id1'].values:
-        # Swap id1 and id2
-        id1, id2 = id2, id1
-        seq_a, seq_b = seq_b, seq_a
+    #if id1 in row['Id2'].values and id2 in row['Id1'].values:
+    #    # Swap id1 and id2
+    #    id1, id2 = id2, id1
+    #    seq_a, seq_b = seq_b, seq_a
+
 
     print(f'Number of chains in {pdb_id}: {num_chains}')
     
@@ -125,12 +142,12 @@ def aligned_distmap(id1, id2, pdb_id, pdb_file, seq_df):
     alignment_length_a = alignment_end_seq_a - alignment_start_seq_a
     if alignment_length_a < min_length:
         print(f"Alignment A is too short: {alignment_length_a}")
-        return None, None, None, None, None, None, None, None, None, True
+        return None, None, None, None, None, None, None, None, None, True, "length"
 
     alignment_length_b = alignment_end_seq_b - alignment_start_seq_b
     if alignment_length_b < min_length:
         print(f"Alignment B is too short: {alignment_length_b}")
-        return None, None, None, None, None, None, None, None, None, True
+        return None, None, None, None, None, None, None, None, None, True, "length"
 
     distmap, x0, y0 = get_distmap(structure, alignment_start_chain_a, alignment_end_chain_a, alignment_start_chain_b, alignment_end_chain_b,
                                   chain_prot1, chain_prot2)
@@ -138,7 +155,7 @@ def aligned_distmap(id1, id2, pdb_id, pdb_file, seq_df):
     x1 = one_to_three(seq_b, alignment_start_seq_b, alignment_end_seq_b)
     y1 = one_to_three(seq_a, alignment_start_seq_a, alignment_end_seq_a)
 
-    return distmap, x0, y0, x1, y1, alignment_start_seq_a, alignment_end_seq_a, alignment_start_seq_b, alignment_end_seq_b, False
+    return distmap, x0, y0, x1, y1, alignment_start_seq_a, alignment_end_seq_a, alignment_start_seq_b, alignment_end_seq_b, False, False
 
 def get_distmap(structure, start_A, end_A, start_B, end_B, chain_prot1, chain_prot2):
     model = structure[0]
@@ -335,4 +352,9 @@ def test_predictions(model_name, seed, model, save_confpred):
     print(f'TP: {tp}, FP: {fp}, TN: {tn}, FN: {fn}')
 
 
-main(dataset='Intra2', model='crossattention')
+#main(dataset='Intra0', model='baseline2d')
+
+for model in ["dscript_like", "baseline2d", "selfattention", "crossattention"]:
+    main(dataset='Intra0', model=model)
+    main(dataset='Intra1', model=model)
+    main(dataset='Intra2', model=model)

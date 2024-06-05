@@ -1,6 +1,7 @@
 import Bio.PDB
 import numpy as np
 import plotly.graph_objects as go
+import plotly.io as pio
 from plotly.subplots import make_subplots
 from pcmap import contactMap
 import pandas as pd
@@ -176,13 +177,13 @@ def plot_distmaps(distmap1, distmap2, x0, y0, x1, y1, complex_id, id1, id2, mode
     # correlation
     fig.add_annotation(
         x=0.5,
-        y=-0.2,
+        y=-0.12,
         xref='paper',
         yref='paper',
         text=f'Correlation: {correlation:.2f}',
         showarrow=False,
         font=dict(
-            size=24,
+            size=40,
             color="red"
         ))
     
@@ -192,10 +193,12 @@ def plot_distmaps(distmap1, distmap2, x0, y0, x1, y1, complex_id, id1, id2, mode
     fig.update_layout(
         title=f"{model_name}: Complex ID: {complex_id}, IDs: {id1}, {id2}",
         title_x=0.5,
-        title_font=dict(size=24),
+        title_font=dict(size=40,
+                        color="black"),
         width=2000,
         height=1000)
 
-    fig.show()
+    #fig.show()
+    pio.write_image(fig, f"/nfs/home/students/t.reim/bachelor/pytorchtest/data/distmaps/{model_name}_{complex_id}_{id1}_{id2}.png")
 
     return correlation
