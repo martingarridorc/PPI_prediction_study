@@ -1,5 +1,6 @@
 import torch
 import torch.utils.data as data
+import h5py
 from torch.nn.utils.rnn import pad_sequence
 
 import pandas as pd
@@ -186,17 +187,7 @@ def one_hotting(letter):
     elif letter == 'W':
         hot_vector[1] = 1
     elif letter == 'Y':
-        hot_vector[0] = 1
-    elif letter == 'B':
-        hot_vector[20] = 1
-    elif letter == 'U':
-        hot_vector[21] = 1
-    elif letter == 'X':
-        hot_vector[22] = 1
-    elif letter == 'Z':
-        hot_vector[23] = 1
-    
-        
+        hot_vector[0] = 1      
     return hot_vector
 
         
@@ -267,13 +258,20 @@ def tensorize(sequence1, sequence2):
 
 
 def get_embedding_per_tok(dirpath, protein_id, layer):
-    embedding = torch.load(os.path.join(dirpath, protein_id + ".pt"))
-    return embedding['representations'][layer]
+    if dirpath.endswith(".h5"):
+        return get_embedding_per_tok_h5(dirpath, protein_id)
+    else:
+        embedding = torch.load(os.path.join(dirpath, protein_id + ".pt"))
+        return embedding['representations'][layer]
 
 def get_embedding_mean(dirpath, protein_id, layer):
     embedding = torch.load(os.path.join(dirpath, protein_id + ".pt"))
     return embedding['mean_representations'][layer]          
 
+def get_embedding_per_tok_h5(file_path, protein_id):
+    with h5py.File(file_path, 'r') as f:
+        embedding = torch.from_numpy(f[protein_id][:])
+    return embedding
 
 
 class MyDataset(data.Dataset):

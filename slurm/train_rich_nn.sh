@@ -16,12 +16,11 @@ srun python /nfs/home/students/t.reim/bachelor/pytorchtest/main.py \
 -model richoux \
 -lr 0.001 \
 -epoch 25 \
--es 6 \
+-max 1000 \
 -batch 1024 \
 -sub \
 -subsize 0.5 \
--emb \
--emb_dim 1280 \
--mean \
 -wandb \
--run richoux_no_specnorm
+-test \
+-save_model \
+-run richoux_one_hot_test

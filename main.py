@@ -539,10 +539,8 @@ def train(config=None, sweep=False):
 
         # some cases, could be done better or more elegantly
         if model_name in per_tok_models:
-            use_embeddings = True
             use_2d_data = True
         elif model_name in mean_models:
-            use_embeddings = True
             use_2d_data = False
         else:
             raise ValueError(f"The model name {model_name}  does not exist. Please check for spelling errors.")
@@ -565,7 +563,15 @@ def train(config=None, sweep=False):
         elif embedding_dim == 5120:
             emb_name = 'esm2_t48_15B'
             layer = 48
+        elif embedding_dim == 6165:
+            emb_name = 'bepler_berger_2019'
+            layer = None  # Assuming there's no specific layer concept for this model
+            num_heads = 1
+        elif embedding_dim == 320:
+            emb_name = "esm2_t6_8M"
+            layer = 6
 
+            
         if mean_embedding:
             emb_type = 'mean'
         else:
@@ -574,6 +580,11 @@ def train(config=None, sweep=False):
 
         if use_embeddings:
             embedding_dir = "/nfs/scratch/t.reim/embeddings/" + emb_name + "/" + emb_type + "/"
+        else:
+            embedding_dir = None
+
+        if embedding_dim == 6165:
+            embedding_dir = "/nfs/scratch/jbernett/human_embedding.h5"   
 
         if run_name is None:
             run_name = f"{model_name}_{emb_name}_{subset_size}"
@@ -868,7 +879,7 @@ def main():
     if debug:
         args = argparse.Namespace(
             data_name="gold_stand",
-            model_name="TUnA",
+            model_name="dscript_like",
             learning_rate=0.001,
             num_epochs=25,
             batch_size=2,
@@ -877,7 +888,7 @@ def main():
             subset_size=0.5,
             use_embeddings=True,
             mean_embedding=False,
-            embedding_dim=1280,
+            embedding_dim=6165,
             use_wandb=False,
             early_stopping=True,
             dropout=0.3,
@@ -908,8 +919,10 @@ def main():
         parser.add_argument('-h3', '--attention_dim', type=int, default=64, help='embedding dimension before attention')
         parser.add_argument('-sweep', '--sweep', action='store_true', help='use wandb sweep/hyperparam_tuning')
         parser.add_argument('-save_confpred', '--save_confpred', action='store_true', help='save confident predictions')
+        parser.add_argument('-save_model', '--save_model', action='store_true', help='save model')
         parser.add_argument('-pool', '--pooling', type=str, default='avg', help='pooling method')
         parser.add_argument('-tb', '--test_best', action='store_true', help='test best config')
+        parser.add_argument('-test', '--test', action='store_true', help='evaluate model on testset')
         args = parser.parse_args()
         if args.sweep:
             model = args.model_name

@@ -12,15 +12,18 @@
 #SBATCH --mem-per-gpu=40G
 
 srun python /nfs/home/students/t.reim/bachelor/pytorchtest/main.py \
--data gold_stand \
+-data gold_stand_dscript \
 -model dscript_like \
 -lr 0.001 \
 -max 1000 \
 -epoch 25 \
+-batch 16 \
 -es 6 \
--batch 32 \
 -sub \
 -subsize 0.5 \
 -emb \
--emb_dim 1280 \
--wandb 
+-emb_dim 6165 \
+-run dscript_original_embeddings \
+-wandb \
+-save_model \
+-test 

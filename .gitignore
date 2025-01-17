@@ -1,4 +1,5 @@
 data/gold_stand
+data/gold_stand_dscript
 data/huang
 data/pan
 data/richoux_regular
@@ -11,3 +12,4 @@ models/__pycache__
 data/__pycache__
 models/pretrained
 __pycache__
+

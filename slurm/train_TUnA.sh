@@ -17,13 +17,12 @@ srun python /nfs/home/students/t.reim/bachelor/pytorchtest/main.py \
 -lr 0.001 \
 -max 1000 \
 -epoch 25 \
--batch 32 \
+-batch 8 \
 -sub \
 -subsize 0.5 \
 -es 6 \
 -emb \
--emb_dim 1280 \
+-emb_dim 5120 \
 -wandb \
 -heads 8 \
 -dropout 0.2 \
--run TUnA_unpadded

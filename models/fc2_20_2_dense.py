@@ -41,11 +41,13 @@ class FC2_20_2Dense(nn.Module):
         x1 = x1.to(torch.float32)
         x1 = x1.contiguous()
         x1 = x1.squeeze(1)
+        x1 = x1.view(x1.size(0), -1)  # Reshape to (a, c*d)
 
         x2 = test[1]
         x2 = x2.to(torch.float32)
         x2 = x2.contiguous()
         x2 = x2.squeeze(1)
+        x2 = x2.view(x2.size(0), -1)
 
         x1 = F.relu(self.fc1(x1))
         x1 = self.bn1(x1)

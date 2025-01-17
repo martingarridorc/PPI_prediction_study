@@ -12,4 +12,4 @@
 #SBATCH --output=/nfs/home/students/t.reim/bachelor/pytorchtest/slurm/out/%j.out
 #SBATCH --job-name=create_embeddings
 
-srun python /nfs/home/students/t.reim/bachelor/pytorchtest/data/extract16.py esm2_t48_15B_UR50D /nfs/home/students/t.reim/bachelor/pytorchtest/data/swissprot/human_swissprot_oneliner_10k.fasta /nfs/scratch/t.reim/embeddings/esm2_t48_15B/mean --include mean
+srun python /nfs/home/students/t.reim/bachelor/pytorchtest/data/extract.py esm2_t48_15B_UR50D /nfs/home/students/t.reim/bachelor/pytorchtest/data/swissprot/human_swissprot_oneliner_10k.fasta /nfs/scratch/t.reim/embeddings/esm2_t48_15B/mean --include mean
