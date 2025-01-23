@@ -4,7 +4,7 @@
 
 ## Data
 We used the data leakage-free PPI dataset from [Bernett et al](https://figshare.com/articles/dataset/PPI_prediction_from_sequence_gold_standard_dataset/21591618) available on figshare (DOI: 10.6084/m9.figshare.21591618.v3). 
-For the proteins contained in the dataset, we generated ESM-2 per-token and per-protein embeddings [data/extract_esm.py](data/extract_esm.py) / [data/extract_16.py](data/extract_16.py) for `esm2_t33_650M_UR50D`, `esm2_t36_3B_UR50D`, and `esm2_t48_15B_UR50D`.
+For the proteins contained in the dataset, we generated ESM-2 per-token and per-protein embeddings [data/extract_esm.py](data/extract_esm.py) for `esm2_t33_650M_UR50D`, `esm2_t36_3B_UR50D`, and `esm2_t48_15B_UR50D`.
 
 ## Models
 ### Per-protein models
