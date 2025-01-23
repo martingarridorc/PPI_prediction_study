@@ -30,6 +30,9 @@ PPIs included in the PDB were identified in [data/get_contact.py](data/get_conta
 
 Finally, the distance maps were calculated and their correlations to the predicted distance maps were obtained in [data/get_cmap.py](data/get_cmap.py).
 
+## Visualizations
+All other visualizations can be found in [plots/](plots/). 
+
 ## Contact
 
 - [Timo Reim](https://github.com/BlackCetus) T.Reim@campus.lmu.de (Developer)
