@@ -39,5 +39,5 @@ jobs:
       - name: Verify Conda environment activation
         run: |
           source $HOME/miniforge/bin/activate
-          conda activate myenv  # Change `myenv` to the name in your environment.yml
+          conda activate mamba2  # Change `myenv` to the name in your environment.yml
           python --version  # Check Python version (or another test)
