@@ -1,0 +1,43 @@
+name: Test Conda Environment
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  test-conda:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Miniforge
+        run: |
+          MINIFORGE_INSTALLER=Miniforge3-Linux-x86_64.sh
+          MINIFORGE_URL="https://github.com/conda-forge/miniforge/releases/latest/download/$MINIFORGE_INSTALLER"
+          wget $MINIFORGE_URL -O $MINIFORGE_INSTALLER
+          bash $MINIFORGE_INSTALLER -b -p $HOME/miniforge
+          echo "$HOME/miniforge/bin" >> $GITHUB_PATH
+          source $HOME/miniforge/bin/activate
+
+      - name: Verify Conda installation
+        run: |
+          conda --version
+          conda info
+
+      - name: Create Conda environment
+        run: |
+          source $HOME/miniforge/bin/activate
+          conda env create -f central_env.yaml
+
+      - name: Verify Conda environment activation
+        run: |
+          source $HOME/miniforge/bin/activate
+          conda activate myenv  # Change `myenv` to the name in your environment.yml
+          python --version  # Check Python version (or another test)
