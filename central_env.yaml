@@ -1,6 +1,8 @@
 name: mamba2
 channels:
   - conda-forge
+  - nvidia
+  - pytorch
 dependencies:
   - biopython=1.81
   - brotli=1.1.0
@@ -25,9 +27,10 @@ dependencies:
   - unicodedata2=15.1.0
   - wandb=0.15.12
   - wheel=0.41.3
+  - cuda-toolkit=11.8
   - pip:
       - certifi==2023.7.22
-      - git+https://github.com/facebookresearch/esm.git
+      - git+https://github.com/facebookresearch/esm.git@2b369911bb5b4b0dda914521b9475cad1656b2ac
       - kaleido==0.2.1
       - networkx==3.1
       - numpy==1.24.1
@@ -41,6 +44,6 @@ dependencies:
       - nvidia-nccl-cu12==2.18.1
       - nvidia-nvtx-cu12==12.1.105
       - pcmap==0.5.0
-      - torch==2.1.1+cu118
-      - torchaudio==2.1.1+cu118
-      - torchvision==0.16.1+cu118
+      - torch==2.1.1
+      - torchaudio==2.1.1
+      - torchvision==0.16.1
